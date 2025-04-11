@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.aortem" "\0"
-            VALUE "FileDescription", "stytch_dart_admin_auth_sample_app" "\0"
+            VALUE "FileDescription", "stytch_dart_auth_sample_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "stytch_dart_admin_auth_sample_app" "\0"
+            VALUE "InternalName", "stytch_dart_auth_sample_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.aortem. All rights reserved." "\0"
-            VALUE "OriginalFilename", "stytch_dart_admin_auth_sample_app.exe" "\0"
-            VALUE "ProductName", "stytch_dart_admin_auth_sample_app" "\0"
+            VALUE "OriginalFilename", "stytch_dart_auth_sample_app.exe" "\0"
+            VALUE "ProductName", "stytch_dart_auth_sample_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
