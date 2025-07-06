@@ -1,5 +1,5 @@
 import 'package:ds_tools_testing/ds_tools_testing.dart';
-import 'package:mockito/mockito.dart';
+//import 'package:mockito/mockito.dart';
 import '../../mocks/stytch_auth_mock.dart';
 
 void main() {
@@ -19,8 +19,9 @@ void main() {
         body: {'message': 'Success'},
       );
 
-      when(mockstytchAuth.performRequest(endpoint, body))
-          .thenAnswer((_) async => expectedResponse);
+      when(
+        mockstytchAuth.performRequest(endpoint, body),
+      ).thenAnswer((_) async => expectedResponse);
 
       // Act
       final result = await mockstytchAuth.performRequest(endpoint, body);
