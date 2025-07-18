@@ -1,4 +1,4 @@
-//import 'package:stytch_dart_auth_sdk/src/stytch_auth.dart';
+import 'package:stytch_dart_auth_sdk/src/stytch_auth.dart';
 
 void main() async {
   final auth = stytchAuth(apiKey: 'YOUR_API_KEY', projectId: 'YOUR_PROJECT_ID');
