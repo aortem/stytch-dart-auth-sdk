@@ -4,6 +4,7 @@ version: 0.1.0
 repository: https://github.com/aortem/stytch_dart_auth_sdk
 homepage: https://aortem.gitbook.io/stytch-dart-auth-admin-sdk/
 issue_tracker: https://github.com/aortem/stytch_dart_auth_sdk/issues
+license: BSD-3
 
 environment:
   sdk: ^3.8.1

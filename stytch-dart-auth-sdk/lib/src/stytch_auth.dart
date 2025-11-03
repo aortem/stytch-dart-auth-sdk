@@ -1,36 +1,3 @@
-<<<<<<< Updated upstream
-class StytchAuth {
-  final String apiKey;
-  final String projectId;
-
-  StytchAuth({required this.apiKey, required this.projectId});
-
-  Future<UserCredential> createUserWithEmailAndPassword(
-      String email, String password) async {
-    print('🧩 Creating new user: $email');
-    return UserCredential(User(email: email, displayName: 'Demo User'));
-  }
-
-  Future<UserCredential?> signInWithEmailAndPassword(
-      String email, String password) async {
-    print('✅ Signing in: $email');
-    return UserCredential(User(email: email, displayName: 'Demo User'));
-  }
-}
-
-class User {
-  final String email;
-  final String displayName;
-
-  User({required this.email, required this.displayName});
-}
-
-class UserCredential {
-  final User user;
-
-  UserCredential(this.user);
-}
-=======
 /// Main stytch authentication class for B2B
 import 'dart:convert';
 import 'dart:io';
@@ -99,9 +66,7 @@ class stytchAuth {
 
   /// Get environment variable
   static String _getEnvVar(String name) {
-    return const bool.fromEnvironment('dart.vm.product')
-        ? _getProdEnvVar(name)
-        : _getDevEnvVar(name);
+    return Platform.environment[name] ?? '';
   }
 
   static String _getProdEnvVar(String name) {
@@ -109,9 +74,7 @@ class stytchAuth {
   }
 
   static String _getDevEnvVar(String name) {
-    return const bool.fromEnvironment('dart.vm.product')
-        ? ''
-        : const String.fromEnvironment(name, defaultValue: '');
+    return Platform.environment[name] ?? '';
   }
 
   /// Initialize the HTTP client and services
@@ -188,4 +151,3 @@ stytchAuth get stytchApp {
     'stytchAuth has not been initialized. Call initializeStytch() first.',
   ));
 }
->>>>>>> Stashed changes
