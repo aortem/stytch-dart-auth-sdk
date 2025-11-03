@@ -1,18 +1,26 @@
 import 'package:stytch_dart_auth_sdk/src/stytch_auth.dart';
 
 void main() async {
-  final auth = stytchAuth(apiKey: 'YOUR_API_KEY', projectId: 'YOUR_PROJECT_ID');
+  // ✅ Use the correct class name (StytchAuth) — not stytchAuth
+  final auth = StytchAuth(
+    apiKey: 'YOUR_API_KEY',
+    projectId: 'YOUR_PROJECT_ID',
+  );
 
   try {
-    // Sign up a new user
+    // ✨ Sign up a new user
     final newUser = await auth.createUserWithEmailAndPassword(
-        'newuser@aortem.com', 'password123');
+      'newuser@aortem.com',
+      'password123',
+    );
     print('User created: ${newUser.user.displayName}');
     print('User created: ${newUser.user.email}');
 
-    // Sign in with the new user
+    // ✅ Sign in with the new user
     final userCredential = await auth.signInWithEmailAndPassword(
-        'newuser@aortem.com', 'password123');
+      'newuser@aortem.com',
+      'password123',
+    );
     print('Signed in: ${userCredential?.user.email}');
   } catch (e) {
     print('Error: $e');
