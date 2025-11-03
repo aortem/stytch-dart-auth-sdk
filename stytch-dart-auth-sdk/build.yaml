@@ -1,4 +1,4 @@
-#This file targets the root folder.  The example folder contains it's own root.
+# Build configuration for JSON serialization
 targets:
   $default:
     sources:
@@ -8,3 +8,18 @@ targets:
         - bin/**
       exclude:
         - example/**
+    builders:
+      json_serializable:
+        generate_for:
+          - lib/src/models/*.dart
+        options:
+          # Enable strict null safety
+          any_map: false
+          # Generate toJson/fromJson for all classes
+          checked: true
+          # Include required fields in generated code
+          explicit_to_json: true
+          # Generate equals and hashCode methods
+          generate: true
+          # Include fields that are not final
+          include_if_null: false
