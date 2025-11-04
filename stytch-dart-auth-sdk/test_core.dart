@@ -28,8 +28,10 @@ void main() async {
     print('\n3. Testing Error Handling...');
     final authException = StytchAuthException('Test auth error');
     print('   ✅ Auth exception: ${authException.message}');
-    
-    final validationException = StytchValidationException('Test validation error');
+
+    final validationException = StytchValidationException(
+      'Test validation error',
+    );
     print('   ✅ Validation exception: ${validationException.message}');
 
     // Test 4: API Error Response
@@ -42,14 +44,15 @@ void main() async {
     print('   ✅ API error created: ${errorResponse.errorMessage}');
 
     print('\n🎉 All core tests passed!');
-    print('✅ The stytch Dart B2B Auth SDK core structure is working correctly.');
+    print(
+      '✅ The stytch Dart B2B Auth SDK core structure is working correctly.',
+    );
     print('\n📋 Summary:');
     print('   • Configuration management ✅');
     print('   • HTTP client foundation ✅');
     print('   • Error handling system ✅');
     print('   • Exception hierarchy ✅');
     print('   • API response models ✅');
-    
   } catch (e, stackTrace) {
     print('❌ Test failed: $e');
     print('StackTrace: $stackTrace');

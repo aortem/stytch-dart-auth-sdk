@@ -6,12 +6,16 @@ library organization_models;
 class CreateOrganizationRequest {
   /// String
   final String name;
+
   /// String?
   final String? slug;
+
   /// List<String>?
   final List<String>? allowedDomains;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
+
   /// List<String>?
   final List<String>? ssoMethods;
 
@@ -31,14 +35,14 @@ class CreateOrganizationRequest {
       slug: json['slug'] as String?,
       allowedDomains: json['allowed_domains'] != null
           ? (json['allowed_domains'] as List<dynamic>)
-              .map((domain) => domain as String)
-              .toList()
+                .map((domain) => domain as String)
+                .toList()
           : null,
       attributes: json['attributes'] as Map<String, dynamic>?,
       ssoMethods: json['sso_methods'] != null
           ? (json['sso_methods'] as List<dynamic>)
-              .map((method) => method as String)
-              .toList()
+                .map((method) => method as String)
+                .toList()
           : null,
     );
   }
@@ -59,16 +63,22 @@ class CreateOrganizationRequest {
 class CreateOrganizationResponse {
   /// String
   final String organizationId;
+
   /// String
   final String name;
+
   /// String
   final String slug;
+
   /// List<String>
   final List<String> allowedDomains;
+
   /// Map<String,
   final Map<String, dynamic> attributes;
+
   /// List<String>
   final List<String> ssoMethods;
+
   /// DateTime
   final DateTime createdAt;
 
@@ -118,18 +128,25 @@ class CreateOrganizationResponse {
 class Organization {
   /// String
   final String organizationId;
+
   /// String
   final String name;
+
   /// String
   final String slug;
+
   /// List<String>
   final List<String> allowedDomains;
+
   /// Map<String,
   final Map<String, dynamic> attributes;
+
   /// List<String>
   final List<String> ssoMethods;
+
   /// DateTime
   final DateTime createdAt;
+
   /// DateTime?
   final DateTime? updatedAt;
 
@@ -184,12 +201,16 @@ class Organization {
 class UpdateOrganizationRequest {
   /// String?
   final String? name;
+
   /// String?
   final String? slug;
+
   /// List<String>?
   final List<String>? allowedDomains;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
+
   /// List<String>?
   final List<String>? ssoMethods;
 
@@ -209,14 +230,14 @@ class UpdateOrganizationRequest {
       slug: json['slug'] as String?,
       allowedDomains: json['allowed_domains'] != null
           ? (json['allowed_domains'] as List<dynamic>)
-              .map((domain) => domain as String)
-              .toList()
+                .map((domain) => domain as String)
+                .toList()
           : null,
       attributes: json['attributes'] as Map<String, dynamic>?,
       ssoMethods: json['sso_methods'] != null
           ? (json['sso_methods'] as List<dynamic>)
-              .map((method) => method as String)
-              .toList()
+                .map((method) => method as String)
+                .toList()
           : null,
     );
   }
@@ -244,14 +265,14 @@ class UpdateOrganizationResponse {
   /// fromJson
   factory UpdateOrganizationResponse.fromJson(Map<String, dynamic> json) {
     return UpdateOrganizationResponse(
-      organization: Organization.fromJson(json['organization'] as Map<String, dynamic>),
+      organization: Organization.fromJson(
+        json['organization'] as Map<String, dynamic>,
+      ),
     );
   }
 
   /// dynamic>
   Map<String, dynamic> toJson() {
-    return {
-      'organization': organization.toJson(),
-    };
+    return {'organization': organization.toJson()};
   }
 }

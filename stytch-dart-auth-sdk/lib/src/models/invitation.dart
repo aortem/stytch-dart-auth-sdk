@@ -6,14 +6,19 @@ library invitation_models;
 class SendInvitationRequest {
   /// String
   final String email;
+
   /// String?
   final String? organizationId;
+
   /// List<String>?
   final List<String>? organizationIds;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
+
   /// String?
   final String? inviteRedirectUrl;
+
   /// String?
   final String? inviteTokenId;
 
@@ -34,8 +39,8 @@ class SendInvitationRequest {
       organizationId: json['organization_id'] as String?,
       organizationIds: json['organization_ids'] != null
           ? (json['organization_ids'] as List<dynamic>)
-              .map((id) => id as String)
-              .toList()
+                .map((id) => id as String)
+                .toList()
           : null,
       attributes: json['attributes'] as Map<String, dynamic>?,
       inviteRedirectUrl: json['invite_redirect_url'] as String?,
@@ -60,14 +65,19 @@ class SendInvitationRequest {
 class SendInvitationResponse {
   /// String
   final String invitationId;
+
   /// String
   final String email;
+
   /// String?
   final String? organizationId;
+
   /// String
   final String status;
+
   /// DateTime
   final DateTime expiresAt;
+
   /// DateTime
   final DateTime sentAt;
 
@@ -110,18 +120,25 @@ class SendInvitationResponse {
 class Invitation {
   /// String
   final String invitationId;
+
   /// String
   final String email;
+
   /// String?
   final String? organizationId;
+
   /// String
   final String status;
+
   /// DateTime
   final DateTime expiresAt;
+
   /// DateTime
   final DateTime sentAt;
+
   /// DateTime?
   final DateTime? acceptedAt;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
@@ -172,8 +189,10 @@ class Invitation {
 class AcceptInvitationRequest {
   /// String
   final String token;
+
   /// String?
   final String? password;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
@@ -207,14 +226,19 @@ class AcceptInvitationRequest {
 class AcceptInvitationResponse {
   /// String
   final String userId;
+
   /// String
   final String email;
+
   /// String
   final String sessionId;
+
   /// String
   final String sessionToken;
+
   /// DateTime
   final DateTime sessionExpiresAt;
+
   /// List<String>
   final List<String> organizationIds;
 
@@ -272,8 +296,6 @@ class CancelInvitationRequest {
 
   /// dynamic>
   Map<String, dynamic> toJson() {
-    return {
-      'invitation_id': invitationId,
-    };
+    return {'invitation_id': invitationId};
   }
 }

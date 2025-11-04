@@ -5,10 +5,10 @@ import 'dart:io';
 
 void main() {
   print('🎯 ULTIMATE FINAL: Fixing the exact 2 remaining issues...');
-  
+
   fixLibraryDirective();
   fixConstructorDocumentation();
-  
+
   print('');
   print('🏆 ULTIMATE SUCCESS: ALL 2 REMAINING ISSUES FIXED!');
   print('📊 FINAL verification: dart analyze');
@@ -19,10 +19,10 @@ void main() {
 /// Fix the dangling library doc comment issue
 void fixLibraryDirective() {
   final file = 'final_15_issues_fix.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     if (content.startsWith('///') && !content.contains('library ')) {
       final lines = content.split('\n');
       final docLines = <String>[];
@@ -31,8 +31,9 @@ void fixLibraryDirective() {
         docLines.add(lines[i]);
         i++;
       }
-      
-      final newContent = '''
+
+      final newContent =
+          '''
 ${docLines.join('\n')}
 library final_15_issues_fix;
 
@@ -48,9 +49,9 @@ ${lines.sublist(i).join('\n')}
 void fixConstructorDocumentation() {
   final file = 'lib/src/stytch_auth.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Replace the problematic constructor area with clean version
   final cleanConstructor = '''  /// Constructor for StytchAuth
   StytchAuth({
@@ -69,18 +70,31 @@ void fixConstructorDocumentation() {
         ) {
     _initializeClient();
   }''';
-  
+
   // Find the constructor and replace it
-  final constructorMatch = RegExp(r'  StytchAuth\(\{[^}]*?\) : _config = StytchConfig\([^}]*?\) \{[^}]*?  \}', multiLine: true, dotAll: true);
+  final constructorMatch = RegExp(
+    r'  StytchAuth\(\{[^}]*?\) : _config = StytchConfig\([^}]*?\) \{[^}]*?  \}',
+    multiLine: true,
+    dotAll: true,
+  );
   content = content.replaceAll(constructorMatch, cleanConstructor);
-  
+
   // Clean up duplicate documentation comments
-  content = content.replaceAll(RegExp(r'/// environment\s*///', multiLine: true), '/// Environment for the SDK');
-  content = content.replaceAll(RegExp(r'/// environment\s*///', multiLine: true), '/// Environment for the SDK');
-  
+  content = content.replaceAll(
+    RegExp(r'/// environment\s*///', multiLine: true),
+    '/// Environment for the SDK',
+  );
+  content = content.replaceAll(
+    RegExp(r'/// environment\s*///', multiLine: true),
+    '/// Environment for the SDK',
+  );
+
   // Remove multiple consecutive comments
-  content = content.replaceAll(RegExp(r'/// Environment\s*/// Environment', multiLine: true), '/// Environment for the SDK');
-  
+  content = content.replaceAll(
+    RegExp(r'/// Environment\s*/// Environment', multiLine: true),
+    '/// Environment for the SDK',
+  );
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed constructor documentation: $file');
 }

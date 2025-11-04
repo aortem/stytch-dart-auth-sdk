@@ -2,7 +2,6 @@
 /// These tests verify core functionality without JSON serialization
 library test_unit_stytch_working_test;
 
-
 import 'package:test/test.dart';
 import 'package:stytch_dart_auth_sdk/src/client/stytch_client.dart';
 import 'package:stytch_dart_auth_sdk/src/models/error.dart';
@@ -23,20 +22,14 @@ void main() {
 
     test('should throw exception for empty API key', () {
       expect(
-        () => StytchConfig(
-          apiKey: '',
-          projectId: 'test-project-id',
-        ),
+        () => StytchConfig(apiKey: '', projectId: 'test-project-id'),
         throwsA(isA<StytchConfigurationException>()),
       );
     });
 
     test('should throw exception for empty project ID', () {
       expect(
-        () => StytchConfig(
-          apiKey: 'test-api-key',
-          projectId: '',
-        ),
+        () => StytchConfig(apiKey: 'test-api-key', projectId: ''),
         throwsA(isA<StytchConfigurationException>()),
       );
     });
@@ -65,14 +58,8 @@ void main() {
         environment: 'production',
       );
 
-      expect(
-        sandboxConfig.environmentBaseUrl,
-        contains('sandbox.stytch.com'),
-      );
-      expect(
-        productionConfig.environmentBaseUrl,
-        contains('api.stytch.com'),
-      );
+      expect(sandboxConfig.environmentBaseUrl, contains('sandbox.stytch.com'));
+      expect(productionConfig.environmentBaseUrl, contains('api.stytch.com'));
     });
   });
 
@@ -179,18 +166,9 @@ void main() {
         errorMessage: 'Too many requests',
       );
 
-      expect(
-        authError.toException(),
-        isA<StytchAuthException>(),
-      );
-      expect(
-        validationError.toException(),
-        isA<StytchValidationException>(),
-      );
-      expect(
-        rateLimitError.toException(),
-        isA<StytchRateLimitException>(),
-      );
+      expect(authError.toException(), isA<StytchAuthException>());
+      expect(validationError.toException(), isA<StytchValidationException>());
+      expect(rateLimitError.toException(), isA<StytchRateLimitException>());
     });
   });
 }

@@ -5,9 +5,9 @@ import 'dart:io';
 
 void main() {
   print('🎯 FINAL LIBRARY FIX: Fixing the last remaining issue...');
-  
+
   fixFinalLibraryDirective();
-  
+
   print('');
   print('🏆 ULTIMATE SUCCESS: ALL ISSUES FIXED!');
   print('📊 FINAL verification: dart analyze');
@@ -18,10 +18,10 @@ void main() {
 /// Fix the final dangling library doc comment
 void fixFinalLibraryDirective() {
   final file = 'final_15_issues_fix.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     if (content.startsWith('///') && !content.contains('library ')) {
       final lines = content.split('\n');
       final docLines = <String>[];
@@ -30,8 +30,9 @@ void fixFinalLibraryDirective() {
         docLines.add(lines[i]);
         i++;
       }
-      
-      final newContent = '''
+
+      final newContent =
+          '''
 ${docLines.join('\n')}
 library final_15_issues_fix;
 

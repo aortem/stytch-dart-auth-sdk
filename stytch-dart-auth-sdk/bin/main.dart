@@ -7,7 +7,8 @@ void main() async {
     final auth = StytchAuth(
       apiKey: 'YOUR_API_KEY', // Replace with your actual API key
       projectId: 'YOUR_PROJECT_ID', // Replace with your actual project ID
-      environment: 'sandbox', // Use 'sandbox' for testing, 'production' for live
+      environment:
+          'sandbox', // Use 'sandbox' for testing, 'production' for live
     );
 
     print('Stytch initialized: ${auth.isConfigured()}');
@@ -77,7 +78,6 @@ void main() async {
     print('2. Replace YOUR_PROJECT_ID with your actual project ID');
     print('3. Uncomment the API calls to test with real requests');
     print('4. Handle exceptions with proper try-catch blocks');
-
   } catch (e) {
     print('Error: $e');
     if (e is StytchException) {

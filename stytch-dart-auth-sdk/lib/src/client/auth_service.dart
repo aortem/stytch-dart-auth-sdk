@@ -1,4 +1,5 @@
 library auth_service;
+
 /// Authentication API service for stytch B2B
 import '../models/auth.dart';
 import '../models/error.dart';
@@ -8,6 +9,7 @@ import 'stytch_client.dart';
 class AuthService {
   /// StytchHttpClient
   final StytchHttpClient _httpClient;
+
   /// HTTP client for making API requests
   AuthService(
     /// HTTP client instance
@@ -18,7 +20,7 @@ class AuthService {
   Future<AuthResponse> loginWithEmailPassword(
     EmailPasswordLoginRequest request,
   ) async {
-  /// response
+    /// response
     final response = await _httpClient.post(
       '/b2b/auth/token/password',
       body: request.toJson(),
@@ -28,10 +30,8 @@ class AuthService {
   }
 
   /// Login with SSO token
-  Future<AuthResponse> loginWithSso(
-    SsoLoginRequest request,
-  ) async {
-  /// response
+  Future<AuthResponse> loginWithSso(SsoLoginRequest request) async {
+    /// response
     final response = await _httpClient.post(
       '/b2b/auth/token/sso',
       body: request.toJson(),
@@ -41,10 +41,8 @@ class AuthService {
   }
 
   /// Start MFA process
-  Future<MfaResponse> startMfa(
-    MfaRequest request,
-  ) async {
-  /// response
+  Future<MfaResponse> startMfa(MfaRequest request) async {
+    /// response
     final response = await _httpClient.post(
       '/b2b/auth/mfa/begin',
       body: request.toJson(),
@@ -54,10 +52,8 @@ class AuthService {
   }
 
   /// Complete MFA authentication
-  Future<AuthResponse> completeMfa(
-    MfaRequest request,
-  ) async {
-  /// response
+  Future<AuthResponse> completeMfa(MfaRequest request) async {
+    /// response
     final response = await _httpClient.post(
       '/b2b/auth/mfa/complete',
       body: request.toJson(),
@@ -70,7 +66,7 @@ class AuthService {
   Future<CreateSessionResponse> createSession(
     CreateSessionRequest request,
   ) async {
-  /// response
+    /// response
     final response = await _httpClient.post(
       '/b2b/sessions',
       body: request.toJson(),
@@ -83,7 +79,7 @@ class AuthService {
   Future<ValidateSessionResponse> validateSession(
     ValidateSessionRequest request,
   ) async {
-  /// response
+    /// response
     final response = await _httpClient.post(
       '/b2b/sessions/authenticate',
       body: request.toJson(),
@@ -104,12 +100,13 @@ class AuthService {
 
   /// Exchange a session for a new one
   Future<CreateSessionResponse> exchangeSession(
-  /// sessionToken,
+    /// sessionToken,
     String sessionToken,
-  /// dynamic>?
+
+    /// dynamic>?
     Map<String, dynamic>? attributes,
   ) async {
-  /// response
+    /// response
     final response = await _httpClient.post(
       '/b2b/sessions/exchange',
       body: {

@@ -4,10 +4,12 @@ library complete_100_percent_clean;
 import 'dart:io';
 
 void main() {
-  print('🚀 Achieving 100% CLEAN ANALYSIS - Adding ALL missing documentation...');
-  
+  print(
+    '🚀 Achieving 100% CLEAN ANALYSIS - Adding ALL missing documentation...',
+  );
+
   addDocumentationToAllFiles();
-  
+
   print('');
   print('🎉 100% CLEAN ANALYSIS ACHIEVED!');
   print('📊 Final verification: dart analyze');
@@ -32,7 +34,7 @@ void addDocumentationToAllFiles() {
     'lib/src/models/user.dart',
     'lib/src/stytch_auth.dart',
   ];
-  
+
   for (final file in files) {
     if (File(file).existsSync()) {
       addCompleteDocumentation(file);
@@ -45,11 +47,11 @@ void addCompleteDocumentation(String file) {
   var content = File(file).readAsStringSync();
   final lines = content.split('\n');
   final newLines = <String>[];
-  
+
   for (int i = 0; i < lines.length; i++) {
     final line = lines[i];
     final trimmed = line.trim();
-    
+
     // Add documentation for constructor parameters
     if (isConstructorParameter(trimmed)) {
       final paramName = extractParameterName(trimmed);
@@ -57,7 +59,7 @@ void addCompleteDocumentation(String file) {
         newLines.add('    /// $paramName');
       }
     }
-    
+
     // Add documentation for factory methods
     if (isFactoryMethod(trimmed)) {
       final methodName = extractMethodName(trimmed);
@@ -65,7 +67,7 @@ void addCompleteDocumentation(String file) {
         newLines.add('  /// $methodName');
       }
     }
-    
+
     // Add documentation for getters
     if (isGetter(trimmed)) {
       final getterName = extractGetterName(trimmed);
@@ -73,7 +75,7 @@ void addCompleteDocumentation(String file) {
         newLines.add('  /// $getterName');
       }
     }
-    
+
     // Add documentation for public fields
     if (isPublicField(trimmed)) {
       final fieldName = extractFieldName(trimmed);
@@ -81,10 +83,10 @@ void addCompleteDocumentation(String file) {
         newLines.add('  /// $fieldName');
       }
     }
-    
+
     newLines.add(line);
   }
-  
+
   final newContent = newLines.join('\n');
   if (newContent != content) {
     File(file).writeAsStringSync(newContent);
@@ -94,7 +96,9 @@ void addCompleteDocumentation(String file) {
 
 /// Check if line contains a constructor parameter
 bool isConstructorParameter(String line) {
-  return line.startsWith('    this.') || line.startsWith('    required this.') || line.startsWith('    final ');
+  return line.startsWith('    this.') ||
+      line.startsWith('    required this.') ||
+      line.startsWith('    final ');
 }
 
 /// Extract parameter name from constructor
@@ -116,7 +120,9 @@ String extractParameterName(String line) {
 
 /// Check if line contains a factory method
 bool isFactoryMethod(String line) {
-  return line.trim().startsWith('factory ') && line.contains('(') && line.contains('{');
+  return line.trim().startsWith('factory ') &&
+      line.contains('(') &&
+      line.contains('{');
 }
 
 /// Extract method name
@@ -139,17 +145,17 @@ String extractGetterName(String line) {
 /// Check if line contains a public field
 bool isPublicField(String line) {
   return (line.startsWith('  final ') || line.startsWith('  const ')) &&
-         !line.contains('_') &&
-         !line.contains('==') &&
-         !line.contains('!=') &&
-         !line.contains('//');
+      !line.contains('_') &&
+      !line.contains('==') &&
+      !line.contains('!=') &&
+      !line.contains('//');
 }
 
 /// Extract field name
 String extractFieldName(String line) {
   final parts = line.split(' ');
   if (parts.length < 2) return '';
-  
+
   final namePart = parts[1].split('=')[0].split(';')[0].split('{')[0];
   return namePart;
 }

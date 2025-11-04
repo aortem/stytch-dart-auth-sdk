@@ -6,16 +6,20 @@ import 'package:stytch_dart_auth_sdk/src/http_response.dart';
 void main() {
   group('HttpResponse', () {
     test('constructor should initialize correctly', () {
-      final response =
-          HttpResponse(statusCode: 200, body: {'message': 'Success'});
+      final response = HttpResponse(
+        statusCode: 200,
+        body: {'message': 'Success'},
+      );
 
       expect(response.statusCode, equals(200));
       expect(response.body, containsPair('message', 'Success'));
     });
 
     test('toMap should convert the object to a Map', () {
-      final response =
-          HttpResponse(statusCode: 200, body: {'message': 'Success'});
+      final response = HttpResponse(
+        statusCode: 200,
+        body: {'message': 'Success'},
+      );
 
       final map = response.toMap();
       expect(map, isA<Map<String, dynamic>>());
@@ -24,19 +28,23 @@ void main() {
     });
 
     test('toJson should convert the object to a JSON string', () {
-      final response =
-          HttpResponse(statusCode: 200, body: {'message': 'Success'});
+      final response = HttpResponse(
+        statusCode: 200,
+        body: {'message': 'Success'},
+      );
 
       final jsonString = response.toJson();
       expect(jsonString, isA<String>());
-      expect(jsonString,
-          equals('{"statusCode":200,"body":{"message":"Success"}}'));
+      expect(
+        jsonString,
+        equals('{"statusCode":200,"body":{"message":"Success"}}'),
+      );
     });
 
     test('fromMap should create an instance from a Map', () {
       final map = {
         'statusCode': 200,
-        'body': {'message': 'Success'}
+        'body': {'message': 'Success'},
       };
 
       final response = HttpResponse.fromMap(map);

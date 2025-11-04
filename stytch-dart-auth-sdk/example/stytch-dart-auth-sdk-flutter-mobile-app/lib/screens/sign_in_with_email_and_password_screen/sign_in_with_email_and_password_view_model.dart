@@ -10,7 +10,10 @@ class SignInWithEmailAndPasswordViewModel extends ChangeNotifier {
   }
 
   Future<void> signIn(
-      String email, String password, VoidCallback onSuccess) async {
+    String email,
+    String password,
+    VoidCallback onSuccess,
+  ) async {
     try {
       setLoading(true);
 

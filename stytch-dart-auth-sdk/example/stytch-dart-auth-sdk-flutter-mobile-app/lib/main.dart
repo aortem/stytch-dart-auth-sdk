@@ -66,12 +66,7 @@ void main() async {
     debugPrint('stytch Auth instance obtained.');
 
     // Wrap the app with Provider
-    runApp(
-      Provider<stytchAuth>.value(
-        value: auth,
-        child: const MyApp(),
-      ),
-    );
+    runApp(Provider<stytchAuth>.value(value: auth, child: const MyApp()));
   } catch (e, stackTrace) {
     debugPrint('Error initializing stytch: $e');
     debugPrint('StackTrace: $stackTrace');
@@ -92,9 +87,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // Wrap SplashScreen with Builder to ensure proper context
-      home: Builder(
-        builder: (context) => const SplashScreen(),
-      ),
+      home: Builder(builder: (context) => const SplashScreen()),
     );
   }
 }

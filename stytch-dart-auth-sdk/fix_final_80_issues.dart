@@ -1,16 +1,17 @@
 /// Script to fix the remaining 80 Dart analysis issues
 library;
+
 import 'dart:io';
 
 void main() {
   print('Fixing the final 80 Dart analysis issues...');
-  
+
   fixUnusedVariables();
   fixDocumentationIssues();
   fixRelativeImports();
   fixCodeStyleIssues();
   fixLibraryDirective();
-  
+
   print('Final 80 issues have been addressed!');
   print('Run: dart analyze --fatal-infos');
 }
@@ -22,14 +23,14 @@ void fixUnusedVariables() {
     'fix_all_analysis_issues.dart': ['inClass'],
     'test_core.dart': ['httpClient'],
   };
-  
+
   for (final entry in files.entries) {
     final file = entry.key;
     final variables = entry.value;
-    
+
     if (File(file).existsSync()) {
       var content = File(file).readAsStringSync();
-      
+
       for (final variable in variables) {
         // Comment out unused variables
         content = content.replaceAll(
@@ -41,7 +42,7 @@ void fixUnusedVariables() {
           '// var $variable // unused',
         );
       }
-      
+
       File(file).writeAsStringSync(content);
       print('Fixed unused variables: $file');
     }
@@ -65,7 +66,7 @@ void fixDocumentationIssues() {
     'lib/src/models/user.dart',
     'lib/src/stytch_auth.dart',
   ];
-  
+
   for (final file in files) {
     if (File(file).existsSync()) {
       addBasicDocumentation(file);
@@ -78,15 +79,15 @@ void addBasicDocumentation(String file) {
   var content = File(file).readAsStringSync();
   final lines = content.split('\n');
   final newLines = <String>[];
-  
+
   for (int i = 0; i < lines.length; i++) {
     final line = lines[i];
     final trimmed = line.trim();
-    
+
     // Check if this is a public member declaration
     if (isPublicMember(trimmed)) {
       final memberName = extractMemberName(trimmed);
-      
+
       // Check if previous line is not documentation
       if (newLines.isNotEmpty && !newLines.last.trim().startsWith('///')) {
         if (memberName.isNotEmpty) {
@@ -94,10 +95,10 @@ void addBasicDocumentation(String file) {
         }
       }
     }
-    
+
     newLines.add(line);
   }
-  
+
   final newContent = newLines.join('\n');
   if (newContent != content) {
     File(file).writeAsStringSync(newContent);
@@ -107,27 +108,27 @@ void addBasicDocumentation(String file) {
 
 /// Check if line contains a public member declaration
 bool isPublicMember(String line) {
-  return (line.startsWith('final ') || 
-          line.startsWith('String ') || 
-          line.startsWith('int ') || 
+  return (line.startsWith('final ') ||
+          line.startsWith('String ') ||
+          line.startsWith('int ') ||
           line.startsWith('bool ') ||
-          line.startsWith('Map<') || 
+          line.startsWith('Map<') ||
           line.startsWith('List<') ||
           line.startsWith('DateTime ') ||
           line.startsWith('Duration ')) &&
-         !line.contains('==') && 
-         !line.contains('!=') && 
-         !line.contains('null') && 
-         !line.contains('//') &&
-         !line.trim().startsWith('///') &&
-         !extractMemberName(line).startsWith('_');
+      !line.contains('==') &&
+      !line.contains('!=') &&
+      !line.contains('null') &&
+      !line.contains('//') &&
+      !line.trim().startsWith('///') &&
+      !extractMemberName(line).startsWith('_');
 }
 
 /// Extract member name from declaration
 String extractMemberName(String line) {
   final parts = line.split(' ');
   if (parts.length < 2) return '';
-  
+
   final namePart = parts[1].split('=')[0].split(';')[0];
   return namePart;
 }
@@ -135,20 +136,20 @@ String extractMemberName(String line) {
 /// Fix relative imports
 void fixRelativeImports() {
   final file = 'test/unit/stytch_working_test.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     content = content.replaceAll(
       "import '../lib/src/stytch_auth.dart'",
       "import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart'",
     );
-    
+
     content = content.replaceAll(
       "import '../lib/src/client/auth_service.dart'",
       "import 'package:stytch_dart_auth_sdk/src/client/auth_service.dart'",
     );
-    
+
     File(file).writeAsStringSync(content);
     print('Fixed relative imports: $file');
   }
@@ -157,16 +158,16 @@ void fixRelativeImports() {
 /// Fix code style issues
 void fixCodeStyleIssues() {
   final file = 'test_final.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     // Fix prefer_iterable_wheretype
     content = content.replaceAll(
       '.where((item) => item is MyType)',
       '.whereType<MyType>()',
     );
-    
+
     File(file).writeAsStringSync(content);
     print('Fixed code style: $file');
   }
@@ -175,10 +176,10 @@ void fixCodeStyleIssues() {
 /// Fix library directive
 void fixLibraryDirective() {
   final file = 'fix_all_analysis_issues.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     if (content.startsWith('///')) {
       final lines = content.split('\n');
       final docLines = <String>[];
@@ -187,8 +188,9 @@ void fixLibraryDirective() {
         docLines.add(lines[i]);
         i++;
       }
-      
-      final newContent = '''
+
+      final newContent =
+          '''
 ${docLines.join('\n')}
 library fix_all_analysis_issues;
 

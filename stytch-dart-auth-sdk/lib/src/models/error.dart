@@ -6,10 +6,13 @@ library error_models;
 class StytchException implements Exception {
   /// String
   final String message;
+
   /// String?
   final String? code;
+
   /// int?
   final int? statusCode;
+
   /// Map<String,
   final Map<String, dynamic>? details;
 
@@ -30,7 +33,7 @@ class StytchException implements Exception {
 class StytchAuthException extends StytchException {
   /// StytchAuthException(
   const StytchAuthException(
-  /// super.message,
+    /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -42,7 +45,7 @@ class StytchAuthException extends StytchException {
 class StytchValidationException extends StytchException {
   /// StytchValidationException(
   const StytchValidationException(
-  /// super.message,
+    /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -54,7 +57,7 @@ class StytchValidationException extends StytchException {
 class StytchRateLimitException extends StytchException {
   /// StytchRateLimitException(
   const StytchRateLimitException(
-  /// super.message,
+    /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -66,7 +69,7 @@ class StytchRateLimitException extends StytchException {
 class StytchConfigurationException extends StytchException {
   /// StytchConfigurationException(
   const StytchConfigurationException(
-  /// super.message,
+    /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -78,12 +81,16 @@ class StytchConfigurationException extends StytchException {
 class ApiErrorResponse {
   /// String
   final String errorType;
+
   /// String
   final String errorMessage;
+
   /// String?
   final String? errorCode;
+
   /// String?
   final String? requestId;
+
   /// Map<String,
   final Map<String, dynamic>? metadata;
 
@@ -159,24 +166,23 @@ class ApiErrorResponse {
 class ApiResponse<T> {
   /// T?
   final T? data;
+
   /// ApiErrorResponse?
   final ApiErrorResponse? error;
 
   /// ApiResponse(
-  const ApiResponse({
-    this.data,
-    this.error,
-  });
+  const ApiResponse({this.data, this.error});
 
   /// Create from JSON
   factory ApiResponse.fromJson(
-  /// dynamic>
+    /// dynamic>
     Map<String, dynamic> json,
     T Function(Object?)? fromJsonT,
   ) {
-  /// errorJson
+    /// errorJson
     final errorJson = json['error'];
-  /// dataJson
+
+    /// dataJson
     final dataJson = json['data'];
 
     return ApiResponse<T>(

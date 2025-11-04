@@ -1,4 +1,5 @@
 library html_import;
+
 /// HTML import for web platform
 /// This file serves as a placeholder for dart:html functionality
 /// when targeting web platforms

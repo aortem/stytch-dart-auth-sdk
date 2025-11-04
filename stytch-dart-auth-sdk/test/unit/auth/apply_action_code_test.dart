@@ -7,10 +7,7 @@ void main() {
   group('StytchAuth B2B Tests', () {
     test('StytchAuth should create instance with valid config', () {
       // Arrange & Act
-      final client = StytchAuth(
-        apiKey: 'test-key',
-        projectId: 'test-project',
-      );
+      final client = StytchAuth(apiKey: 'test-key', projectId: 'test-project');
 
       // Assert
       expect(client, isA<StytchAuth>());
@@ -32,10 +29,7 @@ void main() {
 
     test('StytchAuth should have proper service accessors', () {
       // Arrange
-      final client = StytchAuth(
-        apiKey: 'test-key',
-        projectId: 'test-project',
-      );
+      final client = StytchAuth(apiKey: 'test-key', projectId: 'test-project');
 
       // Act & Assert
       expect(client.auth, isA<AuthService>());

@@ -7,9 +7,15 @@ void main() async {
     // Test 1: Import and basic class instantiation
     print('\n1. 📦 Testing SDK Package Structure');
     print('   ✅ Package name: stytch_dart_auth_sdk');
-    print('   ✅ Core directories: lib/src/models, lib/src/client, lib/src/auth');
-    print('   ✅ Data models: user.dart, auth.dart, organization.dart, invitation.dart, error.dart');
-    print('   ✅ Client services: stytch_client.dart, auth_service.dart, user_service.dart, etc.');
+    print(
+      '   ✅ Core directories: lib/src/models, lib/src/client, lib/src/auth',
+    );
+    print(
+      '   ✅ Data models: user.dart, auth.dart, organization.dart, invitation.dart, error.dart',
+    );
+    print(
+      '   ✅ Client services: stytch_client.dart, auth_service.dart, user_service.dart, etc.',
+    );
 
     // Test 2: Configuration Testing
     print('\n2. 🔧 Testing Configuration System');
@@ -67,7 +73,7 @@ void main() async {
     print('\n' + '=' * 65);
     print('🎉 COMPREHENSIVE SDK TEST RESULTS');
     print('=' * 65);
-    
+
     print('\n✅ IMPLEMENTATION STATUS: PRODUCTION READY');
     print('\n📋 CORE COMPONENTS VERIFIED:');
     print('   • Package Architecture: 100% Complete');
@@ -106,7 +112,6 @@ void main() async {
 
     print('\n🎯 TASK COMPLETION: ✅ SUCCESS');
     print('The stytch Dart B2B Auth SDK is ready for production use!');
-
   } catch (e, stackTrace) {
     print('❌ Test failed: $e');
     print('StackTrace: $stackTrace');

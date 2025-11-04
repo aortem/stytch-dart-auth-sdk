@@ -2,7 +2,6 @@
 /// This test demonstrates that the core architecture is working without JSON serialization
 library test_final;
 
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -16,11 +15,11 @@ void main() async {
     final libDir = Directory('lib/src');
     if (libDir.existsSync()) {
       print('   ✅ lib/src directory exists');
-      
+
       final modelsDir = Directory('lib/src/models');
       final clientDir = Directory('lib/src/client');
       final authDir = Directory('lib/src/auth');
-      
+
       print('   ✅ Models directory: ${modelsDir.existsSync()}');
       print('   ✅ Client directory: ${clientDir.existsSync()}');
       print('   ✅ Auth directory: ${authDir.existsSync()}');
@@ -30,12 +29,12 @@ void main() async {
     print('\n2. 📄 Core Files Analysis');
     final modelFiles = [
       'lib/src/models/user.dart',
-      'lib/src/models/auth.dart', 
+      'lib/src/models/auth.dart',
       'lib/src/models/organization.dart',
       'lib/src/models/invitation.dart',
       'lib/src/models/error.dart',
     ];
-    
+
     final clientFiles = [
       'lib/src/client/stytch_client.dart',
       'lib/src/client/auth_service.dart',
@@ -58,13 +57,13 @@ void main() async {
     print('\n3. 🔧 Build Configuration');
     final pubspec = File('pubspec.yaml');
     final buildYaml = File('build.yaml');
-    
+
     if (pubspec.existsSync()) {
       final pubspecContent = pubspec.readAsStringSync();
       final hasHttp = pubspecContent.contains('http:');
       final hasJsonAnnotation = pubspecContent.contains('json_annotation:');
       final hasBuildRunner = pubspecContent.contains('build_runner:');
-      
+
       print('   ✅ HTTP dependency: $hasHttp');
       print('   ✅ JSON annotation: $hasJsonAnnotation');
       print('   ✅ Build runner: $hasBuildRunner');
@@ -107,7 +106,7 @@ void main() async {
     print('✅ Package Configuration: COMPLETE');
     print('✅ Documentation: COMPREHENSIVE');
     print('✅ Test Infrastructure: SETUP');
-    
+
     print('\n🚀 SDK STATUS: PRODUCTION READY');
     print('\n📋 Key Features Implemented:');
     print('   • Email/Password Authentication');
@@ -120,13 +119,12 @@ void main() async {
     print('   • Multi-environment Support');
     print('   • Comprehensive Error Handling');
     print('   • Type-safe Request/Response Models');
-    
+
     print('\n💡 Next Steps for Full Functionality:');
     print('   1. Fix JSON serialization code generation');
     print('   2. Run dart pub run build_runner build');
     print('   3. Add integration tests with real stytch API');
     print('   4. Publish to pub.dev');
-    
   } catch (e, stackTrace) {
     print('❌ Test failed: $e');
     print('StackTrace: $stackTrace');

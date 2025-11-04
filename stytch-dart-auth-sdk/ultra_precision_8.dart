@@ -5,10 +5,10 @@ import 'dart:io';
 
 void main() {
   print('🎯 ULTRA-PRECISION: Adding documentation BEFORE constructors...');
-  
+
   addDocumentationBeforeConstructors();
   addRemainingDoc();
-  
+
   print('');
   print('🏆 ULTIMATE SUCCESS: ALL 8 ISSUES RESOLVED!');
   print('📊 FINAL verification: dart analyze');
@@ -30,10 +30,10 @@ void addDocumentationBeforeConstructors() {
 /// Fix final_15_issues.dart library directive
 void fixFinal15Issues() {
   final file = 'final_15_issues_fix.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     if (content.startsWith('///') && !content.contains('library ')) {
       final lines = content.split('\n');
       final docLines = <String>[];
@@ -42,8 +42,9 @@ void fixFinal15Issues() {
         docLines.add(lines[i]);
         i++;
       }
-      
-      final newContent = '''
+
+      final newContent =
+          '''
 ${docLines.join('\n')}
 library final_15_issues_fix;
 
@@ -59,16 +60,16 @@ ${lines.sublist(i).join('\n')}
 void fixAuthService() {
   final file = 'lib/src/client/auth_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Add documentation before AuthService constructor
   content = content.replaceFirst(
     '  AuthService(this._httpClient);',
     '''  /// HTTP client for authentication requests
-  AuthService(this._httpClient);'''
+  AuthService(this._httpClient);''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Added AuthService documentation');
 }
@@ -77,16 +78,16 @@ void fixAuthService() {
 void fixInvitationService() {
   final file = 'lib/src/client/invitation_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Add documentation before InvitationService constructor
   content = content.replaceFirst(
     '  InvitationService(this._httpClient);',
     '''  /// HTTP client for invitation requests
-  InvitationService(this._httpClient);'''
+  InvitationService(this._httpClient);''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Added InvitationService documentation');
 }
@@ -95,16 +96,16 @@ void fixInvitationService() {
 void fixOrganizationService() {
   final file = 'lib/src/client/organization_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Add documentation before OrganizationService constructor
   content = content.replaceFirst(
     '  OrganizationService(this._httpClient);',
     '''  /// HTTP client for organization requests
-  OrganizationService(this._httpClient);'''
+  OrganizationService(this._httpClient);''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Added OrganizationService documentation');
 }
@@ -113,38 +114,32 @@ void fixOrganizationService() {
 void fixUserService() {
   final file = 'lib/src/client/user_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Add documentation before UserService constructor
   content = content.replaceFirst(
     '  UserService(this._httpClient);',
     '''  /// HTTP client for user requests
-  UserService(this._httpClient);'''
+  UserService(this._httpClient);''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Added UserService documentation');
 }
 
 /// Fix HTML and JS imports - add documentation before constructor
 void fixHtmlJsImports() {
-  final files = [
-    'lib/src/html_import.dart',
-    'lib/src/js_import.dart',
-  ];
-  
+  final files = ['lib/src/html_import.dart', 'lib/src/js_import.dart'];
+
   for (final file in files) {
     if (File(file).existsSync()) {
       var content = File(file).readAsStringSync();
-      
+
       // Add documentation before constructor parameter
-      content = content.replaceFirst(
-        '  T? data,',
-        '''  /// Data parameter
-  T? data,'''
-      );
-      
+      content = content.replaceFirst('  T? data,', '''  /// Data parameter
+  T? data,''');
+
       File(file).writeAsStringSync(content);
       print('✅ Added ${file.split('/').last} documentation');
     }
@@ -155,15 +150,15 @@ void fixHtmlJsImports() {
 void fixStytchAuth() {
   final file = 'lib/src/stytch_auth.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Add documentation before environment parameter
   content = content.replaceFirst(
     '    String environment = \'production\',',
-    '    /// Environment for the SDK\n    String environment = \'production\','
+    '    /// Environment for the SDK\n    String environment = \'production\',',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Added stytchAuth documentation');
 }

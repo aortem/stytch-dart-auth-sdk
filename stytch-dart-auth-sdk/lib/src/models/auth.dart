@@ -6,10 +6,13 @@ library auth_models;
 class EmailPasswordLoginRequest {
   /// String
   final String email;
+
   /// String
   final String password;
+
   /// String?
   final String? organizationId;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
@@ -46,8 +49,10 @@ class EmailPasswordLoginRequest {
 class SsoLoginRequest {
   /// String
   final String ssoToken;
+
   /// String?
   final String? organizationId;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
@@ -81,22 +86,31 @@ class SsoLoginRequest {
 class AuthResponse {
   /// String
   final String userId;
+
   /// String
   final String email;
+
   /// String?
   final String? name;
+
   /// bool
   final bool isMfaEnabled;
+
   /// List<String>
   final List<String> organizationIds;
+
   /// String
   final String sessionId;
+
   /// String
   final String sessionToken;
+
   /// DateTime
   final DateTime sessionExpiresAt;
+
   /// Map<String,
   final Map<String, dynamic>? userAttributes;
+
   /// DateTime
   final DateTime createdAt;
 
@@ -153,8 +167,10 @@ class AuthResponse {
 class MfaRequest {
   /// String
   final String mfaToken;
+
   /// String
   final String method;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
@@ -188,14 +204,12 @@ class MfaRequest {
 class MfaResponse {
   /// String
   final String mfaToken;
+
   /// List<String>
   final List<String> availableMethods;
 
   /// MfaResponse(
-  const MfaResponse({
-    required this.mfaToken,
-    required this.availableMethods,
-  });
+  const MfaResponse({required this.mfaToken, required this.availableMethods});
 
   /// fromJson
   factory MfaResponse.fromJson(Map<String, dynamic> json) {
@@ -209,10 +223,7 @@ class MfaResponse {
 
   /// dynamic>
   Map<String, dynamic> toJson() {
-    return {
-      'mfa_token': mfaToken,
-      'available_methods': availableMethods,
-    };
+    return {'mfa_token': mfaToken, 'available_methods': availableMethods};
   }
 }
 
@@ -220,10 +231,13 @@ class MfaResponse {
 class CreateSessionRequest {
   /// String
   final String userId;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
+
   /// DateTime?
   final DateTime? expiresAt;
+
   /// List<String>?
   final List<String>? organizationIds;
 
@@ -245,8 +259,8 @@ class CreateSessionRequest {
           : null,
       organizationIds: json['organization_ids'] != null
           ? (json['organization_ids'] as List<dynamic>)
-              .map((id) => id as String)
-              .toList()
+                .map((id) => id as String)
+                .toList()
           : null,
     );
   }
@@ -266,10 +280,13 @@ class CreateSessionRequest {
 class CreateSessionResponse {
   /// String
   final String sessionId;
+
   /// String
   final String sessionToken;
+
   /// DateTime
   final DateTime sessionExpiresAt;
+
   /// List<String>
   final List<String> organizationIds;
 
@@ -308,6 +325,7 @@ class CreateSessionResponse {
 class ValidateSessionRequest {
   /// String
   final String sessionToken;
+
   /// String?
   final String? organizationId;
 
@@ -338,14 +356,19 @@ class ValidateSessionRequest {
 class ValidateSessionResponse {
   /// bool
   final bool valid;
+
   /// String?
   final String? userId;
+
   /// String?
   final String? email;
+
   /// String?
   final String? organizationId;
+
   /// DateTime?
   final DateTime? sessionExpiresAt;
+
   /// Map<String,
   final Map<String, dynamic>? userAttributes;
 

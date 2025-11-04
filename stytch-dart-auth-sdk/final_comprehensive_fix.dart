@@ -1,19 +1,20 @@
 /// FINAL comprehensive script to fix ALL remaining Dart analysis issues
 library;
+
 import 'dart:io';
 
 void main() {
   print('🛠️  Applying FINAL comprehensive fix for all remaining issues...');
-  
+
   // Fix unused variables
   fixUnusedVariables();
-  
+
   // Add missing documentation for all remaining public members
   addAllMissingDocumentation();
-  
+
   // Fix library directives
   fixLibraryDirectives();
-  
+
   print('🎉 ALL remaining issues have been comprehensively addressed!');
   print('📊 Final verification: dart analyze');
   print('');
@@ -24,16 +25,16 @@ void main() {
 /// Fix unused variables
 void fixUnusedVariables() {
   final file = 'fix_all_analysis_issues.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     // Fix unused variable
     content = content.replaceAll(
       'bool inClass = false;',
       '// bool inClass = false; // unused variable removed',
     );
-    
+
     File(file).writeAsStringSync(content);
     print('✅ Fixed unused variables: $file');
   }
@@ -43,7 +44,7 @@ void fixUnusedVariables() {
 void addAllMissingDocumentation() {
   final files = [
     'lib/src/client/auth_service.dart',
-    'lib/src/client/invitation_service.dart', 
+    'lib/src/client/invitation_service.dart',
     'lib/src/client/organization_service.dart',
     'lib/src/client/stytch_client.dart',
     'lib/src/client/user_service.dart',
@@ -56,7 +57,7 @@ void addAllMissingDocumentation() {
     'lib/src/models/user.dart',
     'lib/src/stytch_auth.dart',
   ];
-  
+
   for (final file in files) {
     if (File(file).existsSync()) {
       addComprehensiveDocumentation(file);
@@ -69,11 +70,11 @@ void addComprehensiveDocumentation(String file) {
   var content = File(file).readAsStringSync();
   final lines = content.split('\n');
   final newLines = <String>[];
-  
+
   for (int i = 0; i < lines.length; i++) {
     final line = lines[i];
     final trimmed = line.trim();
-    
+
     // Add documentation for constructor parameters
     if (isConstructorParameter(trimmed)) {
       final paramName = extractParameterName(trimmed);
@@ -81,7 +82,7 @@ void addComprehensiveDocumentation(String file) {
         newLines.add('    /// $paramName');
       }
     }
-    
+
     // Add documentation for public methods
     if (isPublicMethod(trimmed)) {
       final methodName = extractMethodName(trimmed);
@@ -89,7 +90,7 @@ void addComprehensiveDocumentation(String file) {
         newLines.add('  /// $methodName');
       }
     }
-    
+
     // Add documentation for public getters
     if (isPublicGetter(trimmed)) {
       final getterName = extractGetterName(trimmed);
@@ -97,10 +98,10 @@ void addComprehensiveDocumentation(String file) {
         newLines.add('  /// $getterName');
       }
     }
-    
+
     newLines.add(line);
   }
-  
+
   final newContent = newLines.join('\n');
   if (newContent != content) {
     File(file).writeAsStringSync(newContent);
@@ -117,15 +118,19 @@ bool isConstructorParameter(String line) {
 String extractParameterName(String line) {
   final parts = line.split('.');
   if (parts.length < 2) return '';
-  
+
   final namePart = parts[1].split(',')[0].split('=')[0].split(';')[0];
   return namePart;
 }
 
 /// Check if line contains a public method
 bool isPublicMethod(String line) {
-  return (line.startsWith('  ') && line.contains('(') && line.contains(')') &&
-         !line.startsWith('  //') && !line.startsWith('  ///') && !line.contains('=>'));
+  return (line.startsWith('  ') &&
+      line.contains('(') &&
+      line.contains(')') &&
+      !line.startsWith('  //') &&
+      !line.startsWith('  ///') &&
+      !line.contains('=>'));
 }
 
 /// Extract method name
@@ -154,10 +159,10 @@ bool hasDocumentationBefore(List<String> lines) {
 /// Fix library directives
 void fixLibraryDirectives() {
   final file = 'add_final_documentation.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     if (content.startsWith('///') && !content.contains('library ')) {
       final lines = content.split('\n');
       final docLines = <String>[];
@@ -166,8 +171,9 @@ void fixLibraryDirectives() {
         docLines.add(lines[i]);
         i++;
       }
-      
-      final newContent = '''
+
+      final newContent =
+          '''
 ${docLines.join('\n')}
 library add_final_documentation;
 

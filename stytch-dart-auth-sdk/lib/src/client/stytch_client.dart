@@ -1,4 +1,5 @@
 library stytch_client;
+
 /// Base API client for stytch B2B API
 import 'dart:convert';
 import 'dart:io';
@@ -38,20 +39,25 @@ class StytchConfig {
     this.environment = 'production',
     this.baseUrlOverride = '',
     this.timeout = const Duration(seconds: 30),
-  }) : _environmentBaseUrl = _getEnvironmentBaseUrl(environment, baseUrlOverride) {
+  }) : _environmentBaseUrl = _getEnvironmentBaseUrl(
+         environment,
+         baseUrlOverride,
+       ) {
     validate();
   }
 
   /// Get the full base URL for the current environment
-  String get fullBaseUrl => baseUrlOverride.isNotEmpty
-      ? baseUrlOverride
-      : baseUrl;
+  String get fullBaseUrl =>
+      baseUrlOverride.isNotEmpty ? baseUrlOverride : baseUrl;
 
   /// Get the appropriate base URL for the environment
   String get environmentBaseUrl => _environmentBaseUrl;
 
   /// Helper method to get environment base URL
-  static String _getEnvironmentBaseUrl(String environment, String baseUrlOverride) {
+  static String _getEnvironmentBaseUrl(
+    String environment,
+    String baseUrlOverride,
+  ) {
     if (baseUrlOverride.isNotEmpty) return baseUrlOverride;
 
     switch (environment.toLowerCase()) {
@@ -73,7 +79,8 @@ class StytchConfig {
     if (projectId.isEmpty) {
       throw StytchConfigurationException('Project ID cannot be empty');
     }
-  /// validEnvironments
+
+    /// validEnvironments
     final validEnvironments = ['sandbox', 'development', 'production'];
     if (!validEnvironments.contains(environment.toLowerCase())) {
       throw StytchConfigurationException(
@@ -95,9 +102,10 @@ class StytchHttpClient {
 
   /// Create authenticated headers
   Map<String, String> _createHeaders() {
-  /// credentials
-    final credentials =
-        base64Encode(utf8.encode('${config.projectId}:${config.apiKey}'));
+    /// credentials
+    final credentials = base64Encode(
+      utf8.encode('${config.projectId}:${config.apiKey}'),
+    );
     return {
       'Content-Type': 'application/json',
       'Authorization': 'Basic $credentials',
@@ -108,10 +116,10 @@ class StytchHttpClient {
   /// Parse error response
   StytchException _parseError(int statusCode, String responseBody) {
     try {
-  /// json
+      /// json
       final json = jsonDecode(responseBody) as Map<String, dynamic>;
       if (json.containsKey('error')) {
-  /// error
+        /// error
         final error = ApiErrorResponse.fromJson(
           json['error'] as Map<String, dynamic>,
         );
@@ -141,13 +149,16 @@ class StytchHttpClient {
   }
 
   /// Make GET request
-  Future<Map<String, dynamic>> get(String path,
-      [Map<String, String>? queryParameters]) async {
-  /// uri
-    final uri = Uri.parse('${config.environmentBaseUrl}$path')
-        .replace(queryParameters: queryParameters);
+  Future<Map<String, dynamic>> get(
+    String path, [
+    Map<String, String>? queryParameters,
+  ]) async {
+    /// uri
+    final uri = Uri.parse(
+      '${config.environmentBaseUrl}$path',
+    ).replace(queryParameters: queryParameters);
 
-  /// response
+    /// response
     final response = await http
         .get(uri, headers: _createHeaders())
         .timeout(config.timeout);
@@ -160,11 +171,14 @@ class StytchHttpClient {
   }
 
   /// Make POST request
-  Future<Map<String, dynamic>> post(String path,
-      {Map<String, dynamic>? body}) async {
-  /// uri
+  Future<Map<String, dynamic>> post(
+    String path, {
+    Map<String, dynamic>? body,
+  }) async {
+    /// uri
     final uri = Uri.parse('${config.environmentBaseUrl}$path');
-  /// response
+
+    /// response
     final response = await http
         .post(
           uri,
@@ -181,11 +195,14 @@ class StytchHttpClient {
   }
 
   /// Make PUT request
-  Future<Map<String, dynamic>> put(String path,
-      {Map<String, dynamic>? body}) async {
-  /// uri
+  Future<Map<String, dynamic>> put(
+    String path, {
+    Map<String, dynamic>? body,
+  }) async {
+    /// uri
     final uri = Uri.parse('${config.environmentBaseUrl}$path');
-  /// response
+
+    /// response
     final response = await http
         .put(
           uri,
@@ -203,9 +220,10 @@ class StytchHttpClient {
 
   /// Make DELETE request
   Future<Map<String, dynamic>> delete(String path) async {
-  /// uri
+    /// uri
     final uri = Uri.parse('${config.environmentBaseUrl}$path');
-  /// response
+
+    /// response
     final response = await http
         .delete(uri, headers: _createHeaders())
         .timeout(config.timeout);
@@ -218,11 +236,14 @@ class StytchHttpClient {
   }
 
   /// Make PATCH request
-  Future<Map<String, dynamic>> patch(String path,
-      {Map<String, dynamic>? body}) async {
-  /// uri
+  Future<Map<String, dynamic>> patch(
+    String path, {
+    Map<String, dynamic>? body,
+  }) async {
+    /// uri
     final uri = Uri.parse('${config.environmentBaseUrl}$path');
-  /// response
+
+    /// response
     final response = await http
         .patch(
           uri,

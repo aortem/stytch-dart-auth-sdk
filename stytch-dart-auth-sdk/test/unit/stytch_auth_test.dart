@@ -22,18 +22,12 @@ void main() {
 
     test('should validate configuration', () {
       expect(
-        () => StytchAuth(
-          apiKey: '',
-          projectId: 'test_project_id',
-        ),
+        () => StytchAuth(apiKey: '', projectId: 'test_project_id'),
         throwsA(isA<StytchConfigurationException>()),
       );
 
       expect(
-        () => StytchAuth(
-          apiKey: 'test_api_key',
-          projectId: '',
-        ),
+        () => StytchAuth(apiKey: 'test_api_key', projectId: ''),
         throwsA(isA<StytchConfigurationException>()),
       );
 
@@ -76,10 +70,7 @@ void main() {
 
   group('Global initialization', () {
     test('should initialize global instance', () {
-      initializeStytch(
-        apiKey: 'test_api_key',
-        projectId: 'test_project_id',
-      );
+      initializeStytch(apiKey: 'test_api_key', projectId: 'test_project_id');
 
       expect(() => stytchApp, returnsNormally);
       expect(stytchApp.isConfigured(), isTrue);

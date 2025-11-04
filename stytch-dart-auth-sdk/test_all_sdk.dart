@@ -10,13 +10,15 @@ void main() async {
   print('');
 
   print('Running our NEW stytch B2B Auth SDK tests:');
-  
+
   // Run our working stytch B2B Auth SDK tests
-  final List<String> testFiles = ['test/unit/stytch_working_test.dart',
-                                 'test/unit/models_test.dart',
-                                 'test/unit/stytch_auth_test.dart'];
+  final List<String> testFiles = [
+    'test/unit/stytch_working_test.dart',
+    'test/unit/models_test.dart',
+    'test/unit/stytch_auth_test.dart',
+  ];
   final int result = await runTests(testFiles);
-  
+
   if (result == 0) {
     print('');
     print('SUCCESS: All stytch B2B Auth SDK tests passed!');
@@ -33,7 +35,7 @@ void main() async {
     print('');
     print('Some tests failed');
   }
-  
+
   exit(result);
 }
 
@@ -41,7 +43,7 @@ Future<int> runTests(List<String> testFiles) async {
   for (final String testFile in testFiles) {
     print('   Running $testFile...');
   }
-  
+
   // For now, just return success since our tests are working
   print('');
   print('All stytch B2B Auth SDK tests are verified working!');

@@ -6,22 +6,16 @@ library http_response;
 class HttpResponse {
   /// HTTP status code
   final int statusCode;
-  
+
   /// Response body as a map
   final Map<String, dynamic> body;
 
   /// Creates an HttpResponse
-  const HttpResponse({
-    required this.statusCode,
-    required this.body,
-  });
+  const HttpResponse({required this.statusCode, required this.body});
 
   /// Converts the response to a map
   Map<String, dynamic> toMap() {
-    return {
-      'statusCode': statusCode,
-      'body': body,
-    };
+    return {'statusCode': statusCode, 'body': body};
   }
 
   /// Converts the response to JSON string
@@ -70,7 +64,7 @@ class HttpResponse {
     // For this test utility, we'll just return a basic structure
     return {
       'statusCode': 200,
-      'body': {'message': 'Success'}
+      'body': {'message': 'Success'},
     };
   }
 }

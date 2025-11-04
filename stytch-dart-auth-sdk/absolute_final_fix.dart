@@ -5,9 +5,9 @@ import 'dart:io';
 
 void main() {
   print('🎯 ABSOLUTE FINAL: Fixing the exact 8 remaining issues...');
-  
+
   fixAllRemainingIssues();
-  
+
   print('');
   print('🏆 ABSOLUTE SUCCESS: ALL 8 ISSUES COMPLETELY FIXED!');
   print('📊 FINAL verification: dart analyze');
@@ -26,10 +26,10 @@ void fixAllRemainingIssues() {
 /// Fix final_15_issues.dart library directive
 void fixLibraryDirective() {
   final file = 'final_15_issues_fix.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     if (content.startsWith('///') && !content.contains('library ')) {
       final lines = content.split('\n');
       final docLines = <String>[];
@@ -38,8 +38,9 @@ void fixLibraryDirective() {
         docLines.add(lines[i]);
         i++;
       }
-      
-      final newContent = '''
+
+      final newContent =
+          '''
 ${docLines.join('\n')}
 library final_15_issues_fix;
 
@@ -53,22 +54,19 @@ ${lines.sublist(i).join('\n')}
 
 /// Fix HTML and JS static field documentation
 void fixHtmlJsStaticFields() {
-  final files = [
-    'lib/src/html_import.dart',
-    'lib/src/js_import.dart',
-  ];
-  
+  final files = ['lib/src/html_import.dart', 'lib/src/js_import.dart'];
+
   for (final file in files) {
     if (File(file).existsSync()) {
       var content = File(file).readAsStringSync();
-      
+
       // Add documentation before static field
       content = content.replaceFirst(
         '  static final bool isSupported = false;',
         '''  /// Whether this platform supports the feature
-  static final bool isSupported = false;'''
+  static final bool isSupported = false;''',
       );
-      
+
       File(file).writeAsStringSync(content);
       print('✅ Fixed static field documentation: $file');
     }
@@ -83,7 +81,7 @@ void fixServiceConstructors() {
     'lib/src/client/organization_service.dart',
     'lib/src/client/user_service.dart',
   ];
-  
+
   for (final file in services) {
     if (File(file).existsSync()) {
       fixServiceConstructor(file);
@@ -94,26 +92,30 @@ void fixServiceConstructors() {
 /// Fix individual service constructor
 void fixServiceConstructor(String file) {
   var content = File(file).readAsStringSync();
-  
+
   // Add documentation before constructor parameter
   content = content.replaceFirst(
     'AuthService(\n    this._httpClient,\n  );',
     '''AuthService(
     /// HTTP client for API requests
     this._httpClient,
-  );'''
+  );''',
   );
-  
+
   // Fix other service names based on file
-  final serviceName = file.split('/').last.replaceAll('_service.dart', '').replaceAll('.dart', '');
+  final serviceName = file
+      .split('/')
+      .last
+      .replaceAll('_service.dart', '')
+      .replaceAll('.dart', '');
   content = content.replaceFirst(
     '${serviceName}Service(\n    this._httpClient,\n  );',
     '''${serviceName}Service(
     /// HTTP client for API requests
     this._httpClient,
-  );'''
+  );''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed service constructor: $file');
 }
@@ -122,27 +124,27 @@ void fixServiceConstructor(String file) {
 void fixStytchAuthConstructor() {
   final file = 'lib/src/stytch_auth.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Fix constructor parameter documentation by replacing the parameter line
   content = content.replaceFirst(
     '    String environment = \'production\',',
-    '    /// Environment\n    String environment = \'production\','
+    '    /// Environment\n    String environment = \'production\',',
   );
-  
+
   // Also fix the global stytchAuth function
   content = content.replaceFirst(
     '  String environment = \'production\',',
-    '  /// Environment\n  String environment = \'production\','
+    '  /// Environment\n  String environment = \'production\',',
   );
-  
+
   // Fix initializeStytch function
   content = content.replaceFirst(
     '    String environment = \'production\',',
-    '    /// Environment\n    String environment = \'production\','
+    '    /// Environment\n    String environment = \'production\',',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed stytchAuth constructor parameters');
 }

@@ -5,19 +5,19 @@ import 'dart:io';
 
 void main() {
   print('Fixing all remaining Dart analysis issues...');
-  
+
   // Fix library doc comments
   fixLibraryDocComments();
-  
+
   // Fix file naming conventions
   fixFileNaming();
-  
+
   // Fix relative imports
   fixRelativeImports();
-  
+
   // Add missing documentation to public members
   addMissingDocumentation();
-  
+
   print('All analysis issues have been addressed!');
 }
 
@@ -32,7 +32,7 @@ void fixLibraryDocComments() {
     'test_core.dart',
     'test_final.dart',
   ];
-  
+
   for (final file in files) {
     if (File(file).existsSync()) {
       final content = File(file).readAsStringSync();
@@ -44,9 +44,10 @@ void fixLibraryDocComments() {
           docLines.add(lines[i]);
           i++;
         }
-        
+
         final libraryName = file.replaceAll('/', '_').replaceAll('.dart', '');
-        final newContent = '''
+        final newContent =
+            '''
 ${docLines.join('\n')}
 library $libraryName;
 
@@ -65,7 +66,7 @@ void fixFileNaming() {
     ('test-all-sdk.dart', 'test_all_sdk.dart'),
     ('test-all.dart', 'test_all.dart'),
   ];
-  
+
   for (final (oldName, newName) in renamedFiles) {
     if (File(oldName).existsSync()) {
       File(oldName).renameSync(newName);
@@ -76,25 +77,23 @@ void fixFileNaming() {
 
 /// Fix relative imports
 void fixRelativeImports() {
-  final files = [
-    'test/unit/stytch_working_test.dart',
-  ];
-  
+  final files = ['test/unit/stytch_working_test.dart'];
+
   for (final file in files) {
     if (File(file).existsSync()) {
       var content = File(file).readAsStringSync();
-      
+
       // Replace relative imports with package imports
       content = content.replaceAll(
         "import '../lib/src/stytch_auth.dart'",
         "import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart'",
       );
-      
+
       content = content.replaceAll(
         "import '../lib/src/client/auth_service.dart'",
         "import 'package:stytch_dart_auth_sdk/src/client/auth_service.dart'",
       );
-      
+
       File(file).writeAsStringSync(content);
       print('Fixed relative imports: $file');
     }
@@ -118,7 +117,7 @@ void addMissingDocumentation() {
     'lib/src/models/user.dart',
     'lib/src/stytch_auth.dart',
   ];
-  
+
   for (final file in files) {
     if (File(file).existsSync()) {
       addDocumentationToFile(file);
@@ -131,45 +130,56 @@ void addDocumentationToFile(String file) {
   var content = File(file).readAsStringSync();
   final lines = content.split('\n');
   final newLines = <String>[];
-  
+
   // bool inClass = false; // unused variable removed
   String className = '';
-  
+
   for (int i = 0; i < lines.length; i++) {
     final line = lines[i];
-    
+
     // Detect class declarations
     if (line.trim().startsWith('class ')) {
       // inClass = true; // unused variable removed
       className = line.trim().split(' ')[1].split('<')[0].split('{')[0];
-      
+
       // Add documentation before class if missing
-      if (i > 0 && !lines[i-1].trim().startsWith('///') && !lines[i-1].trim().startsWith('//')) {
+      if (i > 0 &&
+          !lines[i - 1].trim().startsWith('///') &&
+          !lines[i - 1].trim().startsWith('//')) {
         newLines.add('/// $className class');
         newLines.add('');
       }
     }
-    
+
     // Detect public member declarations
-    if ((line.trim().startsWith('final ') || line.trim().startsWith('String ') || 
-         line.trim().startsWith('int ') || line.trim().startsWith('bool ') ||
-         line.trim().startsWith('Map<') || line.trim().startsWith('List<')) &&
-        !line.trim().startsWith('///') && !line.trim().startsWith('//') &&
-        !line.contains('==') && !line.contains('!=') && 
-        !line.contains('null') && !line.contains('_')) {
-      
+    if ((line.trim().startsWith('final ') ||
+            line.trim().startsWith('String ') ||
+            line.trim().startsWith('int ') ||
+            line.trim().startsWith('bool ') ||
+            line.trim().startsWith('Map<') ||
+            line.trim().startsWith('List<')) &&
+        !line.trim().startsWith('///') &&
+        !line.trim().startsWith('//') &&
+        !line.contains('==') &&
+        !line.contains('!=') &&
+        !line.contains('null') &&
+        !line.contains('_')) {
       // Check if previous line is not documentation
       if (newLines.isEmpty || !newLines.last.trim().startsWith('///')) {
-        final memberName = line.trim().split(' ')[1].split('=')[0].split(';')[0];
+        final memberName = line
+            .trim()
+            .split(' ')[1]
+            .split('=')[0]
+            .split(';')[0];
         if (!memberName.startsWith('_')) {
           newLines.add('  /// $memberName');
         }
       }
     }
-    
+
     newLines.add(line);
   }
-  
+
   final newContent = newLines.join('\n');
   if (newContent != content) {
     File(file).writeAsStringSync(newContent);

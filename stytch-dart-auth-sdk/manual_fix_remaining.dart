@@ -5,12 +5,12 @@ import 'dart:io';
 
 void main() {
   print('🔧 Manual fix for all remaining 15 documentation issues...');
-  
+
   fixClientServices();
   fixModels();
   fixHtmlJsImports();
   fixStytchAuth();
-  
+
   print('');
   print('✅ ALL REMAINING ISSUES MANUALLY FIXED!');
   print('📊 Final verification: dart analyze');
@@ -29,17 +29,14 @@ void fixClientServices() {
 void fixAuthService() {
   final file = 'lib/src/client/auth_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Fix constructor parameter documentation
-  content = content.replaceAll(
-    'AuthService(this._httpClient);',
-    '''AuthService(
+  content = content.replaceAll('AuthService(this._httpClient);', '''AuthService(
     this._httpClient,
-  );'''
-  );
-  
+  );''');
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed AuthService documentation');
 }
@@ -48,17 +45,17 @@ void fixAuthService() {
 void fixInvitationService() {
   final file = 'lib/src/client/invitation_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Fix constructor parameter documentation
   content = content.replaceAll(
     'InvitationService(this._httpClient);',
     '''InvitationService(
     this._httpClient,
-  );'''
+  );''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed InvitationService documentation');
 }
@@ -67,17 +64,17 @@ void fixInvitationService() {
 void fixOrganizationService() {
   final file = 'lib/src/client/organization_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Fix constructor parameter documentation
   content = content.replaceAll(
     'OrganizationService(this._httpClient);',
     '''OrganizationService(
     this._httpClient,
-  );'''
+  );''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed OrganizationService documentation');
 }
@@ -86,17 +83,14 @@ void fixOrganizationService() {
 void fixUserService() {
   final file = 'lib/src/client/user_service.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Fix constructor parameter documentation
-  content = content.replaceAll(
-    'UserService(this._httpClient);',
-    '''UserService(
+  content = content.replaceAll('UserService(this._httpClient);', '''UserService(
     this._httpClient,
-  );'''
-  );
-  
+  );''');
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed UserService documentation');
 }
@@ -105,9 +99,9 @@ void fixUserService() {
 void fixStytchClient() {
   final file = 'lib/src/client/stytch_client.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Fix constructor parameter documentation
   content = content.replaceAll(
     '''  StytchConfig({
@@ -127,19 +121,17 @@ void fixStytchClient() {
     this.timeout = const Duration(seconds: 30),
   }) : _environmentBaseUrl = _getEnvironmentBaseUrl(environment, baseUrlOverride) {
     validate();
-  }'''
+  }''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed StytchConfig documentation');
 }
 
 /// Fix model documentation
 void fixModels() {
-  final files = [
-    'lib/src/models/error.dart',
-  ];
-  
+  final files = ['lib/src/models/error.dart'];
+
   for (final file in files) {
     if (File(file).existsSync()) {
       fixErrorModel(file);
@@ -150,37 +142,34 @@ void fixModels() {
 /// Fix error model
 void fixErrorModel(String file) {
   var content = File(file).readAsStringSync();
-  
+
   // Fix missing getter and method documentation
   content = content.replaceAll(
     '  bool get hasError => error != null;',
     '''  /// Whether the response has an error
-  bool get hasError => error != null;'''
+  bool get hasError => error != null;''',
   );
-  
+
   content = content.replaceAll(
     '  bool get isSuccessful => !hasError && data != null;',
     '''  /// Whether the response is successful
-  bool get isSuccessful => !hasError && data != null;'''
+  bool get isSuccessful => !hasError && data != null;''',
   );
-  
+
   content = content.replaceAll(
     '  T get requireData {',
     '''  /// Get required data, throwing error if present
-  T get requireData {'''
+  T get requireData {''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed ErrorModel documentation');
 }
 
 /// Fix HTML and JS imports
 void fixHtmlJsImports() {
-  final files = [
-    'lib/src/html_import.dart',
-    'lib/src/js_import.dart',
-  ];
-  
+  final files = ['lib/src/html_import.dart', 'lib/src/js_import.dart'];
+
   for (final file in files) {
     if (File(file).existsSync()) {
       fixImportFile(file);
@@ -191,11 +180,11 @@ void fixHtmlJsImports() {
 /// Fix import file
 void fixImportFile(String file) {
   var content = File(file).readAsStringSync();
-  
+
   // Add proper documentation to the only parameter
   final lines = content.split('\n');
   final newLines = <String>[];
-  
+
   for (int i = 0; i < lines.length; i++) {
     final line = lines[i];
     if (line.contains('T?') || line.contains('T ?') || line.contains('T?')) {
@@ -205,7 +194,7 @@ void fixImportFile(String file) {
       newLines.add(line);
     }
   }
-  
+
   final newContent = newLines.join('\n');
   if (newContent != content) {
     File(file).writeAsStringSync(newContent);
@@ -217,9 +206,9 @@ void fixImportFile(String file) {
 void fixStytchAuth() {
   final file = 'lib/src/stytch_auth.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
-  
+
   // Fix constructor parameter documentation
   content = content.replaceAll(
     '''  stytchAuth({
@@ -251,9 +240,9 @@ void fixStytchAuth() {
           timeout: timeout,
         ) {
     _initializeClient();
-  }'''
+  }''',
   );
-  
+
   // Add class properties documentation
   content = content.replaceAll(
     '''class stytchAuth {
@@ -263,9 +252,9 @@ void fixStytchAuth() {
   /// Configuration
   final StytchConfig _config;
   /// HTTP client
-  late final StytchHttpClient _httpClient;'''
+  late final StytchHttpClient _httpClient;''',
   );
-  
+
   File(file).writeAsStringSync(content);
   print('✅ Fixed stytchAuth documentation');
 }

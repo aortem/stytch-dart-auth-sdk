@@ -1,4 +1,5 @@
 library organization_service;
+
 /// Organization management API service for stytch B2B
 import '../models/organization.dart';
 import '../models/error.dart';
@@ -8,16 +9,18 @@ import 'stytch_client.dart';
 class OrganizationService {
   /// StytchHttpClient
   final StytchHttpClient _httpClient;
+
   /// HTTP client for making API requests
   OrganizationService(
     /// HTTP client instance
     this._httpClient,
   );
+
   /// Create a new organization
   Future<CreateOrganizationResponse> createOrganization(
     CreateOrganizationRequest request,
   ) async {
-  /// response
+    /// response
     final response = await _httpClient.post(
       '/b2b/organizations',
       body: request.toJson(),
@@ -28,25 +31,27 @@ class OrganizationService {
 
   /// Get organization by ID
   Future<Organization> getOrganization(String organizationId) async {
-  /// response
-    final response = await _httpClient.get('/b2b/organizations/$organizationId');
+    /// response
+    final response = await _httpClient.get(
+      '/b2b/organizations/$organizationId',
+    );
     return Organization.fromJson(response);
   }
 
   /// Get organization by slug
   Future<Organization> getOrganizationBySlug(String slug) async {
-  /// response
+    /// response
     final response = await _httpClient.get('/b2b/organizations/slug/$slug');
     return Organization.fromJson(response);
   }
 
   /// Update organization
   Future<UpdateOrganizationResponse> updateOrganization(
-  /// organizationId,
+    /// organizationId,
     String organizationId,
     UpdateOrganizationRequest request,
   ) async {
-  /// response
+    /// response
     final response = await _httpClient.put(
       '/b2b/organizations/$organizationId',
       body: request.toJson(),
@@ -62,33 +67,37 @@ class OrganizationService {
 
   /// List organizations with pagination
   Future<List<Organization>> listOrganizations({
-  /// limit
+    /// limit
     int limit = 100,
     String? cursor,
   }) async {
-  /// queryParams
+    /// queryParams
     final queryParams = <String, String>{
       'limit': limit.toString(),
       if (cursor != null) 'cursor': cursor,
     };
 
-  /// response
+    /// response
     final response = await _httpClient.get('/b2b/organizations', queryParams);
-  /// orgsJson
+
+    /// orgsJson
     final orgsJson = response['organizations'] as List<dynamic>;
     return orgsJson
-        .map((orgJson) => Organization.fromJson(orgJson as Map<String, dynamic>))
+        .map(
+          (orgJson) => Organization.fromJson(orgJson as Map<String, dynamic>),
+        )
         .toList();
   }
 
   /// Search organizations
   Future<List<Organization>> searchOrganizations({
     required String query,
-  /// limit
+
+    /// limit
     int limit = 100,
     String? cursor,
   }) async {
-  /// response
+    /// response
     final response = await _httpClient.post(
       '/b2b/organizations/search',
       body: {
@@ -98,48 +107,53 @@ class OrganizationService {
       },
     );
 
-  /// orgsJson
+    /// orgsJson
     final orgsJson = response['organizations'] as List<dynamic>;
     return orgsJson
-        .map((orgJson) => Organization.fromJson(orgJson as Map<String, dynamic>))
+        .map(
+          (orgJson) => Organization.fromJson(orgJson as Map<String, dynamic>),
+        )
         .toList();
   }
 
   /// Get organization members
   Future<List<String>> getOrganizationMembers(
-  /// organizationId,
+    /// organizationId,
     String organizationId, {
-  /// limit
+
+    /// limit
     int limit = 100,
     String? cursor,
   }) async {
-  /// queryParams
+    /// queryParams
     final queryParams = <String, String>{
       'limit': limit.toString(),
       if (cursor != null) 'cursor': cursor,
     };
 
-  /// response
+    /// response
     final response = await _httpClient.get(
       '/b2b/organizations/$organizationId/members',
       queryParams,
     );
 
-  /// membersJson
+    /// membersJson
     final membersJson = response['member_ids'] as List<dynamic>;
     return membersJson.map((id) => id as String).toList();
   }
 
   /// Add user to organization
   Future<void> addUserToOrganization(
-  /// organizationId,
+    /// organizationId,
     String organizationId,
-  /// userId,
+
+    /// userId,
     String userId,
-  /// dynamic>?
+
+    /// dynamic>?
     Map<String, dynamic>? attributes,
   ) async {
-  /// body
+    /// body
     final body = <String, dynamic>{
       'user_id': userId,
       if (attributes != null) 'attributes': attributes,
@@ -153,9 +167,10 @@ class OrganizationService {
 
   /// Remove user from organization
   Future<void> removeUserFromOrganization(
-  /// organizationId,
+    /// organizationId,
     String organizationId,
-  /// userId,
+
+    /// userId,
     String userId,
   ) async {
     await _httpClient.delete(
@@ -165,14 +180,16 @@ class OrganizationService {
 
   /// Update organization member
   Future<void> updateOrganizationMember(
-  /// organizationId,
+    /// organizationId,
     String organizationId,
-  /// userId,
+
+    /// userId,
     String userId,
-  /// dynamic>?
+
+    /// dynamic>?
     Map<String, dynamic>? attributes,
   ) async {
-  /// body
+    /// body
     final body = <String, dynamic>{};
     if (attributes != null) body['attributes'] = attributes;
 

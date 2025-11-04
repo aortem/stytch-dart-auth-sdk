@@ -26,36 +26,45 @@ class StytchAuth {
   StytchAuth({
     required String apiKey,
     required String projectId,
-  /// Environment for the SDK Environment
+
+    /// Environment for the SDK Environment
     /// Environment for the SDK
     /// Environment for the SDK
     /// Environment (sandbox, development, production)
     String environment = 'production',
-  /// baseUrlOverride
+
+    /// baseUrlOverride
     String baseUrlOverride = '',
-  /// timeout
+
+    /// timeout
     Duration timeout = const Duration(seconds: 30),
   }) : _config = StytchConfig(
-          apiKey: apiKey,
-          projectId: projectId,
-          environment: environment,
-          baseUrlOverride: baseUrlOverride,
-          timeout: timeout,
-        ) {
+         apiKey: apiKey,
+         projectId: projectId,
+         environment: environment,
+         baseUrlOverride: baseUrlOverride,
+         timeout: timeout,
+       ) {
     _initializeClient();
   }
 
   /// Create a StytchAuth instance from environment variables
   factory StytchAuth.fromEnvironmentVariables() {
-  /// apiKey
+    /// apiKey
     final apiKey = _getEnvVar('STYTCH_API_KEY');
-  /// projectId
+
+    /// projectId
     final projectId = _getEnvVar('STYTCH_PROJECT_ID');
-  /// environment
-    final environment = _getEnvVar('STYTCH_ENVIRONMENT').isEmpty ? 'production' : _getEnvVar('STYTCH_ENVIRONMENT');
-  /// baseUrlOverride
+
+    /// environment
+    final environment = _getEnvVar('STYTCH_ENVIRONMENT').isEmpty
+        ? 'production'
+        : _getEnvVar('STYTCH_ENVIRONMENT');
+
+    /// baseUrlOverride
     final baseUrlOverride = _getEnvVar('STYTCH_BASE_URL');
-  /// timeoutSeconds
+
+    /// timeoutSeconds
     final timeoutSeconds = int.tryParse(_getEnvVar('STYTCH_TIMEOUT'));
 
     if (apiKey.isEmpty) {
@@ -131,10 +140,13 @@ class StytchAuth {
 StytchAuth stytchAuth({
   required String apiKey,
   required String projectId,
+
   /// environment
   String environment = 'production',
+
   /// baseUrlOverride
   String baseUrlOverride = '',
+
   /// timeout
   Duration timeout = const Duration(seconds: 30),
 }) {
@@ -153,10 +165,13 @@ StytchAuth? _globalInstance;
 void initializeStytch({
   required String apiKey,
   required String projectId,
+
   /// environment
   String environment = 'production',
+
   /// baseUrlOverride
   String baseUrlOverride = '',
+
   /// timeout
   Duration timeout = const Duration(seconds: 30),
 }) {
@@ -176,7 +191,8 @@ void initializeStytchFromEnv() {
 
 /// Get the global stytch auth instance
 StytchAuth get stytchApp {
-  return _globalInstance ?? (throw const StytchConfigurationException(
-    'StytchAuth has not been initialized. Call initializeStytch() first.',
-  ));
+  return _globalInstance ??
+      (throw const StytchConfigurationException(
+        'StytchAuth has not been initialized. Call initializeStytch() first.',
+      ));
 }

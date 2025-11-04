@@ -6,14 +6,19 @@ library user_models;
 class CreateUserRequest {
   /// String
   final String email;
+
   /// String?
   final String? name;
+
   /// String?
   final String? password;
+
   /// bool?
   final bool? isMfaEnabled;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
+
   /// String?
   final String? organizationId;
 
@@ -44,16 +49,22 @@ class CreateUserRequest {
 class CreateUserResponse {
   /// String
   final String userId;
+
   /// String
   final String email;
+
   /// String?
   final String? name;
+
   /// bool
   final bool isMfaEnabled;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
+
   /// DateTime
   final DateTime createdAt;
+
   /// DateTime?
   final DateTime? updatedAt;
 
@@ -101,18 +112,25 @@ class CreateUserResponse {
 class User {
   /// String
   final String userId;
+
   /// String
   final String email;
+
   /// String?
   final String? name;
+
   /// bool
   final bool isMfaEnabled;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
+
   /// DateTime
   final DateTime createdAt;
+
   /// DateTime?
   final DateTime? updatedAt;
+
   /// List<String>?
   final List<String>? organizationIds;
 
@@ -142,8 +160,8 @@ class User {
           : null,
       organizationIds: json['organization_ids'] != null
           ? (json['organization_ids'] as List<dynamic>)
-              .map((id) => id as String)
-              .toList()
+                .map((id) => id as String)
+                .toList()
           : null,
     );
   }
@@ -167,17 +185,15 @@ class User {
 class UpdateUserRequest {
   /// String?
   final String? name;
+
   /// bool?
   final bool? isMfaEnabled;
+
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
   /// UpdateUserRequest(
-  const UpdateUserRequest({
-    this.name,
-    this.isMfaEnabled,
-    this.attributes,
-  });
+  const UpdateUserRequest({this.name, this.isMfaEnabled, this.attributes});
 
   /// fromJson
   factory UpdateUserRequest.fromJson(Map<String, dynamic> json) {
@@ -215,9 +231,7 @@ class UpdateUserResponse {
 
   /// dynamic>
   Map<String, dynamic> toJson() {
-    return {
-      'user': user.toJson(),
-    };
+    return {'user': user.toJson()};
   }
 }
 
@@ -231,8 +245,6 @@ class DeleteUserRequest {
 
   /// dynamic>
   Map<String, dynamic> toJson() {
-    return {
-      'user_id': userId,
-    };
+    return {'user_id': userId};
   }
 }

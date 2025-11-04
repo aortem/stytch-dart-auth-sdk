@@ -1,4 +1,5 @@
 library js_import;
+
 /// JavaScript import for web platform
 /// This file serves as a placeholder for dart:js functionality
 /// when targeting web platforms

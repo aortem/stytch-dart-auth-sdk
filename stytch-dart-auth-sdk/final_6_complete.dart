@@ -5,11 +5,11 @@ import 'dart:io';
 
 void main() {
   print('🎯 FINAL COMPLETE: Fixing the exact 6 remaining issues...');
-  
+
   fixLibraryDirective();
   fixConstructorParams();
   fixEnvironmentParam();
-  
+
   print('');
   print('🏆 FINAL COMPLETE SUCCESS: ALL 6 ISSUES FIXED!');
   print('📊 ULTIMATE verification: dart analyze');
@@ -20,10 +20,10 @@ void main() {
 /// Fix the library directive issue
 void fixLibraryDirective() {
   final file = 'final_15_issues_fix.dart';
-  
+
   if (File(file).existsSync()) {
     var content = File(file).readAsStringSync();
-    
+
     if (content.startsWith('///') && !content.contains('library ')) {
       final lines = content.split('\n');
       final docLines = <String>[];
@@ -32,8 +32,9 @@ void fixLibraryDirective() {
         docLines.add(lines[i]);
         i++;
       }
-      
-      final newContent = '''
+
+      final newContent =
+          '''
 ${docLines.join('\n')}
 library final_15_issues_fix;
 
@@ -53,7 +54,7 @@ void fixConstructorParams() {
     'lib/src/client/organization_service.dart',
     'lib/src/client/user_service.dart',
   ];
-  
+
   for (final file in services) {
     if (File(file).existsSync()) {
       fixServiceConstructor(file);
@@ -65,16 +66,17 @@ void fixConstructorParams() {
 void fixServiceConstructor(String file) {
   var content = File(file).readAsStringSync();
   final lines = content.split('\n');
-  
+
   // Find line 11 (0-indexed) or the constructor line
   if (lines.length > 11) {
     // Add documentation before the constructor parameter
-    lines[10] = '  /// HTTP client for making API requests\n  final StytchHttpClient _httpClient;';
+    lines[10] =
+        '  /// HTTP client for making API requests\n  final StytchHttpClient _httpClient;';
     lines[11] = '  AuthService(';
     lines[12] = '    /// HTTP client instance';
     lines[13] = '    this._httpClient,';
     lines[14] = '  );';
-    
+
     // Apply same fix pattern for other services
     if (file.contains('invitation')) {
       lines[11] = '  InvitationService(';
@@ -90,7 +92,7 @@ void fixServiceConstructor(String file) {
       lines[13] = '    this._httpClient,';
     }
   }
-  
+
   File(file).writeAsStringSync(lines.join('\n'));
   print('✅ Fixed constructor parameters: $file');
 }
@@ -99,26 +101,28 @@ void fixServiceConstructor(String file) {
 void fixEnvironmentParam() {
   final file = 'lib/src/stytch_auth.dart';
   if (!File(file).existsSync()) return;
-  
+
   var content = File(file).readAsStringSync();
   final lines = content.split('\n');
-  
+
   // Fix line 24 (constructor parameter) - ensure proper documentation
   if (lines.length > 24) {
     // Find the StytchAuth constructor and fix the environment parameter
     for (int i = 0; i < lines.length; i++) {
-      if (lines[i].contains('StytchAuth({') || lines[i].contains('stytchAuth({')) {
+      if (lines[i].contains('StytchAuth({') ||
+          lines[i].contains('stytchAuth({')) {
         // Look for environment parameter in the next few lines
         for (int j = i; j < i + 10 && j < lines.length; j++) {
           if (lines[j].contains('String environment = \'production\',')) {
-            lines[j] = '    /// Environment (sandbox, development, production)\n    String environment = \'production\',';
+            lines[j] =
+                '    /// Environment (sandbox, development, production)\n    String environment = \'production\',';
           }
         }
         break;
       }
     }
   }
-  
+
   File(file).writeAsStringSync(lines.join('\n'));
   print('✅ Fixed environment parameter: $file');
 }
