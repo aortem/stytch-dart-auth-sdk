@@ -1,45 +1,38 @@
+library apply_action_code_test;
+
 import 'package:test/test.dart';
-import 'package:stytch_dart_auth_sdk/stytch_auth.dart';
+import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 
 void main() {
-  group('stytchAuth B2B Tests', () {
-    late stytchAuth authClient;
-
-    setUp(() {
-      authClient = stytchAuth(
-        apiKey: 'test-api-key',
-        projectId: 'test-project-id',
-      );
-    });
-
-    test('stytchAuth should create instance with valid config', () {
+  group('StytchAuth B2B Tests', () {
+    test('StytchAuth should create instance with valid config', () {
       // Arrange & Act
-      final client = stytchAuth(
+      final client = StytchAuth(
         apiKey: 'test-key',
         projectId: 'test-project',
       );
 
       // Assert
-      expect(client, isA<stytchAuth>());
+      expect(client, isA<StytchAuth>());
       expect(client.isConfigured(), true);
     });
 
-    test('stytchAuth should validate configuration', () {
+    test('StytchAuth should validate configuration', () {
       // Arrange & Act & Assert
       expect(
-        () => stytchAuth(apiKey: '', projectId: 'test'),
+        () => StytchAuth(apiKey: '', projectId: 'test'),
         throwsA(isA<StytchConfigurationException>()),
       );
 
       expect(
-        () => stytchAuth(apiKey: 'test', projectId: ''),
+        () => StytchAuth(apiKey: 'test', projectId: ''),
         throwsA(isA<StytchConfigurationException>()),
       );
     });
 
-    test('stytchAuth should have proper service accessors', () {
+    test('StytchAuth should have proper service accessors', () {
       // Arrange
-      final client = stytchAuth(
+      final client = StytchAuth(
         apiKey: 'test-key',
         projectId: 'test-project',
       );
@@ -51,9 +44,9 @@ void main() {
       expect(client.invitation, isA<InvitationService>());
     });
 
-    test('stytchAuth should provide configuration details', () {
+    test('StytchAuth should provide configuration details', () {
       // Arrange
-      final client = stytchAuth(
+      final client = StytchAuth(
         apiKey: 'test-key',
         projectId: 'test-project',
         environment: 'sandbox',

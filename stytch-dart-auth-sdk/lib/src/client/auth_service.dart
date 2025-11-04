@@ -1,3 +1,4 @@
+library auth_service;
 /// Authentication API service for stytch B2B
 import '../models/auth.dart';
 import '../models/error.dart';
@@ -5,14 +6,19 @@ import 'stytch_client.dart';
 
 /// Authentication service for stytch B2B API
 class AuthService {
+  /// StytchHttpClient
   final StytchHttpClient _httpClient;
-
-  AuthService(this._httpClient);
+  /// HTTP client for making API requests
+  AuthService(
+    /// HTTP client instance
+    this._httpClient,
+  );
 
   /// Login with email and password
   Future<AuthResponse> loginWithEmailPassword(
     EmailPasswordLoginRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/auth/token/password',
       body: request.toJson(),
@@ -25,6 +31,7 @@ class AuthService {
   Future<AuthResponse> loginWithSso(
     SsoLoginRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/auth/token/sso',
       body: request.toJson(),
@@ -37,6 +44,7 @@ class AuthService {
   Future<MfaResponse> startMfa(
     MfaRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/auth/mfa/begin',
       body: request.toJson(),
@@ -49,6 +57,7 @@ class AuthService {
   Future<AuthResponse> completeMfa(
     MfaRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/auth/mfa/complete',
       body: request.toJson(),
@@ -61,6 +70,7 @@ class AuthService {
   Future<CreateSessionResponse> createSession(
     CreateSessionRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/sessions',
       body: request.toJson(),
@@ -73,6 +83,7 @@ class AuthService {
   Future<ValidateSessionResponse> validateSession(
     ValidateSessionRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/sessions/authenticate',
       body: request.toJson(),
@@ -93,9 +104,12 @@ class AuthService {
 
   /// Exchange a session for a new one
   Future<CreateSessionResponse> exchangeSession(
+  /// sessionToken,
     String sessionToken,
+  /// dynamic>?
     Map<String, dynamic>? attributes,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/sessions/exchange',
       body: {

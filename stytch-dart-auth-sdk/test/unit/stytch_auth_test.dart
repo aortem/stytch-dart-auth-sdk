@@ -1,3 +1,5 @@
+library stytch_auth_test;
+
 /// Unit tests for stytch_auth.dart
 import 'package:test/test.dart';
 import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
@@ -5,7 +7,7 @@ import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 void main() {
   group('stytchAuth', () {
     test('should create instance with valid config', () {
-      final auth = stytchAuth(
+      final auth = StytchAuth(
         apiKey: 'test_api_key',
         projectId: 'test_project_id',
         environment: 'sandbox',
@@ -20,7 +22,7 @@ void main() {
 
     test('should validate configuration', () {
       expect(
-        () => stytchAuth(
+        () => StytchAuth(
           apiKey: '',
           projectId: 'test_project_id',
         ),
@@ -28,7 +30,7 @@ void main() {
       );
 
       expect(
-        () => stytchAuth(
+        () => StytchAuth(
           apiKey: 'test_api_key',
           projectId: '',
         ),
@@ -36,7 +38,7 @@ void main() {
       );
 
       expect(
-        () => stytchAuth(
+        () => StytchAuth(
           apiKey: 'test_api_key',
           projectId: 'test_project_id',
           environment: 'invalid_env',
@@ -46,7 +48,7 @@ void main() {
     });
 
     test('should return configuration details', () {
-      final auth = stytchAuth(
+      final auth = StytchAuth(
         apiKey: 'test_api_key',
         projectId: 'test_project_id',
         environment: 'development',
@@ -60,7 +62,7 @@ void main() {
     });
 
     test('should access individual services', () {
-      final auth = stytchAuth(
+      final auth = StytchAuth(
         apiKey: 'test_api_key',
         projectId: 'test_project_id',
       );

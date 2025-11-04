@@ -1,14 +1,23 @@
+library user_models;
+
 /// Models for user management in stytch B2B API
 
 /// Request model for creating a user
 class CreateUserRequest {
+  /// String
   final String email;
+  /// String?
   final String? name;
+  /// String?
   final String? password;
+  /// bool?
   final bool? isMfaEnabled;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
+  /// String?
   final String? organizationId;
 
+  /// CreateUserRequest(
   const CreateUserRequest({
     required this.email,
     this.name,
@@ -18,6 +27,7 @@ class CreateUserRequest {
     this.organizationId,
   });
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'email': email,
@@ -32,14 +42,22 @@ class CreateUserRequest {
 
 /// Response model for user creation
 class CreateUserResponse {
+  /// String
   final String userId;
+  /// String
   final String email;
+  /// String?
   final String? name;
+  /// bool
   final bool isMfaEnabled;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
+  /// DateTime
   final DateTime createdAt;
+  /// DateTime?
   final DateTime? updatedAt;
 
+  /// CreateUserResponse(
   const CreateUserResponse({
     required this.userId,
     required this.email,
@@ -50,6 +68,7 @@ class CreateUserResponse {
     this.updatedAt,
   });
 
+  /// fromJson
   factory CreateUserResponse.fromJson(Map<String, dynamic> json) {
     return CreateUserResponse(
       userId: json['user_id'] as String,
@@ -64,6 +83,7 @@ class CreateUserResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
@@ -79,15 +99,24 @@ class CreateUserResponse {
 
 /// Model for a user in stytch
 class User {
+  /// String
   final String userId;
+  /// String
   final String email;
+  /// String?
   final String? name;
+  /// bool
   final bool isMfaEnabled;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
+  /// DateTime
   final DateTime createdAt;
+  /// DateTime?
   final DateTime? updatedAt;
+  /// List<String>?
   final List<String>? organizationIds;
 
+  /// User(
   const User({
     required this.userId,
     required this.email,
@@ -99,6 +128,7 @@ class User {
     this.organizationIds,
   });
 
+  /// fromJson
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       userId: json['user_id'] as String,
@@ -118,6 +148,7 @@ class User {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
@@ -134,16 +165,21 @@ class User {
 
 /// Request model for updating a user
 class UpdateUserRequest {
+  /// String?
   final String? name;
+  /// bool?
   final bool? isMfaEnabled;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
 
+  /// UpdateUserRequest(
   const UpdateUserRequest({
     this.name,
     this.isMfaEnabled,
     this.attributes,
   });
 
+  /// fromJson
   factory UpdateUserRequest.fromJson(Map<String, dynamic> json) {
     return UpdateUserRequest(
       name: json['name'] as String?,
@@ -152,6 +188,7 @@ class UpdateUserRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       if (name != null) 'name': name,
@@ -163,16 +200,20 @@ class UpdateUserRequest {
 
 /// Response model for user updates
 class UpdateUserResponse {
+  /// User
   final User user;
 
+  /// UpdateUserResponse(
   const UpdateUserResponse({required this.user});
 
+  /// fromJson
   factory UpdateUserResponse.fromJson(Map<String, dynamic> json) {
     return UpdateUserResponse(
       user: User.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),
@@ -182,10 +223,13 @@ class UpdateUserResponse {
 
 /// Request model for deleting a user
 class DeleteUserRequest {
+  /// String
   final String userId;
 
+  /// DeleteUserRequest(
   const DeleteUserRequest({required this.userId});
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,

@@ -1,4 +1,6 @@
 /// Test the core stytch SDK functionality without JSON serialization
+library test_core;
+
 import 'dart:convert';
 import 'lib/src/models/error.dart';
 import 'lib/src/client/stytch_client.dart';
@@ -19,7 +21,7 @@ void main() async {
 
     // Test 2: HTTP Client
     print('\n2. Testing StytchHttpClient...');
-    final httpClient = StytchHttpClient(config);
+    // final httpClient // unused = StytchHttpClient(config);
     print('   ✅ HTTP client created successfully');
 
     // Test 3: Error handling

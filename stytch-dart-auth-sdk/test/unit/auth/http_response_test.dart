@@ -1,6 +1,6 @@
-// ignore_for_file: depend_on_referenced_packages
+library http_response_test;
 
-import 'package:ds_tools_testing/ds_tools_testing.dart';
+import 'package:test/test.dart';
 import 'package:stytch_dart_auth_sdk/src/http_response.dart';
 
 void main() {

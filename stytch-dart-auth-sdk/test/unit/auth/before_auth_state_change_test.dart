@@ -1,1 +1,3 @@
-import 'package:ds_tools_testing/ds_tools_testing.dart';
+library before_auth_state_change_test;
+
+import 'package:test/test.dart';

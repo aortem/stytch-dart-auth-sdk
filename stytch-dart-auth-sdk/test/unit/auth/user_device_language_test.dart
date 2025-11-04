@@ -1,1 +1,3 @@
-import 'package:ds_tools_testing/ds_tools_testing.dart';
+library user_device_language_test;
+
+import 'package:test/test.dart';

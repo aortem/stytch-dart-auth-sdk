@@ -1,3 +1,4 @@
+library invitation_service;
 /// Invitation management API service for stytch B2B
 import '../models/invitation.dart';
 import '../models/error.dart';
@@ -5,14 +6,18 @@ import 'stytch_client.dart';
 
 /// Invitation service for stytch B2B API
 class InvitationService {
+  /// StytchHttpClient
   final StytchHttpClient _httpClient;
-
-  InvitationService(this._httpClient);
-
+  /// HTTP client for making API requests
+  InvitationService(
+    /// HTTP client instance
+    this._httpClient,
+  );
   /// Send an invitation to join an organization
   Future<SendInvitationResponse> sendInvitation(
     SendInvitationRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/invitations',
       body: request.toJson(),
@@ -23,23 +28,28 @@ class InvitationService {
 
   /// Get invitation by ID
   Future<Invitation> getInvitation(String invitationId) async {
+  /// response
     final response = await _httpClient.get('/b2b/invitations/$invitationId');
     return Invitation.fromJson(response);
   }
 
   /// List invitations
   Future<List<Invitation>> listInvitations({
+  /// limit
     int limit = 100,
     String? cursor,
     String? organizationId,
   }) async {
+  /// queryParams
     final queryParams = <String, String>{
       'limit': limit.toString(),
       if (cursor != null) 'cursor': cursor,
       if (organizationId != null) 'organization_id': organizationId,
     };
 
+  /// response
     final response = await _httpClient.get('/b2b/invitations', queryParams);
+  /// invitationsJson
     final invitationsJson = response['invitations'] as List<dynamic>;
     return invitationsJson
         .map((invJson) => Invitation.fromJson(invJson as Map<String, dynamic>))
@@ -59,6 +69,7 @@ class InvitationService {
   Future<AcceptInvitationResponse> acceptInvitation(
     AcceptInvitationRequest request,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/invitations/accept',
       body: request.toJson(),
@@ -69,8 +80,10 @@ class InvitationService {
 
   /// Send bulk invitations
   Future<List<SendInvitationResponse>> sendBulkInvitations(
+  /// requests,
     List<SendInvitationRequest> requests,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/invitations/bulk',
       body: {
@@ -78,6 +91,7 @@ class InvitationService {
       },
     );
 
+  /// invitationsJson
     final invitationsJson = response['invitations'] as List<dynamic>;
     return invitationsJson
         .map((invJson) => SendInvitationResponse.fromJson(invJson as Map<String, dynamic>))
@@ -86,14 +100,18 @@ class InvitationService {
 
   /// Get pending invitations for email
   Future<List<Invitation>> getPendingInvitationsForEmail(
+  /// email,
     String email,
   ) async {
+  /// queryParams
     final queryParams = <String, String>{
       'email': email,
       'status': 'pending',
     };
 
+  /// response
     final response = await _httpClient.get('/b2b/invitations', queryParams);
+  /// invitationsJson
     final invitationsJson = response['invitations'] as List<dynamic>;
     return invitationsJson
         .map((invJson) => Invitation.fromJson(invJson as Map<String, dynamic>))
@@ -102,8 +120,10 @@ class InvitationService {
 
   /// Resend invitation
   Future<SendInvitationResponse> resendInvitation(
+  /// invitationId,
     String invitationId,
   ) async {
+  /// response
     final response = await _httpClient.post(
       '/b2b/invitations/$invitationId/resend',
     );

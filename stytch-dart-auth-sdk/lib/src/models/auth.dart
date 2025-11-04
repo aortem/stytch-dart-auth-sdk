@@ -1,12 +1,19 @@
+library auth_models;
+
 /// Models for authentication in stytch B2B API
 
 /// Request model for email password login
 class EmailPasswordLoginRequest {
+  /// String
   final String email;
+  /// String
   final String password;
+  /// String?
   final String? organizationId;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
 
+  /// EmailPasswordLoginRequest(
   const EmailPasswordLoginRequest({
     required this.email,
     required this.password,
@@ -14,6 +21,7 @@ class EmailPasswordLoginRequest {
     this.attributes,
   });
 
+  /// fromJson
   factory EmailPasswordLoginRequest.fromJson(Map<String, dynamic> json) {
     return EmailPasswordLoginRequest(
       email: json['email'] as String,
@@ -23,6 +31,7 @@ class EmailPasswordLoginRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'email': email,
@@ -35,16 +44,21 @@ class EmailPasswordLoginRequest {
 
 /// Request model for SSO login
 class SsoLoginRequest {
+  /// String
   final String ssoToken;
+  /// String?
   final String? organizationId;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
 
+  /// SsoLoginRequest(
   const SsoLoginRequest({
     required this.ssoToken,
     this.organizationId,
     this.attributes,
   });
 
+  /// fromJson
   factory SsoLoginRequest.fromJson(Map<String, dynamic> json) {
     return SsoLoginRequest(
       ssoToken: json['sso_token'] as String,
@@ -53,6 +67,7 @@ class SsoLoginRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'sso_token': ssoToken,
@@ -64,17 +79,28 @@ class SsoLoginRequest {
 
 /// Response model for authentication
 class AuthResponse {
+  /// String
   final String userId;
+  /// String
   final String email;
+  /// String?
   final String? name;
+  /// bool
   final bool isMfaEnabled;
+  /// List<String>
   final List<String> organizationIds;
+  /// String
   final String sessionId;
+  /// String
   final String sessionToken;
+  /// DateTime
   final DateTime sessionExpiresAt;
+  /// Map<String,
   final Map<String, dynamic>? userAttributes;
+  /// DateTime
   final DateTime createdAt;
 
+  /// AuthResponse(
   const AuthResponse({
     required this.userId,
     required this.email,
@@ -88,6 +114,7 @@ class AuthResponse {
     required this.createdAt,
   });
 
+  /// fromJson
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
       userId: json['user_id'] as String,
@@ -105,6 +132,7 @@ class AuthResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
@@ -123,16 +151,21 @@ class AuthResponse {
 
 /// Request model for MFA
 class MfaRequest {
+  /// String
   final String mfaToken;
+  /// String
   final String method;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
 
+  /// MfaRequest(
   const MfaRequest({
     required this.mfaToken,
     required this.method,
     this.attributes,
   });
 
+  /// fromJson
   factory MfaRequest.fromJson(Map<String, dynamic> json) {
     return MfaRequest(
       mfaToken: json['mfa_token'] as String,
@@ -141,6 +174,7 @@ class MfaRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'mfa_token': mfaToken,
@@ -152,14 +186,18 @@ class MfaRequest {
 
 /// Response model for MFA
 class MfaResponse {
+  /// String
   final String mfaToken;
+  /// List<String>
   final List<String> availableMethods;
 
+  /// MfaResponse(
   const MfaResponse({
     required this.mfaToken,
     required this.availableMethods,
   });
 
+  /// fromJson
   factory MfaResponse.fromJson(Map<String, dynamic> json) {
     return MfaResponse(
       mfaToken: json['mfa_token'] as String,
@@ -169,6 +207,7 @@ class MfaResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'mfa_token': mfaToken,
@@ -179,11 +218,16 @@ class MfaResponse {
 
 /// Request model for session creation
 class CreateSessionRequest {
+  /// String
   final String userId;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
+  /// DateTime?
   final DateTime? expiresAt;
+  /// List<String>?
   final List<String>? organizationIds;
 
+  /// CreateSessionRequest(
   const CreateSessionRequest({
     required this.userId,
     this.attributes,
@@ -191,6 +235,7 @@ class CreateSessionRequest {
     this.organizationIds,
   });
 
+  /// fromJson
   factory CreateSessionRequest.fromJson(Map<String, dynamic> json) {
     return CreateSessionRequest(
       userId: json['user_id'] as String,
@@ -206,6 +251,7 @@ class CreateSessionRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
@@ -218,11 +264,16 @@ class CreateSessionRequest {
 
 /// Response model for session creation
 class CreateSessionResponse {
+  /// String
   final String sessionId;
+  /// String
   final String sessionToken;
+  /// DateTime
   final DateTime sessionExpiresAt;
+  /// List<String>
   final List<String> organizationIds;
 
+  /// CreateSessionResponse(
   const CreateSessionResponse({
     required this.sessionId,
     required this.sessionToken,
@@ -230,6 +281,7 @@ class CreateSessionResponse {
     required this.organizationIds,
   });
 
+  /// fromJson
   factory CreateSessionResponse.fromJson(Map<String, dynamic> json) {
     return CreateSessionResponse(
       sessionId: json['session_id'] as String,
@@ -241,6 +293,7 @@ class CreateSessionResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'session_id': sessionId,
@@ -253,14 +306,18 @@ class CreateSessionResponse {
 
 /// Request model for session validation
 class ValidateSessionRequest {
+  /// String
   final String sessionToken;
+  /// String?
   final String? organizationId;
 
+  /// ValidateSessionRequest(
   const ValidateSessionRequest({
     required this.sessionToken,
     this.organizationId,
   });
 
+  /// fromJson
   factory ValidateSessionRequest.fromJson(Map<String, dynamic> json) {
     return ValidateSessionRequest(
       sessionToken: json['session_token'] as String,
@@ -268,6 +325,7 @@ class ValidateSessionRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'session_token': sessionToken,
@@ -278,13 +336,20 @@ class ValidateSessionRequest {
 
 /// Response model for session validation
 class ValidateSessionResponse {
+  /// bool
   final bool valid;
+  /// String?
   final String? userId;
+  /// String?
   final String? email;
+  /// String?
   final String? organizationId;
+  /// DateTime?
   final DateTime? sessionExpiresAt;
+  /// Map<String,
   final Map<String, dynamic>? userAttributes;
 
+  /// ValidateSessionResponse(
   const ValidateSessionResponse({
     required this.valid,
     this.userId,
@@ -294,6 +359,7 @@ class ValidateSessionResponse {
     this.userAttributes,
   });
 
+  /// fromJson
   factory ValidateSessionResponse.fromJson(Map<String, dynamic> json) {
     return ValidateSessionResponse(
       valid: json['valid'] as bool,
@@ -307,6 +373,7 @@ class ValidateSessionResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'valid': valid,

@@ -1,14 +1,23 @@
+library invitation_models;
+
 /// Models for invitation management in stytch B2B API
 
 /// Request model for sending an invitation
 class SendInvitationRequest {
+  /// String
   final String email;
+  /// String?
   final String? organizationId;
+  /// List<String>?
   final List<String>? organizationIds;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
+  /// String?
   final String? inviteRedirectUrl;
+  /// String?
   final String? inviteTokenId;
 
+  /// SendInvitationRequest(
   const SendInvitationRequest({
     required this.email,
     this.organizationId,
@@ -18,6 +27,7 @@ class SendInvitationRequest {
     this.inviteTokenId,
   });
 
+  /// fromJson
   factory SendInvitationRequest.fromJson(Map<String, dynamic> json) {
     return SendInvitationRequest(
       email: json['email'] as String,
@@ -33,6 +43,7 @@ class SendInvitationRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'email': email,
@@ -47,13 +58,20 @@ class SendInvitationRequest {
 
 /// Response model for sending an invitation
 class SendInvitationResponse {
+  /// String
   final String invitationId;
+  /// String
   final String email;
+  /// String?
   final String? organizationId;
+  /// String
   final String status;
+  /// DateTime
   final DateTime expiresAt;
+  /// DateTime
   final DateTime sentAt;
 
+  /// SendInvitationResponse(
   const SendInvitationResponse({
     required this.invitationId,
     required this.email,
@@ -63,6 +81,7 @@ class SendInvitationResponse {
     required this.sentAt,
   });
 
+  /// fromJson
   factory SendInvitationResponse.fromJson(Map<String, dynamic> json) {
     return SendInvitationResponse(
       invitationId: json['invitation_id'] as String,
@@ -74,6 +93,7 @@ class SendInvitationResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'invitation_id': invitationId,
@@ -88,15 +108,24 @@ class SendInvitationResponse {
 
 /// Model for an invitation
 class Invitation {
+  /// String
   final String invitationId;
+  /// String
   final String email;
+  /// String?
   final String? organizationId;
+  /// String
   final String status;
+  /// DateTime
   final DateTime expiresAt;
+  /// DateTime
   final DateTime sentAt;
+  /// DateTime?
   final DateTime? acceptedAt;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
 
+  /// Invitation(
   const Invitation({
     required this.invitationId,
     required this.email,
@@ -108,6 +137,7 @@ class Invitation {
     this.attributes,
   });
 
+  /// fromJson
   factory Invitation.fromJson(Map<String, dynamic> json) {
     return Invitation(
       invitationId: json['invitation_id'] as String,
@@ -123,6 +153,7 @@ class Invitation {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'invitation_id': invitationId,
@@ -139,16 +170,21 @@ class Invitation {
 
 /// Request model for accepting an invitation
 class AcceptInvitationRequest {
+  /// String
   final String token;
+  /// String?
   final String? password;
+  /// Map<String,
   final Map<String, dynamic>? attributes;
 
+  /// AcceptInvitationRequest(
   const AcceptInvitationRequest({
     required this.token,
     this.password,
     this.attributes,
   });
 
+  /// fromJson
   factory AcceptInvitationRequest.fromJson(Map<String, dynamic> json) {
     return AcceptInvitationRequest(
       token: json['token'] as String,
@@ -157,6 +193,7 @@ class AcceptInvitationRequest {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'token': token,
@@ -168,13 +205,20 @@ class AcceptInvitationRequest {
 
 /// Response model for accepting an invitation
 class AcceptInvitationResponse {
+  /// String
   final String userId;
+  /// String
   final String email;
+  /// String
   final String sessionId;
+  /// String
   final String sessionToken;
+  /// DateTime
   final DateTime sessionExpiresAt;
+  /// List<String>
   final List<String> organizationIds;
 
+  /// AcceptInvitationResponse(
   const AcceptInvitationResponse({
     required this.userId,
     required this.email,
@@ -184,6 +228,7 @@ class AcceptInvitationResponse {
     required this.organizationIds,
   });
 
+  /// fromJson
   factory AcceptInvitationResponse.fromJson(Map<String, dynamic> json) {
     return AcceptInvitationResponse(
       userId: json['user_id'] as String,
@@ -197,6 +242,7 @@ class AcceptInvitationResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
@@ -211,16 +257,20 @@ class AcceptInvitationResponse {
 
 /// Request model for canceling an invitation
 class CancelInvitationRequest {
+  /// String
   final String invitationId;
 
+  /// CancelInvitationRequest(
   const CancelInvitationRequest({required this.invitationId});
 
+  /// fromJson
   factory CancelInvitationRequest.fromJson(Map<String, dynamic> json) {
     return CancelInvitationRequest(
       invitationId: json['invitation_id'] as String,
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'invitation_id': invitationId,

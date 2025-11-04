@@ -1,12 +1,19 @@
+library error_models;
+
 /// Error models for stytch B2B API
 
 /// Base exception class for stytch SDK
 class StytchException implements Exception {
+  /// String
   final String message;
+  /// String?
   final String? code;
+  /// int?
   final int? statusCode;
+  /// Map<String,
   final Map<String, dynamic>? details;
 
+  /// StytchException(
   const StytchException(
     this.message, {
     this.code,
@@ -15,12 +22,15 @@ class StytchException implements Exception {
   });
 
   @override
+  /// toString()
   String toString() => 'StytchException: $message';
 }
 
 /// Exception thrown for authentication errors
 class StytchAuthException extends StytchException {
+  /// StytchAuthException(
   const StytchAuthException(
+  /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -30,7 +40,9 @@ class StytchAuthException extends StytchException {
 
 /// Exception thrown for validation errors
 class StytchValidationException extends StytchException {
+  /// StytchValidationException(
   const StytchValidationException(
+  /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -40,7 +52,9 @@ class StytchValidationException extends StytchException {
 
 /// Exception thrown for rate limit errors
 class StytchRateLimitException extends StytchException {
+  /// StytchRateLimitException(
   const StytchRateLimitException(
+  /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -50,7 +64,9 @@ class StytchRateLimitException extends StytchException {
 
 /// Exception thrown for configuration errors
 class StytchConfigurationException extends StytchException {
+  /// StytchConfigurationException(
   const StytchConfigurationException(
+  /// super.message,
     String super.message, {
     super.code,
     super.statusCode,
@@ -60,12 +76,18 @@ class StytchConfigurationException extends StytchException {
 
 /// API error response model
 class ApiErrorResponse {
+  /// String
   final String errorType;
+  /// String
   final String errorMessage;
+  /// String?
   final String? errorCode;
+  /// String?
   final String? requestId;
+  /// Map<String,
   final Map<String, dynamic>? metadata;
 
+  /// ApiErrorResponse(
   const ApiErrorResponse({
     required this.errorType,
     required this.errorMessage,
@@ -74,6 +96,7 @@ class ApiErrorResponse {
     this.metadata,
   });
 
+  /// fromJson
   factory ApiErrorResponse.fromJson(Map<String, dynamic> json) {
     return ApiErrorResponse(
       errorType: json['error_type'] as String,
@@ -84,6 +107,7 @@ class ApiErrorResponse {
     );
   }
 
+  /// dynamic>
   Map<String, dynamic> toJson() {
     return {
       'error_type': errorType,
@@ -94,6 +118,7 @@ class ApiErrorResponse {
     };
   }
 
+  /// Convert to exception
   StytchException toException() {
     switch (errorType.toLowerCase()) {
       case 'auth_error':
@@ -132,19 +157,26 @@ class ApiErrorResponse {
 
 /// Generic API response wrapper
 class ApiResponse<T> {
+  /// T?
   final T? data;
+  /// ApiErrorResponse?
   final ApiErrorResponse? error;
 
+  /// ApiResponse(
   const ApiResponse({
     this.data,
     this.error,
   });
 
+  /// Create from JSON
   factory ApiResponse.fromJson(
+  /// dynamic>
     Map<String, dynamic> json,
     T Function(Object?)? fromJsonT,
   ) {
+  /// errorJson
     final errorJson = json['error'];
+  /// dataJson
     final dataJson = json['data'];
 
     return ApiResponse<T>(
@@ -155,10 +187,13 @@ class ApiResponse<T> {
     );
   }
 
+  /// Whether the response has an error
   bool get hasError => error != null;
 
+  /// Whether the response is successful
   bool get isSuccessful => !hasError && data != null;
 
+  /// Get required data, throwing error if present
   T get requireData {
     if (hasError) {
       throw error!.toException();

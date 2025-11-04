@@ -4,7 +4,7 @@ import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 void main() async {
   try {
     // Initialize stytch with your credentials
-    final auth = stytchAuth(
+    final auth = StytchAuth(
       apiKey: 'YOUR_API_KEY', // Replace with your actual API key
       projectId: 'YOUR_PROJECT_ID', // Replace with your actual project ID
       environment: 'sandbox', // Use 'sandbox' for testing, 'production' for live
@@ -39,12 +39,12 @@ void main() async {
 
     // Example 3: Session validation
     print('\n=== Session Management Example ===');
-    final sessionRequest = ValidateSessionRequest(
-      sessionToken: 'YOUR_SESSION_TOKEN', // Replace with actual session token
-    );
+    // final _sessionRequest = ValidateSessionRequest(
+    //   sessionToken: 'YOUR_SESSION_TOKEN', // Replace with actual session token
+    // );
 
     // Note: This would make an actual API call - commented out for demo
-    // final sessionResponse = await auth.auth.validateSession(sessionRequest);
+    // final sessionResponse = await auth.auth.validateSession(_sessionRequest);
     print('Session validation request prepared');
 
     // Example 4: Organization management

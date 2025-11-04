@@ -1,4 +1,6 @@
 /// Unit tests for user models
+library test_unit_models_test;
+
 import 'package:test/test.dart';
 import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 

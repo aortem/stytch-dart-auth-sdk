@@ -1,9 +1,9 @@
-{
-  "tags": {
-    "sdk-tests": {
-      "include": "test/unit/stytch_working_test.dart",
-      "include": "test/unit/models_test.dart", 
-      "include": "test/unit/stytch_auth_test.dart"
-    }
-  }
+library flutter_test_config;
+
+import 'dart:async';
+
+/// Test configuration function
+FutureOr<void> testExecutable(FutureOr<void> Function() main) {
+  // Configure test execution here if needed
+  return main();
 }

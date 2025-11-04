@@ -1,5 +1,7 @@
 /// Final comprehensive test of stytch Dart B2B Auth SDK - Core Functionality
 /// This test demonstrates that the core architecture is working without JSON serialization
+library test_final;
+
 
 import 'dart:convert';
 import 'dart:io';
@@ -77,7 +79,7 @@ void main() async {
     final testDir = Directory('test/unit');
     if (testDir.existsSync()) {
       print('   ✅ Test directory exists');
-      final testFiles = testDir.listSync().where((f) => f is File).length;
+      final testFiles = testDir.listSync().whereType<File>().length;
       print('   📊 Test files: $testFiles');
     }
 

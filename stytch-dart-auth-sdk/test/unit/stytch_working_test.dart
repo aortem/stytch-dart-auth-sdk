@@ -1,9 +1,11 @@
 /// Working unit tests for stytch Dart B2B Auth SDK
 /// These tests verify core functionality without JSON serialization
+library test_unit_stytch_working_test;
+
 
 import 'package:test/test.dart';
-import '../../lib/src/client/stytch_client.dart';
-import '../../lib/src/models/error.dart';
+import 'package:stytch_dart_auth_sdk/src/client/stytch_client.dart';
+import 'package:stytch_dart_auth_sdk/src/models/error.dart';
 
 void main() {
   group('StytchConfig', () {

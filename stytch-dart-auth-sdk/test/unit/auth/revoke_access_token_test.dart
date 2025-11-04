@@ -1,1 +1,3 @@
-import 'package:ds_tools_testing/ds_tools_testing.dart';
+library revoke_access_token_test;
+
+import 'package:test/test.dart';
