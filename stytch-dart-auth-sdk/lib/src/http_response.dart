@@ -44,17 +44,17 @@ class HttpResponse {
     try {
       // Try to decode - this will throw FormatException for invalid JSON
       final decoded = jsonDecode(source);
-      
+
       // Ensure it's a Map<String, dynamic>
       if (decoded is! Map<String, dynamic>) {
         throw TypeError();
       }
-      
+
       // Ensure required fields exist
       if (!decoded.containsKey('statusCode') || !decoded.containsKey('body')) {
         throw TypeError();
       }
-      
+
       return decoded;
     } catch (e) {
       // Re-throw as TypeError to match the test expectation
