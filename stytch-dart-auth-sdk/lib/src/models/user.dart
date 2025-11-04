@@ -179,6 +179,32 @@ class User {
       if (organizationIds != null) 'organization_ids': organizationIds,
     };
   }
+  /// Firebase compatibility properties
+  /// Mock uid property (alias for userId)
+  String get uid => userId;
+
+  /// Mock displayName property (alias for name)
+  String? get displayName => name;
+
+  /// Mock photoURL property (always null for stytch)
+  String? get photoURL => null;
+
+  /// Mock emailVerified property (always true for stytch)
+  bool get emailVerified => true;
+
+  /// Mock idToken property
+  String? get idToken => null;
+
+  /// Mock refreshToken property
+  String? get refreshToken => null;
+
+  /// Mock providerId property
+  String? get providerId => 'stytch';
+
+  /// Mock getIdToken method
+  Future<String> getIdToken([bool forceRefresh = false]) async {
+    return 'mock_stytch_token_${userId}_$forceRefresh';
+  }
 }
 
 /// Request model for updating a user

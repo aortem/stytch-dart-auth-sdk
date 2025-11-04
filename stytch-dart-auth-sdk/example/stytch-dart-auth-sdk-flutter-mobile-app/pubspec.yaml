@@ -35,7 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   stytch_dart_auth_sdk:
-    path: ../../../stytch_dart_auth_sdk
+    path: ../../
   provider: ^6.1.2
   bot_toast: ^4.1.3
   google_sign_in: ^6.2.1
