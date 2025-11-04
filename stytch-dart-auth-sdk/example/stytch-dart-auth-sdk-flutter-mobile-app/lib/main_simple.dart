@@ -8,11 +8,11 @@ void main() async {
 
   try {
     print('🎉 Initializing stytch SDK for Flutter demo...');
-    
+
     // Create stytch auth instance
     final auth = stytchAuth(
       apiKey: 'demo_api_key',
-      projectId: 'demo_project_id', 
+      projectId: 'demo_project_id',
       environment: 'sandbox',
     );
 
@@ -23,32 +23,34 @@ void main() async {
   } catch (e, stackTrace) {
     print('❌ Error initializing stytch: $e');
     print('Stack trace: $stackTrace');
-    
-    runApp(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
-              const Text(
-                'Failed to initialize stytch SDK',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text('$e'),
-            ],
+
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                const Text(
+                  'Failed to initialize stytch SDK',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text('$e'),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }
 
 class MyApp extends StatelessWidget {
   final stytchAuth auth;
-  
+
   const MyApp({super.key, required this.auth});
 
   @override
@@ -76,7 +78,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final stytchAuth _auth;
-  
+
   @override
   void initState() {
     super.initState();
@@ -129,7 +131,10 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 16),
             Text(
               'Ready to use stytch B2B authentication features!',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
             ),
           ],
         ),
@@ -156,11 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.security,
-              size: 80,
-              color: Colors.blue,
-            ),
+            Icon(Icons.security, size: 80, color: Colors.blue),
             const SizedBox(height: 32),
             Text(
               'stytch B2B Authentication SDK',
@@ -350,10 +351,7 @@ final org = await auth.organization.createOrganization(
       ),
       child: Text(
         code.trim(),
-        style: const TextStyle(
-          fontFamily: 'monospace',
-          fontSize: 12,
-        ),
+        style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
       ),
     );
   }

@@ -18,7 +18,7 @@ extension UserCompatibility on User {
   /// Mock uid property
   String get uid => userId;
 
-  /// Mock emailVerified property  
+  /// Mock emailVerified property
   bool get emailVerified => true; // Assume verified for mock
 
   /// Mock displayName property

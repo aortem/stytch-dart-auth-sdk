@@ -22,24 +22,19 @@ void main() async {
     debugPrint('Auth instance: $auth');
 
     // Wrap the app with Provider
-    runApp(
-      Provider<stytchAuth>.value(
-        value: auth,
-        child: const MyApp(),
-      ),
-    );
+    runApp(Provider<stytchAuth>.value(value: auth, child: const MyApp()));
   } catch (e, stackTrace) {
     debugPrint('Error initializing stytch: $e');
     debugPrint('StackTrace: $stackTrace');
-    
+
     // Run app with error state
-    runApp(const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Failed to initialize stytch SDK'),
+    runApp(
+      const MaterialApp(
+        home: Scaffold(
+          body: Center(child: Text('Failed to initialize stytch SDK')),
         ),
       ),
-    ));
+    );
   }
 }
 

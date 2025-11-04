@@ -101,160 +101,173 @@ class StytchAuth {
     _organizationService = OrganizationService(_httpClient);
     _invitationService = InvitationService(_httpClient);
   }
-/// Get the authentication service
-AuthService get auth => _authService;
 
-/// Get the user service
-UserService get user => _userService;
+  /// Get the authentication service
+  AuthService get auth => _authService;
 
-/// Get the organization service
-OrganizationService get organization => _organizationService;
+  /// Get the user service
+  UserService get user => _userService;
 
-/// Get the invitation service
-InvitationService get invitation => _invitationService;
+  /// Get the organization service
+  OrganizationService get organization => _organizationService;
 
-/// Check if the client is configured correctly
-bool isConfigured() {
-  try {
-    _config.validate();
-    return true;
-  } catch (e) {
+  /// Get the invitation service
+  InvitationService get invitation => _invitationService;
+
+  /// Check if the client is configured correctly
+  bool isConfigured() {
+    try {
+      _config.validate();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Get configuration details (without sensitive data)
+  Map<String, dynamic> getConfiguration() {
+    return {
+      'projectId': _config.projectId,
+      'environment': _config.environment,
+      'baseUrl': _config.environmentBaseUrl,
+      'timeout': _config.timeout.inSeconds,
+      'isConfigured': isConfigured(),
+    };
+  }
+
+  /// Get current user (for Firebase compatibility)
+  dynamic get currentUser => null;
+
+  /// Sign out method (for Firebase compatibility)
+  Future<void> signOut() async {
+    // Stub implementation for compatibility
+    return;
+  }
+
+  /// Get auth instance (for Firebase compatibility)
+  stytchAuth getAuth() {
+    return this;
+  }
+
+  /// Get storage instance (for Firebase compatibility)
+  dynamic getStorage() {
+    return null;
+  }
+
+  /// Get current user (for Firebase compatibility)
+  dynamic getCurrentUser() {
+    return null;
+  }
+
+  /// On auth state changed (for Firebase compatibility)
+  Stream<dynamic> get onAuthStateChanged => const Stream.empty();
+
+  /// On ID token changed (for Firebase compatibility)
+  Stream<dynamic> get onIdTokenChanged => const Stream.empty();
+
+  /// Firebase compatibility methods (simplified return types)
+  dynamic sendPasswordResetEmail(
+    String email, {
+    dynamic actionCodeSettings,
+  }) async {
+    return null;
+  }
+
+  dynamic checkActionCode(String code) async {
+    return null;
+  }
+
+  void confirmPasswordReset(String code, String newPassword) async {
+    return;
+  }
+
+  void connectAuthEmulator(String host, int port, {bool? useSsl}) async {
+    return;
+  }
+
+  dynamic createUserWithEmailAndPassword(String email, String password) async {
+    throw StytchAuthException('Not implemented in stytch SDK');
+  }
+
+  dynamic createUserWithEmailAndPasswordUser(
+    String email,
+    String password,
+  ) async {
+    throw StytchAuthException('Not implemented in stytch SDK');
+  }
+
+  void reloadUser() async {
+    return;
+  }
+
+  void sendEmailVerificationCode({dynamic actionCodeSettings}) async {
+    return;
+  }
+
+  dynamic getAdditionalUserInfo(dynamic result) async {
+    throw StytchAuthException('Not implemented in stytch SDK');
+  }
+
+  void linkProviderToUser(dynamic user, dynamic provider) async {
+    return;
+  }
+
+  void initializeRecaptchaConfig(
+    String recaptchaKey, {
+    Map<String, dynamic>? config,
+  }) async {
+    return;
+  }
+
+  bool isSignInWithEmailLink(String emailLink) {
     return false;
   }
-}
 
-/// Get configuration details (without sensitive data)
-Map<String, dynamic> getConfiguration() {
-  return {
-    'projectId': _config.projectId,
-    'environment': _config.environment,
-    'baseUrl': _config.environmentBaseUrl,
-    'timeout': _config.timeout.inSeconds,
-    'isConfigured': isConfigured(),
-  };
-}
+  dynamic getMultiFactorResolver(dynamic exception) {
+    return null;
+  }
 
-/// Get current user (for Firebase compatibility)
-dynamic get currentUser => null;
+  bool sendSignInLinkToEmail(String email, dynamic actionCodeSettings) {
+    return true;
+  }
 
-/// Sign out method (for Firebase compatibility)
-Future<void> signOut() async {
-  // Stub implementation for compatibility
-  return;
-}
+  bool signInWithEmailLink(String email, String emailLink) {
+    return true;
+  }
 
-/// Get auth instance (for Firebase compatibility)
-stytchAuth getAuth() {
-  return this;
-}
+  dynamic signInWithPopup(dynamic provider) async {
+    throw StytchAuthException('Not implemented in stytch SDK');
+  }
 
-/// Get storage instance (for Firebase compatibility)
-dynamic getStorage() {
-  return null;
-}
+  dynamic signUp(String email, String password) {
+    throw StytchAuthException('Not implemented in stytch SDK');
+  }
 
-/// Get current user (for Firebase compatibility)
-dynamic getCurrentUser() {
-  return null;
-}
+  void revokeToken(dynamic token) async {
+    return;
+  }
 
-/// On auth state changed (for Firebase compatibility)
-Stream<dynamic> get onAuthStateChanged => const Stream.empty();
+  void sendEmailVerificationCodeUser(dynamic user) async {
+    return;
+  }
 
-/// On ID token changed (for Firebase compatibility)
-Stream<dynamic> get onIdTokenChanged => const Stream.empty();
+  void verifyBeforeEmailUpdate(
+    String email, {
+    dynamic actionCodeSettings,
+  }) async {
+    return;
+  }
 
-/// Firebase compatibility methods (simplified return types)
-dynamic sendPasswordResetEmail(String email, {dynamic actionCodeSettings}) async {
-  return null;
-}
+  /// Get stytch exception method (for compatibility)
+  dynamic stytchAuthException(dynamic exception) {
+    if (exception is StytchException) return exception;
+    return StytchAuthException(exception.toString());
+  }
 
-dynamic checkActionCode(String code) async {
-  return null;
-}
-
-void confirmPasswordReset(String code, String newPassword) async {
-  return;
-}
-
-void connectAuthEmulator(String host, int port, {bool? useSsl}) async {
-  return;
-}
-
-dynamic createUserWithEmailAndPassword(String email, String password) async {
-  throw StytchAuthException('Not implemented in stytch SDK');
-}
-
-dynamic createUserWithEmailAndPasswordUser(String email, String password) async {
-  throw StytchAuthException('Not implemented in stytch SDK');
-}
-
-void reloadUser() async {
-  return;
-}
-
-void sendEmailVerificationCode({dynamic actionCodeSettings}) async {
-  return;
-}
-
-dynamic getAdditionalUserInfo(dynamic result) async {
-  throw StytchAuthException('Not implemented in stytch SDK');
-}
-
-void linkProviderToUser(dynamic user, dynamic provider) async {
-  return;
-}
-
-void initializeRecaptchaConfig(String recaptchaKey, {Map<String, dynamic>? config}) async {
-  return;
-}
-
-bool isSignInWithEmailLink(String emailLink) {
-  return false;
-}
-
-dynamic getMultiFactorResolver(dynamic exception) {
-  return null;
-}
-
-bool sendSignInLinkToEmail(String email, dynamic actionCodeSettings) {
-  return true;
-}
-
-bool signInWithEmailLink(String email, String emailLink) {
-  return true;
-}
-
-dynamic signInWithPopup(dynamic provider) async {
-  throw StytchAuthException('Not implemented in stytch SDK');
-}
-
-dynamic signUp(String email, String password) {
-  throw StytchAuthException('Not implemented in stytch SDK');
-}
-
-void revokeToken(dynamic token) async {
-  return;
-}
-
-void sendEmailVerificationCodeUser(dynamic user) async {
-  return;
-}
-
-void verifyBeforeEmailUpdate(String email, {dynamic actionCodeSettings}) async {
-  return;
-}
-
-/// Get stytch exception method (for compatibility)
-dynamic stytchAuthException(dynamic exception) {
-  if (exception is StytchException) return exception;
-  return StytchAuthException(exception.toString());
-}
-
-/// Connect auth emulator method
-Future<void> connectEmulator(String host, int port) async {
-  return connectAuthEmulator(host, port);
-}
+  /// Connect auth emulator method
+  Future<void> connectEmulator(String host, int port) async {
+    return connectAuthEmulator(host, port);
+  }
 }
 
 /// Create a StytchAuth instance with lowercase function name
@@ -326,7 +339,8 @@ class _FirebaseStytchApp {
   static StytchAuth? _instance;
 
   /// Get the stytch auth instance (Firebase-style)
-  static StytchAuth get instance => _instance ??
+  static StytchAuth get instance =>
+      _instance ??
       (throw const StytchConfigurationException(
         'StytchAuth has not been initialized. Call initializeStytch() first.',
       ));
@@ -392,4 +406,3 @@ Future<void> initializeAppWithServiceAccountImpersonation({
     environment: 'sandbox',
   );
 }
-

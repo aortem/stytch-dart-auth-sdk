@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 /// Mock StytchStorage class for Firebase compatibility
-/// 
+///
 /// This class provides compatibility with Firebase Storage while using
 /// stytch B2B SDK for authentication and user management.
 class StytchStorage {
@@ -13,16 +13,25 @@ class StytchStorage {
   const StytchStorage();
 
   /// Mock getData method
-  /// 
+  ///
   /// Returns placeholder data for Firebase compatibility
   /// [path] - The storage path
   /// Returns mock data as bytes
   Future<Uint8List> getData(String path) async {
-    return Uint8List.fromList([0x66, 0x69, 0x72, 0x65, 0x62, 0x61, 0x73, 0x65]); // "firebase"
+    return Uint8List.fromList([
+      0x66,
+      0x69,
+      0x72,
+      0x65,
+      0x62,
+      0x61,
+      0x73,
+      0x65,
+    ]); // "firebase"
   }
 
   /// Mock getDownloadURL method
-  /// 
+  ///
   /// Returns a mock download URL for Firebase compatibility
   /// [path] - The storage path
   /// Returns a mock download URL
@@ -31,7 +40,7 @@ class StytchStorage {
   }
 
   /// Mock getMetadata method
-  /// 
+  ///
   /// Returns mock metadata for Firebase compatibility
   /// [path] - The storage path
   /// Returns mock metadata
@@ -45,7 +54,7 @@ class StytchStorage {
   }
 
   /// Mock delete method
-  /// 
+  ///
   /// Mock implementation for Firebase compatibility
   /// [path] - The storage path to delete
   Future<void> delete(String path) async {
@@ -54,24 +63,24 @@ class StytchStorage {
 }
 
 /// Mock FileMetadata class for Firebase compatibility
-/// 
+///
 /// Represents metadata for files in storage, including size,
 /// content type, and modification time.
 class MockFileMetadata {
   /// The file path
   final String path;
-  
+
   /// The file size in bytes
   final int size;
-  
+
   /// The content type/MIME type
   final String contentType;
-  
+
   /// Last modified date
   final DateTime updated;
 
   /// Creates a MockFileMetadata instance
-  /// 
+  ///
   /// [path] - File path
   /// [size] - File size in bytes
   /// [contentType] - MIME type

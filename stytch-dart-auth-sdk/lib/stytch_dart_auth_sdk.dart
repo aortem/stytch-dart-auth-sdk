@@ -27,4 +27,5 @@ export 'src/auth/storage.dart';
 export 'src/auth/persistence.dart';
 export 'src/auth/get_multi_factor.dart';
 export 'src/auth/action_code.dart';
-export 'src/auth/firebase_compatibility.dart' hide stytchApp, stytchAuthInstance;
+export 'src/auth/firebase_compatibility.dart'
+    hide stytchApp, stytchAuthInstance;

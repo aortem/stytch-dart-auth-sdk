@@ -179,6 +179,7 @@ class User {
       if (organizationIds != null) 'organization_ids': organizationIds,
     };
   }
+
   /// Firebase compatibility properties
   /// Mock uid property (alias for userId)
   String get uid => userId;

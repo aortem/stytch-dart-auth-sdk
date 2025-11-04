@@ -4,7 +4,7 @@ library get_multi_factor;
 import 'dart:async';
 
 /// Mock MultiFactor class for Firebase compatibility
-/// 
+///
 /// Provides multi-factor authentication support while using
 /// stytch B2B SDK for the underlying authentication.
 class MultiFactor {
@@ -13,27 +13,24 @@ class MultiFactor {
 }
 
 /// Mock MultiFactorResolver class for Firebase compatibility
-/// 
+///
 /// Resolves multi-factor authentication challenges by providing
 /// the user with available factors and verification methods.
 class MultiFactorResolver {
   /// The session ID for the multi-factor flow
   final String sessionId;
-  
+
   /// The list of available hints
   final List<MultiFactorHint> hints;
 
   /// Creates a MultiFactorResolver instance
-  /// 
+  ///
   /// [sessionId] - Session identifier
   /// [hints] - Available factor hints
-  const MultiFactorResolver({
-    required this.sessionId,
-    required this.hints,
-  });
+  const MultiFactorResolver({required this.sessionId, required this.hints});
 
   /// Resolve the multi-factor challenge with the given hint
-  /// 
+  ///
   /// [hint] - The factor hint to use
   /// [multiFactorVerifier] - The verifier for the chosen factor
   /// Returns a verification result
@@ -47,21 +44,21 @@ class MultiFactorResolver {
 }
 
 /// Mock MultiFactorHint class for Firebase compatibility
-/// 
+///
 /// Represents a hint for multi-factor authentication,
 /// providing information about available factors.
 class MultiFactorHint {
   /// The factor ID
   final String factorId;
-  
+
   /// The enrollment ID
   final String enrollmentId;
-  
+
   /// The factor type (phone, email, etc.)
   final String factorType;
 
   /// Creates a MultiFactorHint instance
-  /// 
+  ///
   /// [factorId] - Factor identifier
   /// [enrollmentId] - Enrollment identifier
   /// [factorType] - The type of factor
@@ -73,7 +70,7 @@ class MultiFactorHint {
 }
 
 /// Mock PhoneMultiFactorGenerator class for Firebase compatibility
-/// 
+///
 /// Provides phone-based multi-factor authentication while using
 /// stytch B2B SDK for the actual authentication process.
 class PhoneMultiFactorGenerator {
@@ -84,7 +81,7 @@ class PhoneMultiFactorGenerator {
   const PhoneMultiFactorGenerator();
 
   /// Create a phone-based multi-factor assertion
-  /// 
+  ///
   /// [verificationId] - The verification ID
   /// [smsCode] - The SMS verification code
   /// Returns a phone multi-factor assertion
@@ -100,18 +97,18 @@ class PhoneMultiFactorGenerator {
 }
 
 /// Mock PhoneMultiFactorAssertion class for Firebase compatibility
-/// 
+///
 /// Represents a phone-based multi-factor assertion for verification
 /// of the second factor in authentication.
 class PhoneMultiFactorAssertion {
   /// The verification ID
   final String verificationId;
-  
+
   /// The SMS verification code
   final String smsCode;
 
   /// Creates a PhoneMultiFactorAssertion instance
-  /// 
+  ///
   /// [verificationId] - Verification identifier
   /// [smsCode] - SMS code
   const PhoneMultiFactorAssertion({
@@ -121,7 +118,7 @@ class PhoneMultiFactorAssertion {
 }
 
 /// Mock TotpMultiFactorGenerator class for Firebase compatibility
-/// 
+///
 /// Provides TOTP (Time-based One-Time Password) multi-factor authentication
 /// while using stytch B2B SDK for the authentication flow.
 class TotpMultiFactorGenerator {
@@ -132,7 +129,7 @@ class TotpMultiFactorGenerator {
   const TotpMultiFactorGenerator();
 
   /// Create a TOTP-based multi-factor assertion
-  /// 
+  ///
   /// [oneTimePassword] - The TOTP code
   /// Returns a TOTP multi-factor assertion
   static TotpMultiFactorAssertion getAssertion({
@@ -143,7 +140,7 @@ class TotpMultiFactorGenerator {
 }
 
 /// Mock TotpMultiFactorAssertion class for Firebase compatibility
-/// 
+///
 /// Represents a TOTP-based multi-factor assertion for verification
 /// of the second factor in authentication.
 class TotpMultiFactorAssertion {
@@ -151,15 +148,13 @@ class TotpMultiFactorAssertion {
   final String oneTimePassword;
 
   /// Creates a TotpMultiFactorAssertion instance
-  /// 
+  ///
   /// [oneTimePassword] - TOTP code
-  const TotpMultiFactorAssertion({
-    required this.oneTimePassword,
-  });
+  const TotpMultiFactorAssertion({required this.oneTimePassword});
 }
 
 /// Mock MultiFactorAssertion class for Firebase compatibility
-/// 
+///
 /// Base class for multi-factor assertions that can be used
 /// to complete multi-factor authentication challenges.
 class MultiFactorAssertion {
@@ -167,13 +162,13 @@ class MultiFactorAssertion {
   final String sessionId;
 
   /// Creates a MultiFactorAssertion instance
-  /// 
+  ///
   /// [sessionId] - Session identifier
   const MultiFactorAssertion({required this.sessionId});
 }
 
 /// Mock MultiFactorVerifier class for Firebase compatibility
-/// 
+///
 /// Interface for verifiers that can complete multi-factor authentication
 /// challenges for specific factor types.
 abstract class MultiFactorVerifier {
@@ -181,13 +176,13 @@ abstract class MultiFactorVerifier {
   final String factorId;
 
   /// Creates a MultiFactorVerifier instance
-  /// 
+  ///
   /// [factorId] - Factor identifier
   const MultiFactorVerifier({required this.factorId});
 }
 
 /// Mock EmailMultiFactorGenerator class for Firebase compatibility
-/// 
+///
 /// Provides email-based multi-factor authentication while using
 /// stytch B2B SDK for the authentication flow.
 class EmailMultiFactorGenerator {
@@ -198,7 +193,7 @@ class EmailMultiFactorGenerator {
   const EmailMultiFactorGenerator();
 
   /// Create an email-based multi-factor assertion
-  /// 
+  ///
   /// [confirmationCode] - The email confirmation code
   /// Returns an email multi-factor assertion
   static EmailMultiFactorAssertion getAssertion({
@@ -209,7 +204,7 @@ class EmailMultiFactorGenerator {
 }
 
 /// Mock EmailMultiFactorAssertion class for Firebase compatibility
-/// 
+///
 /// Represents an email-based multi-factor assertion for verification
 /// of the second factor in authentication.
 class EmailMultiFactorAssertion {
@@ -217,9 +212,7 @@ class EmailMultiFactorAssertion {
   final String confirmationCode;
 
   /// Creates an EmailMultiFactorAssertion instance
-  /// 
+  ///
   /// [confirmationCode] - Email confirmation code
-  const EmailMultiFactorAssertion({
-    required this.confirmationCode,
-  });
+  const EmailMultiFactorAssertion({required this.confirmationCode});
 }
