@@ -67,10 +67,12 @@ Future<void> sendMagicLink(HttpRequest request) async {
     return;
   }
 
-  final apiUrl = 'https://test.stytch.com/v1/b2b/magic_links/email/login_or_signup';
+  final apiUrl =
+      'https://test.stytch.com/v1/b2b/magic_links/email/login_or_signup';
   final projectId = 'project-test-f04515f8-2cd1-483b-97dd-bb9ac9647fb3';
   final secret = 'secret-test--I7lknZGOF0USrgD7jJv9c5p8yxhaNKLKf4=';
-  final organizationId = 'organization-test-d0ef20e7-96de-4182-a300-3aab2ac7b109';
+  final organizationId =
+      'organization-test-d0ef20e7-96de-4182-a300-3aab2ac7b109';
 
   final response = await http.post(
     Uri.parse(apiUrl),

@@ -25,25 +25,27 @@ void main() async {
     print('❌ Error initializing stytch: $e');
     print('Stack trace: $stackTrace');
 
-    runApp(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
-              const Text(
-                'Failed to initialize stytch SDK',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text('$e'),
-            ],
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                const Text(
+                  'Failed to initialize stytch SDK',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text('$e'),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -127,18 +129,19 @@ class _DashboardPageState extends State<DashboardPage> {
                   .map(
                     (item) => NavigationRailDestination(
                       icon: Icon(item['icon'], color: Colors.grey[600]),
-                      selectedIcon:
-                          Icon(item['icon'], color: Colors.deepPurple),
+                      selectedIcon: Icon(
+                        item['icon'],
+                        color: Colors.deepPurple,
+                      ),
                       label: Text(
                         item['label'],
                         style: TextStyle(
                           color: _selectedIndex == _navItems.indexOf(item)
                               ? Colors.deepPurple
                               : Colors.grey[700],
-                          fontWeight:
-                              _selectedIndex == _navItems.indexOf(item)
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                          fontWeight: _selectedIndex == _navItems.indexOf(item)
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                           fontSize: 12,
                         ),
                       ),
@@ -183,14 +186,18 @@ class _DashboardPageState extends State<DashboardPage> {
                       Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.notifications_outlined,
-                                color: Colors.deepPurple),
+                            icon: const Icon(
+                              Icons.notifications_outlined,
+                              color: Colors.deepPurple,
+                            ),
                             onPressed: () =>
                                 BotToast.showText(text: 'No new notifications'),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.person_outline,
-                                color: Colors.deepPurple),
+                            icon: const Icon(
+                              Icons.person_outline,
+                              color: Colors.deepPurple,
+                            ),
                             onPressed: () =>
                                 BotToast.showText(text: 'Profile coming soon'),
                           ),
@@ -263,8 +270,10 @@ class _DashboardPageState extends State<DashboardPage> {
         const SizedBox(height: 16),
         const Text(
           '🎯 This demonstrates the Stytch B2B authentication SDK working in Flutter!',
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurple),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.deepPurple,
+          ),
         ),
       ],
     );
@@ -281,11 +290,14 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Icon(icon, color: Colors.deepPurple),
           const SizedBox(width: 8),
-          Text(title,
-              style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.deepPurple)),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+              color: Colors.deepPurple,
+            ),
+          ),
         ],
       ),
     );
@@ -302,9 +314,10 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Icon(Icons.check_circle, color: color),
           const SizedBox(width: 10),
-          Text(text,
-              style:
-                  TextStyle(color: color, fontWeight: FontWeight.w600)),
+          Text(
+            text,
+            style: TextStyle(color: color, fontWeight: FontWeight.w600),
+          ),
         ],
       ),
     );
@@ -320,8 +333,10 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
             const SizedBox(height: 4),
-            Text(value,
-                style: const TextStyle(color: Colors.grey, fontSize: 13)),
+            Text(
+              value,
+              style: const TextStyle(color: Colors.grey, fontSize: 13),
+            ),
           ],
         ),
       ),
@@ -332,8 +347,16 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildServices() {
     final services = [
       {'emoji': '🔐', 'title': 'Authentication', 'desc': 'Email, SSO, MFA'},
-      {'emoji': '👤', 'title': 'User Management', 'desc': 'Create, update, delete'},
-      {'emoji': '🏢', 'title': 'Organizations', 'desc': 'Manage orgs & domains'},
+      {
+        'emoji': '👤',
+        'title': 'User Management',
+        'desc': 'Create, update, delete',
+      },
+      {
+        'emoji': '🏢',
+        'title': 'Organizations',
+        'desc': 'Manage orgs & domains',
+      },
       {'emoji': '📧', 'title': 'Invitations', 'desc': 'Send & track invites'},
     ];
 
@@ -345,7 +368,9 @@ class _DashboardPageState extends State<DashboardPage> {
           spacing: 16,
           runSpacing: 16,
           children: services
-              .map((s) => _buildServiceCard(s['emoji']!, s['title']!, s['desc']!))
+              .map(
+                (s) => _buildServiceCard(s['emoji']!, s['title']!, s['desc']!),
+              )
               .toList(),
         ),
       ],
@@ -387,10 +412,10 @@ final result = await auth.auth.loginWithEmailPassword(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepPurple,
           foregroundColor: Colors.white,
-          padding:
-              const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       ),
     );
@@ -406,12 +431,15 @@ final result = await auth.auth.loginWithEmailPassword(
           children: [
             Text(emoji, style: const TextStyle(fontSize: 26)),
             const SizedBox(height: 6),
-            Text(title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
             const SizedBox(height: 4),
-            Text(desc,
-                style: const TextStyle(color: Colors.grey, fontSize: 13)),
+            Text(
+              desc,
+              style: const TextStyle(color: Colors.grey, fontSize: 13),
+            ),
           ],
         ),
       ),
@@ -423,25 +451,29 @@ final result = await auth.auth.loginWithEmailPassword(
       margin: const EdgeInsets.only(bottom: 14),
       child: Padding(
         padding: const EdgeInsets.all(14),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(title,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 15)),
-          const SizedBox(height: 6),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey[300]!),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
-            child: Text(code.trim(),
-                style:
-                    const TextStyle(fontFamily: 'monospace', fontSize: 12)),
-          ),
-        ]),
+            const SizedBox(height: 6),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300]!),
+              ),
+              child: Text(
+                code.trim(),
+                style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
