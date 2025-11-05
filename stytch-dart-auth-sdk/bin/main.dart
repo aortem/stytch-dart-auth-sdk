@@ -1,88 +1,161 @@
 import 'dart:convert';
-import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 void main() async {
-  try {
-    // Initialize stytch with your credentials
-    final auth = StytchAuth(
-      apiKey: 'YOUR_API_KEY', // Replace with your actual API key
-      projectId: 'YOUR_PROJECT_ID', // Replace with your actual project ID
-      environment:
-          'sandbox', // Use 'sandbox' for testing, 'production' for live
-    );
+  // Start local server
+  final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 3000);
+  print('✅ Server running at http://localhost:3000');
 
-    print('Stytch initialized: ${auth.isConfigured()}');
-    print('Configuration: ${auth.getConfiguration()}');
+  await for (HttpRequest request in server) {
+    final path = request.uri.path;
 
-    // Example 1: Create a new user
-    print('\n=== Creating User ===');
-    final createUserRequest = CreateUserRequest(
-      email: 'user@example.com',
-      name: 'John Doe',
-      organizationId: 'YOUR_ORG_ID', // Replace with your organization ID
-    );
-
-    // Note: This would make an actual API call - commented out for demo
-    // final newUser = await auth.user.createUser(createUserRequest);
-    print('User creation request prepared: ${createUserRequest.email}');
-
-    // Example 2: Login with email and password
-    print('\n=== Authentication Example ===');
-    final loginRequest = EmailPasswordLoginRequest(
-      email: 'user@example.com',
-      password: 'password123',
-      organizationId: 'YOUR_ORG_ID',
-    );
-
-    // Note: This would make an actual API call - commented out for demo
-    // final authResponse = await auth.auth.loginWithEmailPassword(loginRequest);
-    print('Login request prepared for: ${loginRequest.email}');
-
-    // Example 3: Session validation
-    print('\n=== Session Management Example ===');
-    // final _sessionRequest = ValidateSessionRequest(
-    //   sessionToken: 'YOUR_SESSION_TOKEN', // Replace with actual session token
-    // );
-
-    // Note: This would make an actual API call - commented out for demo
-    // final sessionResponse = await auth.auth.validateSession(_sessionRequest);
-    print('Session validation request prepared');
-
-    // Example 4: Organization management
-    print('\n=== Organization Example ===');
-    final createOrgRequest = CreateOrganizationRequest(
-      name: 'Test Organization',
-      slug: 'test-org',
-      allowedDomains: ['example.com'],
-    );
-
-    // Note: This would make an actual API call - commented out for demo
-    // final org = await auth.organization.createOrganization(createOrgRequest);
-    print('Organization creation request prepared: ${createOrgRequest.name}');
-
-    // Example 5: Send invitation
-    print('\n=== Invitation Example ===');
-    final invitationRequest = SendInvitationRequest(
-      email: 'newuser@example.com',
-      organizationId: 'YOUR_ORG_ID',
-      attributes: {'role': 'member'},
-    );
-
-    // Note: This would make an actual API call - commented out for demo
-    // final invitation = await auth.invitation.sendInvitation(invitationRequest);
-    print('Invitation request prepared for: ${invitationRequest.email}');
-
-    print('\n=== Demo Complete ===');
-    print('To use this SDK:');
-    print('1. Replace YOUR_API_KEY with your actual stytch API key');
-    print('2. Replace YOUR_PROJECT_ID with your actual project ID');
-    print('3. Uncomment the API calls to test with real requests');
-    print('4. Handle exceptions with proper try-catch blocks');
-  } catch (e) {
-    print('Error: $e');
-    if (e is StytchException) {
-      print('Exception type: ${e.runtimeType}');
-      print('Exception message: ${e.message}');
+    if (path == '/') {
+      await showHomePage(request);
+    } else if (path == '/send-link' && request.method == 'POST') {
+      await sendMagicLink(request);
+    } else if (path == '/authenticate') {
+      await authenticateMagicLink(request);
+    } else {
+      request.response
+        ..statusCode = HttpStatus.notFound
+        ..write('404 Not Found')
+        ..close();
     }
+  }
+}
+
+/// HTML form for sending magic link
+Future<void> showHomePage(HttpRequest request) async {
+  const html = '''
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Stytch Magic Link Demo</title>
+    <style>
+      body { font-family: sans-serif; margin: 40px; text-align: center; }
+      input, button { padding: 10px; font-size: 16px; margin-top: 10px; }
+    </style>
+  </head>
+  <body>
+    <h2>🔐 Send a Magic Link</h2>
+    <form action="/send-link" method="POST">
+      <input type="email" name="email" placeholder="Enter your email" required><br>
+      <button type="submit">Send Magic Link</button>
+    </form>
+  </body>
+  </html>
+  ''';
+
+  request.response
+    ..headers.contentType = ContentType.html
+    ..write(html)
+    ..close();
+}
+
+/// Send a Stytch magic link
+Future<void> sendMagicLink(HttpRequest request) async {
+  final content = await utf8.decoder.bind(request).join();
+  final data = Uri.splitQueryString(content);
+
+  final email = data['email'];
+  if (email == null || email.isEmpty) {
+    request.response
+      ..statusCode = 400
+      ..write('Missing email address')
+      ..close();
+    return;
+  }
+
+  final apiUrl = 'https://test.stytch.com/v1/b2b/magic_links/email/login_or_signup';
+  final projectId = 'project-test-f04515f8-2cd1-483b-97dd-bb9ac9647fb3';
+  final secret = 'secret-test--I7lknZGOF0USrgD7jJv9c5p8yxhaNKLKf4=';
+  final organizationId = 'organization-test-d0ef20e7-96de-4182-a300-3aab2ac7b109';
+
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: {
+      HttpHeaders.authorizationHeader:
+          'Basic ${base64Encode(utf8.encode('$projectId:$secret'))}',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      "email_address": email,
+      "organization_id": organizationId,
+      "login_redirect_url": "http://localhost:3000/authenticate",
+      "signup_redirect_url": "http://localhost:3000/authenticate",
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    print('✅ Magic link sent to $email');
+    request.response
+      ..headers.contentType = ContentType.html
+      ..write('<p>✅ Magic link sent! Check your email: $email</p>')
+      ..close();
+  } else {
+    print('❌ Failed to send magic link: ${response.statusCode}');
+    print(response.body);
+    request.response
+      ..headers.contentType = ContentType.html
+      ..write('<p>❌ Failed to send magic link: ${response.body}</p>')
+      ..close();
+  }
+}
+
+/// Authenticate when user clicks the magic link
+Future<void> authenticateMagicLink(HttpRequest request) async {
+  final token = request.uri.queryParameters['token'];
+
+  if (token == null) {
+    request.response
+      ..statusCode = 400
+      ..write('❌ Missing token in URL')
+      ..close();
+    return;
+  }
+
+  final authUrl = 'https://test.stytch.com/v1/b2b/magic_links/authenticate';
+  final projectId = 'project-test-f04515f8-2cd1-483b-97dd-bb9ac9647fb3';
+  final secret = 'secret-test--I7lknZGOF0USrgD7jJv9c5p8yxhaNKLKf4=';
+
+  final response = await http.post(
+    Uri.parse(authUrl),
+    headers: {
+      HttpHeaders.authorizationHeader:
+          'Basic ${base64Encode(utf8.encode('$projectId:$secret'))}',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({'magic_links_token': token}),
+  );
+
+  if (response.statusCode == 200) {
+    final jsonResponse = jsonDecode(response.body);
+
+    final memberId = jsonResponse['member_id'];
+    final email = jsonResponse['member']['email_address'];
+    final orgId = jsonResponse['organization_id'];
+
+    print('✅ Authentication successful!');
+    print('🏢 Org ID: $orgId');
+    print('👤 Member ID: $memberId');
+    print('📧 Email: $email');
+
+    request.response
+      ..headers.contentType = ContentType.html
+      ..write('''
+        <h3>🎉 Login successful! You can close this tab.</h3>
+        <p><b>Organization ID:</b> $orgId</p>
+        <p><b>Member ID:</b> $memberId</p>
+        <p><b>Email:</b> $email</p>
+      ''')
+      ..close();
+  } else {
+    print('❌ Authentication failed: ${response.statusCode}');
+    print(response.body);
+    request.response
+      ..headers.contentType = ContentType.html
+      ..write('<p>❌ Authentication failed: ${response.body}</p>')
+      ..close();
   }
 }
