@@ -145,7 +145,7 @@ class StytchAuth {
   }
 
   /// Get auth instance (for Firebase compatibility)
-  stytchAuth getAuth() {
+  StytchAuthType getAuth() {
     return this;
   }
 
@@ -173,22 +173,27 @@ class StytchAuth {
     return null;
   }
 
+  /// Check action code for password reset or email verification.
   dynamic checkActionCode(String code) async {
     return null;
   }
 
+  /// Confirm password reset with code and new password.
   void confirmPasswordReset(String code, String newPassword) async {
     return;
   }
 
+  /// Connect auth emulator for development testing.
   void connectAuthEmulator(String host, int port, {bool? useSsl}) async {
     return;
   }
 
+  /// Create user with email and password (not implemented in stytch SDK).
   dynamic createUserWithEmailAndPassword(String email, String password) async {
     throw StytchAuthException('Not implemented in stytch SDK');
   }
 
+  /// Create user with email and password with user result (not implemented in stytch SDK).
   dynamic createUserWithEmailAndPasswordUser(
     String email,
     String password,
@@ -196,22 +201,27 @@ class StytchAuth {
     throw StytchAuthException('Not implemented in stytch SDK');
   }
 
+  /// Reload user data.
   void reloadUser() async {
     return;
   }
 
+  /// Send email verification code.
   void sendEmailVerificationCode({dynamic actionCodeSettings}) async {
     return;
   }
 
+  /// Get additional user info (not implemented in stytch SDK).
   dynamic getAdditionalUserInfo(dynamic result) async {
     throw StytchAuthException('Not implemented in stytch SDK');
   }
 
+  /// Link provider to user.
   void linkProviderToUser(dynamic user, dynamic provider) async {
     return;
   }
 
+  /// Initialize reCAPTCHA configuration.
   void initializeRecaptchaConfig(
     String recaptchaKey, {
     Map<String, dynamic>? config,
@@ -219,38 +229,47 @@ class StytchAuth {
     return;
   }
 
+  /// Check if sign in link is valid email link.
   bool isSignInWithEmailLink(String emailLink) {
     return false;
   }
 
+  /// Get multi-factor resolver for exceptions.
   dynamic getMultiFactorResolver(dynamic exception) {
     return null;
   }
 
+  /// Send sign in link to email.
   bool sendSignInLinkToEmail(String email, dynamic actionCodeSettings) {
     return true;
   }
 
+  /// Sign in with email link.
   bool signInWithEmailLink(String email, String emailLink) {
     return true;
   }
 
+  /// Sign in with popup (not implemented in stytch SDK).
   dynamic signInWithPopup(dynamic provider) async {
     throw StytchAuthException('Not implemented in stytch SDK');
   }
 
+  /// Sign up with email and password (not implemented in stytch SDK).
   dynamic signUp(String email, String password) {
     throw StytchAuthException('Not implemented in stytch SDK');
   }
 
+  /// Revoke access token.
   void revokeToken(dynamic token) async {
     return;
   }
 
+  /// Send email verification code to user.
   void sendEmailVerificationCodeUser(dynamic user) async {
     return;
   }
 
+  /// Verify before email update.
   void verifyBeforeEmailUpdate(
     String email, {
     dynamic actionCodeSettings,
@@ -294,7 +313,7 @@ StytchAuth createStytchAuthInstance({
 }
 
 /// Type alias for Firebase compatibility
-typedef stytchAuth = StytchAuth;
+typedef StytchAuthType = StytchAuth;
 
 StytchAuth? _globalInstance;
 
