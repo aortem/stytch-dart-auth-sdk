@@ -43,9 +43,9 @@ class UpdateUserScreenState extends State<UpdateUserScreen> {
           Navigator.pop(context);
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update user: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to update user: $e')));
       }
     }
   }
