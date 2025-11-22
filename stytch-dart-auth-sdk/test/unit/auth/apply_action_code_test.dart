@@ -1,36 +1,58 @@
-import 'package:ds_tools_testing/ds_tools_testing.dart';
-//import 'package:mockito/mockito.dart';
-import '../../mocks/stytch_auth_mock.dart';
+library apply_action_code_test;
+
+import 'package:test/test.dart';
+import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 
 void main() {
-  group('stytchAuth Tests', () {
-    late MockstytchAuth mockstytchAuth;
-
-    setUp(() {
-      mockstytchAuth = MockstytchAuth();
-    });
-
-    test('performRequest handles typed arguments correctly', () async {
-      // Arrange
-      const endpoint = 'update';
-      const body = {'key': 'value'};
-      final expectedResponse = HttpResponse(
-        statusCode: 200,
-        body: {'message': 'Success'},
-      );
-
-      when(
-        mockstytchAuth.performRequest(endpoint, body),
-      ).thenAnswer((_) async => expectedResponse);
-
-      // Act
-      final result = await mockstytchAuth.performRequest(endpoint, body);
+  group('StytchAuth B2B Tests', () {
+    test('StytchAuth should create instance with valid config', () {
+      // Arrange & Act
+      final client = StytchAuth(apiKey: 'test-key', projectId: 'test-project');
 
       // Assert
-      expect(result.statusCode, equals(200));
-      expect(result.body, containsPair('message', 'Success'));
+      expect(client, isA<StytchAuth>());
+      expect(client.isConfigured(), true);
+    });
 
-      verify(mockstytchAuth.performRequest(endpoint, body)).called(1);
+    test('StytchAuth should validate configuration', () {
+      // Arrange & Act & Assert
+      expect(
+        () => StytchAuth(apiKey: '', projectId: 'test'),
+        throwsA(isA<StytchConfigurationException>()),
+      );
+
+      expect(
+        () => StytchAuth(apiKey: 'test', projectId: ''),
+        throwsA(isA<StytchConfigurationException>()),
+      );
+    });
+
+    test('StytchAuth should have proper service accessors', () {
+      // Arrange
+      final client = StytchAuth(apiKey: 'test-key', projectId: 'test-project');
+
+      // Act & Assert
+      expect(client.auth, isA<AuthService>());
+      expect(client.user, isA<UserService>());
+      expect(client.organization, isA<OrganizationService>());
+      expect(client.invitation, isA<InvitationService>());
+    });
+
+    test('StytchAuth should provide configuration details', () {
+      // Arrange
+      final client = StytchAuth(
+        apiKey: 'test-key',
+        projectId: 'test-project',
+        environment: 'sandbox',
+      );
+
+      // Act
+      final config = client.getConfiguration();
+
+      // Assert
+      expect(config['projectId'], equals('test-project'));
+      expect(config['environment'], equals('sandbox'));
+      expect(config['isConfigured'], true);
     });
   });
 }

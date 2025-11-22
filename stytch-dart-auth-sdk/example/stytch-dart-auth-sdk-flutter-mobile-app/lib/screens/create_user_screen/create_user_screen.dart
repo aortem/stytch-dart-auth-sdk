@@ -20,9 +20,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create User'),
-      ),
+      appBar: AppBar(title: const Text('Create User')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -46,11 +44,11 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               onTap: () async {
                 try {
                   final auth = Provider.of<stytchAuth>(context, listen: false);
-                  UserCredential? credential =
-                      await auth.createUserWithEmailAndPassword(
-                    _emailController.text,
-                    _passwordController.text,
-                  );
+                  UserCredential? credential = await auth
+                      .createUserWithEmailAndPassword(
+                        _emailController.text,
+                        _passwordController.text,
+                      );
                   setState(() {
                     _result =
                         'User created: ${credential.user.uid}, Email: ${credential.user.email}';
