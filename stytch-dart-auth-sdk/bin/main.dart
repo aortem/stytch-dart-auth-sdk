@@ -71,7 +71,7 @@ void main() async {
       'password123',
     );
 
-    print('Sign in successful!');
+    print('Sign in successful!'); 
     print('  Email: ${signInCredential.user.email}');
     print('  Display Name: ${signInCredential.user.displayName}\n');
 
