@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
