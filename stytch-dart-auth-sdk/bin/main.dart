@@ -1,3 +1,4 @@
+import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 import 'dart:io';
 
 // Firebase-style classes for simplicity
