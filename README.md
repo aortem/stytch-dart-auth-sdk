@@ -118,5 +118,5 @@ The Stytch Dart Auth SDK is licensed under a dual-license approach:
 * You are free to use the SDK in your applications, including open-source and commercial projects, as long as the SDK is not directly offered as part of a third-party cloud service.
 * For details, refer to the LICENSE file.
 
-## Enhance with Stytch Dart Admin Auth SDK
+## Enhance with Stytch Dart Auth SDK
 We hope the Stytch Dart Admin Auth SDK helps you to efficiently build and scale your server-side applications. Join our growing community and start contributing to the ecosystem today!
