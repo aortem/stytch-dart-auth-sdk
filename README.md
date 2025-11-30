@@ -41,138 +41,88 @@
 </p>
 <!-- x-hide-in-docs-start -->
 
-## **Feature Comparison Chart**
+# Firebase vs Amazon Stytch for Server-Side Dart SDK
 
-### **Core Authentication Methods**
+This document provides a high-level comparison of Firebase Authentication and Amazon Stytch features tailored for building a server-side Dart SDK. The goal is to evaluate how a server-side Dart SDK could integrate Amazon Stytch and compare its capabilities to Firebase Authentication.
 
-# Firebase vs Amazon stytch for Server-Side Dart SDK
+## **Comprehensive Feature Comparison**
 
-This document provides a high-level comparison of Firebase Authentication and Amazon stytch features tailored for building a server-side Dart SDK. The goal is to evaluate how a server-side Dart SDK could integrate Amazon stytch and compare its capabilities to Firebase Authentication.
+| Method | Supported |
+|--------|-----------|
+| **Core Authentication Methods** |
+| `FirebaseAuth.signInWithEmailAndPassword()` → Stytch Admin: `AdminInitiateAuth` - Authenticate user with email and password. Server-side API supports admin privileges. | ✅ |
+| `FirebaseAuth.createUserWithEmailAndPassword()` → Stytch Admin: `AdminCreateUser` - Server-side method to create a new user in the user pool. | ✅ |
+| `FirebaseAuth.signOut()` → Not Applicable - Stytch does not provide server-side logout; tokens must be invalidated by the client. | ❌ |
+| `FirebaseAuth.setPersistence()` → Not Applicable - Token persistence is a client-side feature. | ❌ |
+| `FirebaseAuth.sendPasswordResetEmail()` → Stytch Admin: `AdminResetUserPassword` - Sends a reset password request to the user. | ✅ |
+| `FirebaseAuth.connectAuthEmulator` → Not Applicable - Stytch does not support emulated authentication environments. | ❌ |
+| **User Management** |
+| `FirebaseUser.updateEmail()` → Stytch Admin: `AdminUpdateUserAttributes` - Updates the user's email or other attributes. | ✅ |
+| `FirebaseUser.updatePassword()` → Stytch Admin: `AdminSetUserPassword` - Updates the user's password. | ✅ |
+| `FirebaseUser.deleteUser()` → Stytch Admin: `AdminDeleteUser` - Deletes the user account from the user pool. | ✅ |
+| `FirebaseUser.updateProfile()` → Stytch Admin: `AdminUpdateUserAttributes` - Updates custom attributes in the user's profile. | ✅ |
+| `FirebaseUser.sendEmailVerification()` → Not Applicable - Stytch uses built-in email verification workflows; server-side triggering is indirect. | ❌ |
+| `FirebaseUser.reload()` → Stytch Admin: `AdminGetUser` - Refreshes the user profile information. | ✅ |
+| `FirebaseAuth.updateCurrentUser()` → Stytch Admin: `AdminUpdateUserAttributes` - Updates the current user's details, such as profile attributes. | ✅ |
+| **Token Management** |
+| `FirebaseAuth.getIdToken()` → Stytch: `InitiateAuth` - Retrieves tokens for user sessions. | ✅ |
+| `FirebaseAuth.revokeAccessToken()` → Stytch: `RevokeToken` - Revokes a user's refresh token. | ✅ |
+| `FirebaseAuth.signInWithCustomToken()` → Not Applicable - Stytch does not support custom tokens like Firebase. | ❌ |
+| **Multi-Factor Authentication (MFA)** |
+| `FirebaseAuth.getMultiFactorResolver()` → Stytch Admin: `AdminSetUserMFAPreference` - Retrieve MFA configurations and set user preferences. | ✅ |
+| `FirebaseUser.multiFactor()` → Stytch: `AssociateSoftwareToken` - Registers a user for software-based MFA (e.g., TOTP). | ✅ |
+| `FirebaseUser.reauthenticateWithCredential()` → Stytch: `InitiateAuth` - Reauthenticates the user with credentials. | ✅ |
+| **Sign-In Methods** |
+| `FirebaseAuth.signInWithPopup()` → Not Applicable - Stytch does not support popup-based authentication flows. | ❌ |
+| `FirebaseAuth.signInWithRedirect()` → Stytch: `HostedUI` - Hosted UI provides OAuth-based sign-in with redirect support. | ✅ |
+| `FirebaseAuth.signInWithPhoneNumber()` → Stytch: `InitiateAuth` - Phone-based authentication is supported via custom attributes. | ✅ |
+| **Action Code Handling** |
+| `FirebaseAuth.applyActionCode()` → Not Applicable - Stytch does not use action codes. | ❌ |
+| `FirebaseAuth.checkActionCode()` → Not Applicable - Stytch does not use action codes. | ❌ |
+| `FirebaseAuth.verifyPasswordResetCode()` → Stytch: `AdminResetUserPassword` - Password reset is handled via workflows, not codes. | ✅ |
+| **Enterprise Features Unique to Amazon Stytch** |
+| User Pool Groups - Organize users into groups for role-based access control. | ✅ |
+| Lambda Triggers - Extend authentication workflows with serverless functions. | ✅ |
+| Hosted UI - Simplify OAuth and federated login flows with pre-built UI. | ✅ |
+| Advanced Security Features - Detect anomalies and enforce adaptive authentication. | ✅ |
+| Identity Federation - Support for third-party identity providers like Google, Facebook, and SAML. | ✅ |
 
+## **Key Differences Between Firebase and Amazon Stytch**
 
-## **Feature Comparison Chart**
-
-### **Core Authentication Methods**
-
-| Firebase Method                                  | Amazon stytch Equivalent                       | Notes                                                                                  | Supported |
-|--------------------------------------------------|------------------------------------------------|--------------------------------------------------------------------------------------- |-------------|
-| `FirebaseAuth.signInWithEmailAndPassword()`      | stytch Admin: `AdminInitiateAuth`             | Authenticate user with email and password. Server-side API supports admin privileges.  | ✅         |
-| `FirebaseAuth.createUserWithEmailAndPassword()`  | stytch Admin: `AdminCreateUser`               | Server-side method to create a new user in the user pool.                              | ✅         |
-| `FirebaseAuth.signOut()`                         | Not Applicable                                 | stytch does not provide server-side logout; tokens must be invalidated by the client. | ❌         |
-| `FirebaseAuth.setPersistence()`                  | Not Applicable                                 | Token persistence is a client-side feature.                                            | ❌         |
-| `FirebaseAuth.sendPasswordResetEmail()`          | stytch Admin: `AdminResetUserPassword`        | Sends a reset password request to the user.                                            | ✅         |
-| `FirebaseAuth.connectAuthEmulator`               | Not Applicable                                 | stytch does not support emulated authentication environments.                         | ❌         |
-
----
-
-### **User Management**
-
-| Firebase Method                                  | Amazon stytch Equivalent                      | Notes                                                                                   | Supported |
-|--------------------------------------------------|------------------------------------------------|-----------------------------------------------------------------------------------------|-------------|
-| `FirebaseUser.updateEmail()`                     | stytch Admin: `AdminUpdateUserAttributes`     | Updates the user's email or other attributes.                                           | ✅         |
-| `FirebaseUser.updatePassword()`                  | stytch Admin: `AdminSetUserPassword`          | Updates the user's password.                                                            | ✅         |
-| `FirebaseUser.deleteUser()`                      | stytch Admin: `AdminDeleteUser`               | Deletes the user account from the user pool.                                            | ✅         |
-| `FirebaseUser.updateProfile()`                   | stytch Admin: `AdminUpdateUserAttributes`     | Updates custom attributes in the user's profile.                                        | ✅         |
-| `FirebaseUser.sendEmailVerification()`           | Not Applicable                                 | stytch uses built-in email verification workflows; server-side triggering is indirect. | ❌         |
-| `FirebaseUser.reload()`                          | stytch Admin: `AdminGetUser`                  | Refreshes the user profile information.                                                 | ✅         |
-| `FirebaseAuth.updateCurrentUser()`               | stytch Admin: `AdminUpdateUserAttributes`     | Updates the current user's details, such as profile attributes.                         | ✅         |
-
----
-
-### **Token Management**
-
-| Firebase Method                                  | Amazon stytch Equivalent                      | Notes                                                                                 | Supported  |
-|--------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------|------------|
-| `FirebaseAuth.getIdToken()`                      | stytch: `InitiateAuth`                        | Retrieves tokens for user sessions.                                                   | ✅         |
-| `FirebaseAuth.revokeAccessToken()`               | stytch: `RevokeToken`                         | Revokes a user's refresh token.                                                       | ✅         |
-| `FirebaseAuth.signInWithCustomToken()`           | Not Applicable                                 | stytch does not support custom tokens like Firebase.                                 | ❌         |
-
----
-
-### **Multi-Factor Authentication (MFA)**
-
-| Firebase Method                                  | Amazon stytch Equivalent                      | Notes                                                                                | Supported   |
-|--------------------------------------------------|------------------------------------------------|----------------------------------------------------------------------------------------|-------------|
-| `FirebaseAuth.getMultiFactorResolver()`          | stytch Admin: `AdminSetUserMFAPreference`     | Retrieve MFA configurations and set user preferences.                                  | ✅         |
-| `FirebaseUser.multiFactor()`                     | stytch: `AssociateSoftwareToken`              | Registers a user for software-based MFA (e.g., TOTP).                                  | ✅         |
-| `FirebaseUser.reauthenticateWithCredential()`    | stytch: `InitiateAuth`                        | Reauthenticates the user with credentials.                                             | ✅         |
-
----
-
-### **Sign-In Methods**
-
-| Firebase Method                                 | Amazon stytch Equivalent                      | Notes                                                                                  | Supported |
-|-------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------|-----------|
-| `FirebaseAuth.signInWithPopup()`                | Not Applicable                                 | stytch does not support popup-based authentication flows.                             | ❌         |
-| `FirebaseAuth.signInWithRedirect()`             | stytch: `HostedUI`                            | Hosted UI provides OAuth-based sign-in with redirect support.                          | ✅         |
-| `FirebaseAuth.signInWithPhoneNumber()`          | stytch: `InitiateAuth`                        | Phone-based authentication is supported via custom attributes.                        | ✅         |
-
----
-
-### **Action Code Handling**
-
-| Firebase Method                                  | Amazon stytch Equivalent                      | Notes                                                                                  | Supported |
-|--------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------|-----------|
-| `FirebaseAuth.applyActionCode()`                 | Not Applicable                                 | stytch does not use action codes.                                                    | ❌         |
-| `FirebaseAuth.checkActionCode()`                 | Not Applicable                                 | stytch does not use action codes.                                                    | ❌         |
-| `FirebaseAuth.verifyPasswordResetCode()`         | stytch: `AdminResetUserPassword`              | Password reset is handled via workflows, not codes.                                   | ✅         |
-
----
-
-### **Enterprise Features Unique to Amazon stytch**
-
-| Feature                                          | Description                                                                            | Supported |
-|--------------------------------------------------|----------------------------------------------------------------------------------------|-----------|
-| User Pool Groups                                 | Organize users into groups for role-based access control.                              | ✅       |
-| Lambda Triggers                                  | Extend authentication workflows with serverless functions.                             | ✅       |
-| Hosted UI                                        | Simplify OAuth and federated login flows with pre-built UI.                            | ✅       |
-| Advanced Security Features                       | Detect anomalies and enforce adaptive authentication.                                  | ✅       |
-| Identity Federation                              | Support for third-party identity providers like Google, Facebook, and SAML.            | ✅       |
-
----
-
-## **Key Differences Between Firebase and Amazon stytch**
-
-1. **Server-Side Capabilities:** Amazon stytch provides robust server-side APIs (e.g., Admin APIs), while Firebase is primarily client-focused.
-2. **Enterprise Features:** stytch supports advanced features like Lambda triggers and adaptive authentication, which are absent in Firebase.
-3. **Custom Token Support:** Firebase enables custom token generation for integration with external systems, while stytch lacks this feature.
-
----
+1. **Server-Side Capabilities:** Amazon Stytch provides robust server-side APIs (e.g., Admin APIs), while Firebase is primarily client-focused.
+2. **Enterprise Features:** Stytch supports advanced features like Lambda triggers and adaptive authentication, which are absent in Firebase.
+3. **Custom Token Support:** Firebase enables custom token generation for integration with external systems, while Stytch lacks this feature.
 
 ## **Next Steps**
 
-1. Design the Dart SDK for server-side integration with Amazon stytch Admin APIs.
+1. Design the Dart SDK for server-side integration with Amazon Stytch Admin APIs.
 2. Implement key features such as user management, MFA, and token management.
 3. Provide documentation and examples to facilitate adoption for both mobile and web developers.
 
 Let me know if you'd like to explore specific areas further!
 
-
-
-
-
 ## Available Versions
 
-stytch Dart Admin Auth SDK is available in two versions to cater to different needs:
+Stytch Dart Admin Auth SDK is available in two versions to cater to different needs:
 
-1. **Main - Stable Version**: Usually one release a month.  This version attempts to keep stability without introducing breaking changes.
-2. **Pre-Release - Edge Version**: Provided as an early indication of a release when breaking changes are expect.  This release is inconsistent. Use only if you are looking to test new features.
+1. **Main - Stable Version**: Usually one release a month. This version attempts to keep stability without introducing breaking changes.
+2. **Pre-Release - Edge Version**: Provided as an early indication of a release when breaking changes are expected. This release is inconsistent. Use only if you are looking to test new features.
 
 ## Documentation
 
-For detailed guides, API references, and example projects, visit our [stytch Dart Admin Auth SDK Documentation](https://aortem.gitbook.io/stytch-dart-auth-admin-sdk). Start building with  stytch Dart Admin Auth SDK today and take advantage of its robust features and elegant syntax.
+For detailed guides, API references, and example projects, visit our [Stytch Dart Admin Auth SDK Documentation](https://aortem.gitbook.io/stytch-dart-auth-admin-sdk). Start building with Stytch Dart Admin Auth SDK today and take advantage of its robust features and elegant syntax.
 
 ## Examples
 
-Explore the `/example` directory in this repository to find sample applications demonstrating  stytch Dart Admin Auth SDK's capabilities in real-world scenarios.
+Explore the `/example` directory in this repository to find sample applications demonstrating Stytch Dart Admin Auth SDK's capabilities in real-world scenarios.
 
 ## Contributing
 
-We welcome contributions of all forms from the community! If you're interested in helping improve  stytch Dart Admin Auth SDK, please fork the repository and submit your pull requests. For more details, check out our [CONTRIBUTING.md](CONTRIBUTING.md) guide.  Our team will review your pull request. Once approved, we will integrate your changes into our primary repository and push the mirrored changes on the main github branch.
+We welcome contributions of all forms from the community! If you're interested in helping improve Stytch Dart Admin Auth SDK, please fork the repository and submit your pull requests. For more details, check out our [CONTRIBUTING.md](CONTRIBUTING.md) guide. Our team will review your pull request. Once approved, we will integrate your changes into our primary repository and push the mirrored changes on the main github branch.
 
 ## Support Tiers
 
-stytch Dart Admin Auth SDK offers various support tiers for our open-source products with an Initial Response Service Level Agreement (IRSLA):
+Stytch Dart Admin Auth SDK offers various support tiers for our open-source products with an Initial Response Service Level Agreement (IRSLA):
 
 ### Community Support
 - **Cost**: Free
@@ -184,7 +134,7 @@ stytch Dart Admin Auth SDK offers various support tiers for our open-source prod
 - **Cost**: $10/month - Billed Annually.
 - **Features**: Extended documentation, email support, 10 business days response SLA.
 - **Ideal for**: Growing startups and small businesses.
-- **SLA**: 10 business days (Monday-Friday) IRSLANA
+- **SLA**: 10 business days (Monday-Friday) IRSLA
 - [Subscribe-Coming Soon]()
 
 ### Enhanced Support
@@ -195,25 +145,24 @@ stytch Dart Admin Auth SDK offers various support tiers for our open-source prod
 - [Subscribe-Coming Soon]()
 
 ### Enterprise Support
-- **Cost**: 450/month
+- **Cost**: $450/month
 - **Features**: 
-  - 48-hour response SLA, 
-  - Access to beta features:
-  - Comprehensive support for all Aortem Open Source products.
-  - Premium access to our exclusive enterprise customer forum.
-  - Early access to cutting-edge features.
-  - Exclusive access to Partner/Reseller/Channel Program..
+  - 48-hour response SLA
+  - Access to beta features
+  - Comprehensive support for all Aortem Open Source products
+  - Premium access to our exclusive enterprise customer forum
+  - Early access to cutting-edge features
+  - Exclusive access to Partner/Reseller/Channel Program
 - **Ideal for**: Large organizations and enterprises with complex needs.
 - **SLA**: 48-hour IRSLA
 - [Subscribe-Coming Soon]()
 
-*Enterprise Support is designed for businesses, agencies, and partners seeking top-tier support across a wide range of Dart backend and server-side projects.  All Open Source projects that are part of the Aortem Collective are included in the Enterprise subscription, with more projects being added soon.
+*Enterprise Support is designed for businesses, agencies, and partners seeking top-tier support across a wide range of Dart backend and server-side projects. All Open Source projects that are part of the Aortem Collective are included in the Enterprise subscription, with more projects being added soon.
 
 ## Licensing
 
-All  stytch Dart Admin Auth SDK packages are licensed under BSD-3, except for the *services packages*, which uses the ELv2 license, which are licensed from third party software  Inc. In short, this means that you can, without limitation, use any of the client packages in your app as long as you do not offer the SDK's or services as a cloud service to 3rd parties (this is typically only relevant for cloud service providers).  See the [LICENSE](LICENSE.md) file for more details.
+All Stytch Dart Admin Auth SDK packages are licensed under BSD-3, except for the *services packages*, which uses the ELv2 license, which are licensed from third party software Inc. In short, this means that you can, without limitation, use any of the client packages in your app as long as you do not offer the SDK's or services as a cloud service to 3rd parties (this is typically only relevant for cloud service providers). See the [LICENSE](LICENSE.md) file for more details.
 
+## Enhance with Stytch Dart Admin Auth SDK
 
-## Enhance with stytch Dart Admin Auth SDK
-
-We hope the stytch Dart Admin Auth SDK helps you to efficiently build and scale your server-side applications. Join our growing community and start contributing to the ecosystem today!  test
+We hope the Stytch Dart Admin Auth SDK helps you to efficiently build and scale your server-side applications. Join our growing community and start contributing to the ecosystem today!
