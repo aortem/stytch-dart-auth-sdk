@@ -50,42 +50,42 @@ This document provides a high-level comparison of Firebase Authentication and Am
 | Method | Supported |
 |--------|-----------|
 | **Core Authentication Methods** |
-| `FirebaseAuth.signInWithEmailAndPassword()` → Stytch Admin: `AdminInitiateAuth` - Authenticate user with email and password. Server-side API supports admin privileges. | ✅ |
-| `FirebaseAuth.createUserWithEmailAndPassword()` → Stytch Admin: `AdminCreateUser` - Server-side method to create a new user in the user pool. | ✅ |
-| `FirebaseAuth.signOut()` → Not Applicable - Stytch does not provide server-side logout; tokens must be invalidated by the client. | ❌ |
-| `FirebaseAuth.setPersistence()` → Not Applicable - Token persistence is a client-side feature. | ❌ |
-| `FirebaseAuth.sendPasswordResetEmail()` → Stytch Admin: `AdminResetUserPassword` - Sends a reset password request to the user. | ✅ |
-| `FirebaseAuth.connectAuthEmulator` → Not Applicable - Stytch does not support emulated authentication environments. | ❌ |
+| `FirebaseAuth.signInWithEmailAndPassword()` → Stytch Admin: `AdminInitiateAuth` | ✅ |
+| `FirebaseAuth.createUserWithEmailAndPassword()` → Stytch Admin: `AdminCreateUser` | ✅ |
+| `FirebaseAuth.signOut()` → Not Applicable | ❌ |
+| `FirebaseAuth.setPersistence()` → Not Applicable | ❌ |
+| `FirebaseAuth.sendPasswordResetEmail()` → Stytch Admin: `AdminResetUserPassword` | ✅ |
+| `FirebaseAuth.connectAuthEmulator` → Not Applicable | ❌ |
 | **User Management** |
-| `FirebaseUser.updateEmail()` → Stytch Admin: `AdminUpdateUserAttributes` - Updates the user's email or other attributes. | ✅ |
-| `FirebaseUser.updatePassword()` → Stytch Admin: `AdminSetUserPassword` - Updates the user's password. | ✅ |
-| `FirebaseUser.deleteUser()` → Stytch Admin: `AdminDeleteUser` - Deletes the user account from the user pool. | ✅ |
-| `FirebaseUser.updateProfile()` → Stytch Admin: `AdminUpdateUserAttributes` - Updates custom attributes in the user's profile. | ✅ |
-| `FirebaseUser.sendEmailVerification()` → Not Applicable - Stytch uses built-in email verification workflows; server-side triggering is indirect. | ❌ |
-| `FirebaseUser.reload()` → Stytch Admin: `AdminGetUser` - Refreshes the user profile information. | ✅ |
-| `FirebaseAuth.updateCurrentUser()` → Stytch Admin: `AdminUpdateUserAttributes` - Updates the current user's details, such as profile attributes. | ✅ |
+| `FirebaseUser.updateEmail()` → Stytch Admin: `AdminUpdateUserAttributes` | ✅ |
+| `FirebaseUser.updatePassword()` → Stytch Admin: `AdminSetUserPassword` | ✅ |
+| `FirebaseUser.deleteUser()` → Stytch Admin: `AdminDeleteUser` | ✅ |
+| `FirebaseUser.updateProfile()` → Stytch Admin: `AdminUpdateUserAttributes` | ✅ |
+| `FirebaseUser.sendEmailVerification()` → Not Applicable | ❌ |
+| `FirebaseUser.reload()` → Stytch Admin: `AdminGetUser` | ✅ |
+| `FirebaseAuth.updateCurrentUser()` → Stytch Admin: `AdminUpdateUserAttributes` | ✅ |
 | **Token Management** |
-| `FirebaseAuth.getIdToken()` → Stytch: `InitiateAuth` - Retrieves tokens for user sessions. | ✅ |
-| `FirebaseAuth.revokeAccessToken()` → Stytch: `RevokeToken` - Revokes a user's refresh token. | ✅ |
-| `FirebaseAuth.signInWithCustomToken()` → Not Applicable - Stytch does not support custom tokens like Firebase. | ❌ |
+| `FirebaseAuth.getIdToken()` → Stytch: `InitiateAuth` | ✅ |
+| `FirebaseAuth.revokeAccessToken()` → Stytch: `RevokeToken` | ✅ |
+| `FirebaseAuth.signInWithCustomToken()` → Not Applicable | ❌ |
 | **Multi-Factor Authentication (MFA)** |
-| `FirebaseAuth.getMultiFactorResolver()` → Stytch Admin: `AdminSetUserMFAPreference` - Retrieve MFA configurations and set user preferences. | ✅ |
-| `FirebaseUser.multiFactor()` → Stytch: `AssociateSoftwareToken` - Registers a user for software-based MFA (e.g., TOTP). | ✅ |
-| `FirebaseUser.reauthenticateWithCredential()` → Stytch: `InitiateAuth` - Reauthenticates the user with credentials. | ✅ |
+| `FirebaseAuth.getMultiFactorResolver()` → Stytch Admin: `AdminSetUserMFAPreference` | ✅ |
+| `FirebaseUser.multiFactor()` → Stytch: `AssociateSoftwareToken` | ✅ |
+| `FirebaseUser.reauthenticateWithCredential()` → Stytch: `InitiateAuth` | ✅ |
 | **Sign-In Methods** |
-| `FirebaseAuth.signInWithPopup()` → Not Applicable - Stytch does not support popup-based authentication flows. | ❌ |
-| `FirebaseAuth.signInWithRedirect()` → Stytch: `HostedUI` - Hosted UI provides OAuth-based sign-in with redirect support. | ✅ |
-| `FirebaseAuth.signInWithPhoneNumber()` → Stytch: `InitiateAuth` - Phone-based authentication is supported via custom attributes. | ✅ |
+| `FirebaseAuth.signInWithPopup()` → Not Applicable | ❌ |
+| `FirebaseAuth.signInWithRedirect()` → Stytch: `HostedUI` | ✅ |
+| `FirebaseAuth.signInWithPhoneNumber()` → Stytch: `InitiateAuth` | ✅ |
 | **Action Code Handling** |
-| `FirebaseAuth.applyActionCode()` → Not Applicable - Stytch does not use action codes. | ❌ |
-| `FirebaseAuth.checkActionCode()` → Not Applicable - Stytch does not use action codes. | ❌ |
-| `FirebaseAuth.verifyPasswordResetCode()` → Stytch: `AdminResetUserPassword` - Password reset is handled via workflows, not codes. | ✅ |
+| `FirebaseAuth.applyActionCode()` → Not Applicable | ❌ |
+| `FirebaseAuth.checkActionCode()` → Not Applicable | ❌ |
+| `FirebaseAuth.verifyPasswordResetCode()` → Stytch: `AdminResetUserPassword` | ✅ |
 | **Enterprise Features Unique to Amazon Stytch** |
-| User Pool Groups - Organize users into groups for role-based access control. | ✅ |
-| Lambda Triggers - Extend authentication workflows with serverless functions. | ✅ |
-| Hosted UI - Simplify OAuth and federated login flows with pre-built UI. | ✅ |
-| Advanced Security Features - Detect anomalies and enforce adaptive authentication. | ✅ |
-| Identity Federation - Support for third-party identity providers like Google, Facebook, and SAML. | ✅ |
+| User Pool Groups | ✅ |
+| Lambda Triggers | ✅ |
+| Hosted UI | ✅ |
+| Advanced Security Features | ✅ |
+| Identity Federation | ✅ |
 
 ## **Key Differences Between Firebase and Amazon Stytch**
 
