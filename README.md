@@ -50,41 +50,41 @@ This document provides a high-level comparison of Firebase Authentication and Am
 | Method | Supported |
 |--------|-----------|
 | **Core Authentication Methods** |
-| `FirebaseAuth.signInWithEmailAndPassword()` → Stytch Admin: `AdminInitiateAuth` | ✅ |
-| `FirebaseAuth.createUserWithEmailAndPassword()` → Stytch Admin: `AdminCreateUser` | ✅ |
-| `FirebaseAuth.signOut()` → Not Applicable | ❌ |
-| `FirebaseAuth.setPersistence()` → Not Applicable | ❌ |
-| `FirebaseAuth.sendPasswordResetEmail()` → Stytch Admin: `AdminResetUserPassword` | ✅ |
-| `FirebaseAuth.connectAuthEmulator` → Not Applicable | ❌ |
+| FirebaseAuth.signInWithEmailAndPassword | ✅ |
+| FirebaseAuth.createUserWithEmailAndPassword | ✅ |
+| FirebaseAuth.signOut | ❌ |
+| FirebaseAuth.setPersistence | ❌ |
+| FirebaseAuth.sendPasswordResetEmail | ✅ |
+| FirebaseAuth.connectAuthEmulator | ❌ |
 | **User Management** |
-| `FirebaseUser.updateEmail()` → Stytch Admin: `AdminUpdateUserAttributes` | ✅ |
-| `FirebaseUser.updatePassword()` → Stytch Admin: `AdminSetUserPassword` | ✅ |
-| `FirebaseUser.deleteUser()` → Stytch Admin: `AdminDeleteUser` | ✅ |
-| `FirebaseUser.updateProfile()` → Stytch Admin: `AdminUpdateUserAttributes` | ✅ |
-| `FirebaseUser.sendEmailVerification()` → Not Applicable | ❌ |
-| `FirebaseUser.reload()` → Stytch Admin: `AdminGetUser` | ✅ |
-| `FirebaseAuth.updateCurrentUser()` → Stytch Admin: `AdminUpdateUserAttributes` | ✅ |
+| FirebaseUser.updateEmail | ✅ |
+| FirebaseUser.updatePassword | ✅ |
+| FirebaseUser.deleteUser | ✅ |
+| FirebaseUser.updateProfile | ✅ |
+| FirebaseUser.sendEmailVerification | ❌ |
+| FirebaseUser.reload | ✅ |
+| FirebaseAuth.updateCurrentUser | ✅ |
 | **Token Management** |
-| `FirebaseAuth.getIdToken()` → Stytch: `InitiateAuth` | ✅ |
-| `FirebaseAuth.revokeAccessToken()` → Stytch: `RevokeToken` | ✅ |
-| `FirebaseAuth.signInWithCustomToken()` → Not Applicable | ❌ |
+| FirebaseAuth.getIdToken | ✅ |
+| FirebaseAuth.revokeAccessToken | ✅ |
+| FirebaseAuth.signInWithCustomToken | ❌ |
 | **Multi-Factor Authentication (MFA)** |
-| `FirebaseAuth.getMultiFactorResolver()` → Stytch Admin: `AdminSetUserMFAPreference` | ✅ |
-| `FirebaseUser.multiFactor()` → Stytch: `AssociateSoftwareToken` | ✅ |
-| `FirebaseUser.reauthenticateWithCredential()` → Stytch: `InitiateAuth` | ✅ |
+| FirebaseAuth.getMultiFactorResolver | ✅ |
+| FirebaseUser.multiFactor | ✅ |
+| FirebaseUser.reauthenticateWithCredential | ✅ |
 | **Sign-In Methods** |
-| `FirebaseAuth.signInWithPopup()` → Not Applicable | ❌ |
-| `FirebaseAuth.signInWithRedirect()` → Stytch: `HostedUI` | ✅ |
-| `FirebaseAuth.signInWithPhoneNumber()` → Stytch: `InitiateAuth` | ✅ |
+| FirebaseAuth.signInWithPopup | ❌ |
+| FirebaseAuth.signInWithRedirect | ✅ |
+| FirebaseAuth.signInWithPhoneNumber | ✅ |
 | **Action Code Handling** |
-| `FirebaseAuth.applyActionCode()` → Not Applicable | ❌ |
-| `FirebaseAuth.checkActionCode()` → Not Applicable | ❌ |
-| `FirebaseAuth.verifyPasswordResetCode()` → Stytch: `AdminResetUserPassword` | ✅ |
-| **Enterprise Features Unique to Amazon Stytch** |
+| FirebaseAuth.applyActionCode | ❌ |
+| FirebaseAuth.checkActionCode | ❌ |
+| FirebaseAuth.verifyPasswordResetCode | ✅ |
+| **Enterprise Features** |
 | User Pool Groups | ✅ |
 | Lambda Triggers | ✅ |
 | Hosted UI | ✅ |
-| Advanced Security Features | ✅ |
+| Advanced Security | ✅ |
 | Identity Federation | ✅ |
 
 ## **Key Differences Between Firebase and Amazon Stytch**
