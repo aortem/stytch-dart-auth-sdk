@@ -24,7 +24,7 @@
 
 This document provides a high-level comparison of Firebase Authentication and Amazon Stytch features tailored for building a server-side Dart SDK. The goal is to evaluate how a server-side Dart SDK could integrate Amazon Stytch and compare its capabilities to Firebase Authentication.
 
-## **Comprehensive Feature Comparison**
+## **Features**
 
 | Method | Supported |
 |--------|-----------|
