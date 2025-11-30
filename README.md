@@ -82,8 +82,10 @@ Let me know if you'd like to explore specific areas further!
 
 ## Available Versions / Sample Apps
 Stytch Dart Admin Auth SDK is available in a single version with sample apps:
-1. Main - Stable Version: Usually one release a month. This version attempts to keep stability without introducing breaking changes.
-2. Sample Apps - FrontEnd Version: The sample apps are provided in various frontend languages in order to allow maximum flexibility with your frontend implementation with the Dart backend. Note that new features are first tested in the sample apps before being released in the mainline branch. Use only as a guide for your frontend/backend implementation of Dart.
+
+1. **Main - Stable Version**: Usually one release a month. This version attempts to keep stability without introducing breaking changes.
+
+2. **Sample Apps - FrontEnd Version**: The sample apps are provided in various frontend languages in order to allow maximum flexibility with your frontend implementation with the Dart backend. Note that new features are first tested in the sample apps before being released in the mainline branch. Use only as a guide for your frontend/backend implementation of Dart.
 
 ## Documentation
 For detailed guides, API references, and example projects, visit our [Stytch Dart Auth SDK Documentation](https://sdks.aortem.io/stytch-dart-auth-sdk/). Start building with Stytch Dart Admin Auth SDK today and take advantage of its robust features and elegant syntax.
