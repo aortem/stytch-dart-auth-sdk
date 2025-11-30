@@ -101,11 +101,13 @@ For support across all Aortem open-source products, including this SDK, visit ou
 
 ## Licensing
 The Stytch Dart Auth SDK is licensed under a dual-license approach:
-1. BSD-3 License:
+
+1. **BSD-3 License**:
    * Applies to all packages and libraries in the SDK.
    * Allows use, modification, and redistribution, provided that credit is given and compliance with the BSD-3 terms is maintained.
    * Permits usage in open-source projects, applications, and private deployments.
-2. Enhanced License Version 2 (ELv2):
+
+2. **Enhanced License Version 2 (ELv2)**:
    * Applies to all use cases where the SDK or its derivatives are offered as part of a cloud service.
    * This ensures that the SDK cannot be directly used by cloud providers to offer competing services without explicit permission.
    * Example restricted use cases:
