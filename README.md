@@ -59,6 +59,26 @@ This document provides a high-level comparison of Firebase Authentication and Am
 | Advanced Security | ✅ |
 | Identity Federation | ✅ |
 
+## Key Differences Between Firebase and Amazon Stytch
+
+### Server-Side Capabilities
+- **Amazon Stytch** offers strong server-side APIs (Admin APIs).
+- **Firebase** is mainly client-focused.
+
+### Enterprise Features
+- **Stytch** supports advanced features like Lambda triggers and adaptive authentication.
+- These features are not available in **Firebase**.
+
+### Custom Token Support
+- **Firebase** allows custom token generation for external system integration.
+- **Stytch** does not provide this capability.
+
+## Next Steps
+
+1. Design the Dart SDK for server-side integration with **Amazon Stytch Admin APIs**.  
+2. Implement key features such as **user management**, **MFA**, and **token management**.  
+3. Create documentation and examples for easy adoption across mobile and web projects.
+
 ## Available Versions / Sample Apps
 Stytch Dart Admin Auth SDK is available in a single version with sample apps:
 
