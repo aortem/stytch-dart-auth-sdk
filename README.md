@@ -28,14 +28,12 @@ This document provides a high-level comparison of Firebase Authentication and Am
 
 | Method | Supported |
 |--------|-----------|
-| **Core Authentication Methods** |
 | FirebaseAuth.signInWithEmailAndPassword | ✅ |
 | FirebaseAuth.createUserWithEmailAndPassword | ✅ |
 | FirebaseAuth.signOut | ❌ |
 | FirebaseAuth.setPersistence | ❌ |
 | FirebaseAuth.sendPasswordResetEmail | ✅ |
 | FirebaseAuth.connectAuthEmulator | ❌ |
-| **User Management** |
 | FirebaseUser.updateEmail | ✅ |
 | FirebaseUser.updatePassword | ✅ |
 | FirebaseUser.deleteUser | ✅ |
@@ -43,23 +41,18 @@ This document provides a high-level comparison of Firebase Authentication and Am
 | FirebaseUser.sendEmailVerification | ❌ |
 | FirebaseUser.reload | ✅ |
 | FirebaseAuth.updateCurrentUser | ✅ |
-| **Token Management** |
 | FirebaseAuth.getIdToken | ✅ |
 | FirebaseAuth.revokeAccessToken | ✅ |
 | FirebaseAuth.signInWithCustomToken | ❌ |
-| **Multi-Factor Authentication (MFA)** |
 | FirebaseAuth.getMultiFactorResolver | ✅ |
 | FirebaseUser.multiFactor | ✅ |
 | FirebaseUser.reauthenticateWithCredential | ✅ |
-| **Sign-In Methods** |
 | FirebaseAuth.signInWithPopup | ❌ |
 | FirebaseAuth.signInWithRedirect | ✅ |
 | FirebaseAuth.signInWithPhoneNumber | ✅ |
-| **Action Code Handling** |
 | FirebaseAuth.applyActionCode | ❌ |
 | FirebaseAuth.checkActionCode | ❌ |
 | FirebaseAuth.verifyPasswordResetCode | ✅ |
-| **Enterprise Features** |
 | User Pool Groups | ✅ |
 | Lambda Triggers | ✅ |
 | Hosted UI | ✅ |
@@ -100,7 +93,7 @@ We welcome contributions of all forms from the community! If you're interested i
 For support across all Aortem open-source products, including this SDK, visit our [Support Page](https://www.aortem.io/support).
 
 ## Licensing
-The Stytch Dart Auth SDK is licensed under a dual-license approach:
+The **Stytch Dart Auth SDK** is licensed under a dual-license approach:
 
 1. **BSD-3 License**:
    * Applies to all packages and libraries in the SDK.
