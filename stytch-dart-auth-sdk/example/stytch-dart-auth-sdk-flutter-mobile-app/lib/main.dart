@@ -11,7 +11,7 @@ void main() async {
   try {
     print('🎉 Initializing stytch SDK for Flutter demo...');
 
-    final auth = stytchAuth(
+    final auth = StytchAuth(
       apiKey: 'demo_api_key',
       projectId: 'demo_project_id',
       environment: 'sandbox',
@@ -50,12 +50,12 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final stytchAuth auth;
+  final StytchAuth auth;
   const MyApp({super.key, required this.auth});
 
   @override
   Widget build(BuildContext context) {
-    return Provider<stytchAuth>.value(
+    return Provider<StytchAuth>.value(
       value: auth,
       child: MaterialApp(
         title: 'Stytch SDK Dashboard',
@@ -92,12 +92,12 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
-  late final stytchAuth _auth;
+  late final StytchAuth _auth;
 
   @override
   void initState() {
     super.initState();
-    _auth = context.read<stytchAuth>();
+    _auth = context.read<StytchAuth>();
   }
 
   final List<Map<String, dynamic>> _navItems = [
