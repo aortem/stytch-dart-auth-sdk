@@ -1,6 +1,6 @@
 library user_device_language_test;
 
-import 'package:test/test.dart';
+import 'package:ds_tools_testing/ds_tools_testing.dart';
 
 void main() {
   group('User Device Language Tests', () {

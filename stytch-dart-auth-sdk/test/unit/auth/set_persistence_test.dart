@@ -1,6 +1,6 @@
 library set_persistence_test;
 
-import 'package:test/test.dart';
+import 'package:ds_tools_testing/ds_tools_testing.dart';
 
 void main() {
   group('Set Persistence Tests', () {

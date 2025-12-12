@@ -1,6 +1,6 @@
 library firebase_app_test;
 
-import 'package:test/test.dart';
+import 'package:ds_tools_testing/ds_tools_testing.dart';
 
 void main() {
   group('Firebase App Tests', () {
