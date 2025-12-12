@@ -4,8 +4,7 @@ library stytch_client;
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+import 'package:ds_standard_features/ds_standard_features.dart' as http;
 
 import '../models/error.dart';
 
