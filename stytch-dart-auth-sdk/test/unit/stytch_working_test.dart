@@ -2,7 +2,7 @@
 /// These tests verify core functionality without JSON serialization
 library test_unit_stytch_working_test;
 
-import 'package:test/test.dart';
+import 'package:ds_tools_testing/ds_tools_testing.dart';
 import 'package:stytch_dart_auth_sdk/src/client/stytch_client.dart';
 import 'package:stytch_dart_auth_sdk/src/models/error.dart';
 

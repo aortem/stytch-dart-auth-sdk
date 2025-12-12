@@ -1,7 +1,7 @@
 library stytch_auth_test;
 
 /// Unit tests for stytch_auth.dart
-import 'package:test/test.dart';
+import 'package:ds_tools_testing/ds_tools_testing.dart';
 import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 
 void main() {
