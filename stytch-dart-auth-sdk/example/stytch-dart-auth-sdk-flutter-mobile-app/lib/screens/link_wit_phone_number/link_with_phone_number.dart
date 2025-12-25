@@ -51,10 +51,13 @@ class _LinkPhoneNumberScreenState extends State<LinkPhoneNumberScreen> {
                       print('Please enter atleast 11 digit number');
                     }
                     BotToast.showText(
-                        text: 'Please enter atleast 11 digit number');
+                      text: 'Please enter atleast 11 digit number',
+                    );
                   } else {
                     await stytchApp.stytchAuth?.stytchPhoneNumberLinkMethod(
-                        phoneLinkController.text, codeController.text);
+                      phoneLinkController.text,
+                      codeController.text,
+                    );
                   }
                 },
                 title: 'Send',

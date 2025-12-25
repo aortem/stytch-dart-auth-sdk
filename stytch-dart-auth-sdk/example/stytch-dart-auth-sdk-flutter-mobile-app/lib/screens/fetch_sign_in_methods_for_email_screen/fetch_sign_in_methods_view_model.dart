@@ -19,8 +19,8 @@ class FetchSignInMethodsViewModel extends ChangeNotifier {
 
     try {
       setLoading(true);
-      var fetchedResult =
-          await stytchApp.stytchAuth?.fetchSignInMethodsForEmail(email);
+      var fetchedResult = await stytchApp.stytchAuth
+          ?.fetchSignInMethodsForEmail(email);
       result = fetchedResult?.cast<String>(); // Explicitly cast to List<String>
       notifyListeners();
     } catch (e) {
