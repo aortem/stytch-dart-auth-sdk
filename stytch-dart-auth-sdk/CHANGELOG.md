@@ -1,33 +1,40 @@
 ## 0.0.1
 
 ### **Added**
-* Added new example project scaffolding under the `stytch-dart-auth-sdk/example/` directory for multiple platforms (Flutter Web, Flutter Desktop, Flutter Games, Compose, Dart Web, and more).
-* Added initial Firebase configuration files (`.firebaserc`, `firebase.json`, etc.) for the example applications.
+* Added the core Stytch B2B SDK surface with a unified entrypoint in `lib/stytch_dart_auth_sdk.dart`.
+* Added `StytchAuth` initialization flows (direct config, environment-variable bootstrap, and global helpers) in `lib/src/stytch_auth.dart`.
+* Added a typed HTTP client and configuration layer in `lib/src/client/stytch_client.dart` with environment-aware base URLs and structured API error mapping.
+* Added first-class client services for authentication, users, organizations, and invitations:
+  * `lib/src/client/auth_service.dart`
+  * `lib/src/client/user_service.dart`
+  * `lib/src/client/organization_service.dart`
+  * `lib/src/client/invitation_service.dart`
+* Added typed request/response models for auth, user, organization, invitation, and error payloads under `lib/src/models/`.
+* Added Firebase-compatibility support modules under `lib/src/auth/` (`firebase_compatibility.dart`, credentials, action code, persistence, multi-factor, storage, auth/id-token streams) to support Flutter-oriented integration scenarios.
+* Added broader automated test coverage across auth compatibility, model serialization, and SDK entrypoints (unit and integration test updates in `test/`).
+* Added expanded example app scaffolding under `example/`, including renamed Stytch-branded mobile sample app structure.
 
 ### **Changed**
-* Migrated all example app directories from the previous `cognito-dart-auth-sdk-*` naming to the new `stytch-dart-auth-sdk-*` naming convention for consistent Stytch branding.
-* Updated internal imports and file paths inside example apps to reflect the new Stytch-based folder structure.
-* Updated `.gitignore` to remove unused patterns and improve handling of generated files.
-* Updated placeholder files and project metadata within the example applications for better clarity and accuracy.
+* Promoted package version from `0.0.1-pre` to stable `0.0.1` in `pubspec.yaml`.
+* Updated package metadata and runtime/tooling baselines:
+  * Updated Dart SDK constraint to `^3.10.7`
+  * Added `license: BSD-3`
+  * Refreshed dependency versions for `ds_standard_features`, `build_web_compilers`, `jwt_generator`, and `ds_tools_testing`
+  * Added `lints` and `flutter_lints` in dev dependencies
+* Refactored sample app naming and paths from `cognito-*` to `stytch-*` conventions across example projects and CI references.
+* Updated CI/CD pipeline wiring:
+  * Reorganized child pipeline includes into `tools/pipelines/backend/` and `tools/pipelines/frontend/`
+  * Added explicit `release` stage and improved merge-request debug output
+  * Added formatting validation job (`dart format --set-exit-if-changed`)
+  * Expanded branch/commit validation rules to include `docs` prefixes and semver-style release branch names
+* Updated docs and repo metadata to reflect Stytch SDK structure and usage.
 
 ### **Fixed**
-* Fixed broken example app paths caused by outdated “cognito-” prefixes.
-* Fixed references to the correct SDK entrypoints (e.g., `stytch_auth.dart`) across example apps.
-* Fixed missing or misconfigured Firebase project references inside sample apps.
+* Fixed SDK/package import and export path issues affecting SDK consumers and tests.
+* Fixed Dart analysis/format issues across the SDK and test suites.
+* Fixed sample app path references and CI analyze paths after repo/folder renaming.
+* Fixed commit validation and branch naming checks in local hooks and CI setup.
 
 ## 0.0.1-pre
 
-- Initial pre-release version of the stytch Dart Auth SDK.
-
-### **Changed**
-
-* Updated internal project structure and file organization for better consistency across the SDK.
-* Improved example app layout and artifact organization.
-
-### **Fixed**
-
-* Fixed several path inconsistencies that caused example project references to break.
-
-## 0.0.1-pre
-
-- Initial pre-release version of the stytch Dart Auth SDK.
+- Initial pre-release version of the Stytch Dart Auth SDK.
