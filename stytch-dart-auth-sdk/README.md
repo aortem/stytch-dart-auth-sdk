@@ -1,94 +1,216 @@
-# stytch Dart B2B Auth SDK
+# stytch_dart_auth_sdk
 
-## Overview
+Dart SDK for Stytch B2B auth workflows.
 
-The stytch Dart B2B Auth SDK provides a comprehensive and robust set of tools for implementing enterprise-grade authentication and authorization in Dart and Flutter applications. This SDK offers a complete implementation of the stytch B2B API with strong typing, async support, and comprehensive error handling.
+This package provides typed service clients and models for user, session, organization, and invitation operations over the Stytch B2B API.
 
-## Features
+## Package Status
 
-- **🔐 Enterprise Authentication**: Email/password, SSO, and MFA authentication flows
-- **👥 User Management**: Create, update, search, and manage user accounts
-- **🏢 Organization Management**: Multi-tenant organization support with member management
-- **✉️ Invitation System**: Send and manage user invitations to organizations
-- **🎫 Session Management**: Secure session creation, validation, and revocation
-- **⚡ Async/Await Support**: Full asynchronous programming with Dart Futures
-- **🛡️ Type Safety**: Strongly typed request and response models
-- **📊 Comprehensive Error Handling**: Detailed error types and handling
-- **🌍 Multi-Environment**: Support for sandbox, development, and production environments
+Implemented and exported from `lib/stytch_dart_auth_sdk.dart`:
 
-## Quick Start
+- `StytchAuth` main entrypoint.
+- Service clients: `AuthService`, `UserService`, `OrganizationService`, `InvitationService`.
+- Typed request/response models under `lib/src/models/`.
+- Error model and exception mapping (`StytchException`, `StytchAuthException`, etc).
+- Firebase-style compatibility helpers under `lib/src/auth/` (primarily for the Flutter example app).
 
-### Installation
+Important: parts of the Firebase compatibility API are currently placeholders/mocks. Use the Stytch service clients for production flows.
 
-Add to your `pubspec.yaml`:
+## Docs Index
+
+- [CHANGELOG](CHANGELOG.md)
+- [Contributing Guide](../CONTRIBUTING.md)
+- [Local Dev Tools](local_dev_tools/README.md)
+- [Repository README](../README.md)
+
+## Installation
 
 ```yaml
 dependencies:
-  stytch_dart_auth_sdk: ^0.1.0
-
-dev_dependencies:
-  build_runner: ^2.4.7
-  json_serializable: ^6.7.1
+  stytch_dart_auth_sdk: ^0.0.1
 ```
 
-Run:
+Then run:
 
 ```bash
 dart pub get
-# or
-flutter pub get
 ```
 
-### Basic Usage
+## Initialization
+
+### Direct configuration
 
 ```dart
 import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 
-void main() async {
-  // Initialize the SDK
-  final auth = stytchAuth(
+final stytch = StytchAuth(
+  apiKey: 'YOUR_STYTCH_API_KEY',
+  projectId: 'YOUR_STYTCH_PROJECT_ID',
+  environment: 'sandbox', // sandbox | development | production
+);
+```
+
+### Environment variables
+
+Supported environment variables:
+
+- `STYTCH_API_KEY` (required)
+- `STYTCH_PROJECT_ID` (required)
+- `STYTCH_ENVIRONMENT` (optional)
+- `STYTCH_BASE_URL` (optional)
+- `STYTCH_TIMEOUT` in seconds (optional)
+
+```dart
+final stytch = StytchAuth.fromEnvironmentVariables();
+```
+
+## Basic Usage
+
+```dart
+import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
+
+Future<void> main() async {
+  final stytch = StytchAuth(
     apiKey: 'YOUR_STYTCH_API_KEY',
-    projectId: 'YOUR_PROJECT_ID',
-    environment: 'sandbox', // or 'production'
+    projectId: 'YOUR_STYTCH_PROJECT_ID',
+    environment: 'sandbox',
   );
 
-  try {
-    // Create a user
-    final userRequest = CreateUserRequest(
-      email: 'user@example.com',
-      name: 'John Doe',
-      organizationId: 'org_123',
-    );
-    
-    final user = await auth.user.createUser(userRequest);
-    print('User created: ${user.email}');
+  final created = await stytch.user.createUser(
+    const CreateUserRequest(
+      email: 'alice@example.com',
+      name: 'Alice',
+      password: 'strong-password',
+    ),
+  );
 
-    // Login with email and password
-    final loginRequest = EmailPasswordLoginRequest(
-      email: 'user@example.com',
-      password: 'password123',
-      organizationId: 'org_123',
-    );
+  final login = await stytch.auth.loginWithEmailPassword(
+    const EmailPasswordLoginRequest(
+      email: 'alice@example.com',
+      password: 'strong-password',
+    ),
+  );
 
-    final session = await auth.auth.loginWithEmailPassword(loginRequest);
-    print('Logged in as: ${session.email}');
+  final validation = await stytch.auth.validateSession(
+    ValidateSessionRequest(sessionToken: login.sessionToken),
+  );
 
-    // Validate session
-    final sessionRequest = ValidateSessionRequest(
-      sessionToken: session.sessionToken,
-    );
-
-    final isValid = await auth.auth.validateSession(sessionRequest);
-    print('Session is valid: ${isValid.valid}');
-
-  } catch (e) {
-    print('Authentication error: $e');
-  }
+  print('User ID: ${created.userId}');
+  print('Session valid: ${validation.valid}');
 }
 ```
 
-## Documentation
+## API Surface Overview
 
-For detailed API documentation, examples, and guides, visit:
-- **Documentation**: [GitBook](https://aortem.gitbook.io/stytch-dart-auth-admin-sdk/)
-- **stytch B2B API**: [Official Documentation](https://stytch.com/docs/b2b)
+### AuthService
+
+- `loginWithEmailPassword`
+- `loginWithSso`
+- `startMfa`
+- `completeMfa`
+- `createSession`
+- `validateSession`
+- `revokeSession`
+- `revokeAllUserSessions`
+- `exchangeSession`
+
+### UserService
+
+- `createUser`
+- `getUser`
+- `getCurrentUser`
+- `updateUser`
+- `deleteUser`
+- `listUsers`
+- `searchUsers`
+- `setMfaEnabled`
+- `getUserOrganizations`
+- `removeFromOrganization`
+- `deleteAuthenticationFactor`
+
+### OrganizationService
+
+- `createOrganization`
+- `getOrganization`
+- `getOrganizationBySlug`
+- `updateOrganization`
+- `deleteOrganization`
+- `listOrganizations`
+- `searchOrganizations`
+- `getOrganizationMembers`
+- `addUserToOrganization`
+- `removeUserFromOrganization`
+- `updateOrganizationMember`
+
+### InvitationService
+
+- `sendInvitation`
+- `getInvitation`
+- `listInvitations`
+- `cancelInvitation`
+- `acceptInvitation`
+- `sendBulkInvitations`
+- `getPendingInvitationsForEmail`
+- `resendInvitation`
+
+## Example App
+
+Flutter sample app location:
+
+- `example/stytch-dart-auth-sdk-flutter-mobile-app/`
+
+Run it with:
+
+```bash
+cd example/stytch-dart-auth-sdk-flutter-mobile-app
+flutter pub get
+flutter run
+```
+
+## Development
+
+From this package directory:
+
+```bash
+dart pub get
+dart analyze
+dart test
+```
+
+## Testing
+
+Run all tests:
+
+```bash
+dart test
+```
+
+Run only unit tests:
+
+```bash
+dart test test/unit/
+```
+
+Run integration tests:
+
+```bash
+dart test test/integration/
+```
+
+Run a single test file:
+
+```bash
+dart test test/unit/stytch_working_test.dart
+```
+
+Current note: many compatibility and integration tests are still placeholders, so a green test run is currently a smoke/structure signal more than full behavioral coverage.
+
+## CI Status
+
+- The top-level pipeline currently runs validation, Flutter example analysis, and release orchestration.
+- The unit-test stage in `.gitlab-ci.yml` is currently commented out.
+- `tools/pipelines/backend/child-ci-unit-tests-pre-dev.yml` exists but is not wired in and still has stale paths.
+
+## License
+
+BSD 3-Clause. See [LICENSE](LICENSE).
