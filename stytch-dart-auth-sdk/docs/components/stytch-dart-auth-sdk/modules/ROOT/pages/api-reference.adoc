@@ -1,0 +1,22 @@
+﻿= API Reference
+:page-layout: default
+
+This page maps the public package entrypoint to the current source tree.
+
+== Package API
+
+* Package: stytch_dart_auth_sdk
+* Version: v0.0.1
+* Package root: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk
+* Import path: package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart
+* Entrypoint file: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/lib/stytch_dart_auth_sdk.dart
+
+== Source Areas
+
+* apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/lib/src
+
+== Supporting Sources
+
+* Tests: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/test
+* README: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/README.md
+* Changelog: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/CHANGELOG.md

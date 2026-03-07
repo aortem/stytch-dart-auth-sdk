@@ -1,0 +1,15 @@
+site:
+  title: Stytch Dart Auth SDK Docs
+  start_page: stytch-dart-auth-sdk::index.adoc
+  url: https://stytch-dart-auth-sdk-docs.web.app/
+
+content:
+  sources:
+    - url: ..
+      branches: HEAD
+      start_path: stytch-dart-auth-sdk/docs/components/stytch-dart-auth-sdk
+
+ui:
+  bundle:
+    url: ./ui/antora-ui-custom/ui-bundle
+    snapshot: true

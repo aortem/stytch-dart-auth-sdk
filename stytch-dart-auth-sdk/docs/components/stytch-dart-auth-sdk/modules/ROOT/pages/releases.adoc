@@ -1,0 +1,21 @@
+﻿= Releases
+:navtitle: Releases
+:description: Release tracking for Stytch Dart Auth SDK.
+:sectnums:
+
+This page tracks the current public package version documented for Stytch Dart Auth SDK.
+'''
+
+== v0.0.1
+
+=== Overview
+The current public package version for stytch_dart_auth_sdk is v0.0.1.
+
+=== Release Sources
+
+* Pubspec: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/pubspec.yaml
+* Changelog: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/CHANGELOG.md
+
+=== Notes
+* Keep this page aligned with the version declared in pubspec.yaml.
+* Detailed release history and change notes remain in CHANGELOG.md until fuller curated release notes are added here.

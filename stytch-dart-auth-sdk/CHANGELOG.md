@@ -17,7 +17,7 @@
 ### **Changed**
 * Promoted package version from `0.0.1-pre` to stable `0.0.1` in `pubspec.yaml`.
 * Updated package metadata and runtime/tooling baselines:
-  * Updated Dart SDK constraint to `^3.10.7`
+  * Updated Dart SDK constraint to `^3.11.0`
   * Added `license: BSD-3`
   * Refreshed dependency versions for `ds_standard_features`, `build_web_compilers`, `jwt_generator`, and `ds_tools_testing`
   * Added `lints` and `flutter_lints` in dev dependencies

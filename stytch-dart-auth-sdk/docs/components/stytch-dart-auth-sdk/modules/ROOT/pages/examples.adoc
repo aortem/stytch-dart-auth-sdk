@@ -1,0 +1,17 @@
+﻿= Examples
+:page-layout: default
+
+Examples and sample apps for Stytch Dart Auth SDK live under:
+
+* apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/example
+* apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/README.md
+* apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/example/README.md
+
+== Current Example Directories
+
+* apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/example/stytch-dart-auth-sdk-flutter-mobile-app
+
+== Notes
+
+* Use the current example directory names as the source of truth for available sample apps.
+* Expand this page with narrative walkthroughs as examples are finalized.

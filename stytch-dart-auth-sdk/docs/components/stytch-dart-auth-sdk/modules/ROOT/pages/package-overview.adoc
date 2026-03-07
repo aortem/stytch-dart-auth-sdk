@@ -1,0 +1,25 @@
+﻿= Package Overview
+:page-layout: default
+
+Stytch Dart Auth SDK is published as stytch_dart_auth_sdk at version v0.0.1.
+
+== Source of Truth
+
+* Pubspec: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/pubspec.yaml
+* README: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/README.md
+* Changelog: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/CHANGELOG.md
+
+== Directory Layout
+
+* Repository root: apps/sdks/stytch-dart-auth-sdk
+* Package root: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk
+* Documentation: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/docs
+* Library sources: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/lib
+* Examples: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/example
+* Tests: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/test
+* Local dev tools: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/local_dev_tools
+
+== Primary Source Areas
+
+* Public entrypoint: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/lib/stytch_dart_auth_sdk.dart
+* apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/lib/src
