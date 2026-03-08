@@ -5,7 +5,7 @@ site:
 
 content:
   sources:
-    - url: ..
+    - url: ../..
       branches: HEAD
       start_path: stytch-dart-auth-sdk/docs/components/stytch-dart-auth-sdk
 
