@@ -1,6 +1,7 @@
-## 0.0.1
+# Changelog
 
-### **Added**
+## [0.0.1]
+### Added
 * Added the core Stytch B2B SDK surface with a unified entrypoint in `lib/stytch_dart_auth_sdk.dart`.
 * Added `StytchAuth` initialization flows (direct config, environment-variable bootstrap, and global helpers) in `lib/src/stytch_auth.dart`.
 * Added a typed HTTP client and configuration layer in `lib/src/client/stytch_client.dart` with environment-aware base URLs and structured API error mapping.
@@ -14,7 +15,7 @@
 * Added broader automated test coverage across auth compatibility, model serialization, and SDK entrypoints (unit and integration test updates in `test/`).
 * Added expanded example app scaffolding under `example/`, including renamed Stytch-branded mobile sample app structure.
 
-### **Changed**
+### Changed
 * Promoted package version from `0.0.1-pre` to stable `0.0.1` in `pubspec.yaml`.
 * Updated package metadata and runtime/tooling baselines:
   * Updated Dart SDK constraint to `^3.11.0`
@@ -29,12 +30,12 @@
   * Expanded branch/commit validation rules to include `docs` prefixes and semver-style release branch names
 * Updated docs and repo metadata to reflect Stytch SDK structure and usage.
 
-### **Fixed**
+### Fixed
 * Fixed SDK/package import and export path issues affecting SDK consumers and tests.
 * Fixed Dart analysis/format issues across the SDK and test suites.
 * Fixed sample app path references and CI analyze paths after repo/folder renaming.
 * Fixed commit validation and branch naming checks in local hooks and CI setup.
 
-## 0.0.1-pre
-
+## [0.0.1-pre]
 - Initial pre-release version of the Stytch Dart Auth SDK.
+

@@ -1,21 +1,48 @@
-﻿= Releases
+= Releases
 :navtitle: Releases
-:description: Release tracking for Stytch Dart Auth SDK.
+:description: Release highlights and package history for Stytch Dart Auth SDK.
 :sectnums:
 
-This page tracks the current public package version documented for Stytch Dart Auth SDK.
+This page summarizes the stable package release history for Stytch Dart Auth SDK and keeps the public docs aligned with the published SDK versions.
 '''
-
-== v0.0.1
-
-=== Overview
-The current public package version for stytch_dart_auth_sdk is v0.0.1.
 
 === Release Sources
 
 * Pubspec: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/pubspec.yaml
 * Changelog: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/CHANGELOG.md
 
+== v0.0.1
+
+=== Overview
+This release establishes the first stable Stytch Dart Auth SDK with the core B2B surface, Firebase-compatibility helpers, and a broader example and test baseline.
+
+=== Highlights
+* First stable package release
+* Added core auth, user, organization, and invitation services
+* Added Firebase-compatibility support modules
+
+=== Improvements
+* Added the unified SDK entrypoint and `StytchAuth` initialization flows.
+* Added typed clients, configuration, and structured API error handling.
+* Added first-class services for auth, users, organizations, and invitations.
+* Added typed models and Firebase-compatibility support modules for Flutter-oriented integrations.
+* Expanded test coverage and refreshed the example app scaffolding.
+
+=== Changed
+* Promoted the package from `0.0.1-pre` to stable `0.0.1`.
+* Updated the Dart baseline to `^3.11.0`, added `BSD-3`, and refreshed core dependencies and CI validation.
+
+=== Fixes
+* Fixed package import and export path issues, analysis and formatting issues, and renamed sample app paths and CI references.
+
+== Pre-release History
+
+=== Overview
+Earlier pre-stable package builds are part of the SDK history and remain documented in the changelog.
+
+=== Included Pre-release Tags
+* `0.0.1-pre`
+
 === Notes
-* Keep this page aligned with the version declared in pubspec.yaml.
-* Detailed release history and change notes remain in CHANGELOG.md until fuller curated release notes are added here.
+* Keep this page aligned with the version declared in `pubspec.yaml`.
+* Use `CHANGELOG.md` as the source of truth for exhaustive historical change notes.
