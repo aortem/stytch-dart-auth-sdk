@@ -1,10 +1,10 @@
 name: stytch_dart_auth_sdk
 description: A Dart SDK for Stytch Authentication, enabling secure server-side authentication and user management for Dart-based backend applications.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/aortem/stytch_dart_auth_sdk
 
 environment:
-  sdk: ^3.11.0
+  sdk: ^3.11.4
 
 # Add regular dependencies here.
 
@@ -13,8 +13,8 @@ dependencies:
 ## There are three standard libraries.  Each one can be used with a different xxx 
 
   ds_standard_features: ^0.1.6
-  build_web_compilers: ^4.4.15
-  jwt_generator: ^0.0.8
+  build_web_compilers: ^4.4.17
+  jwt_generator: ^0.0.9
 
 
 #------------------ TESTING FEATURES---------------------------------

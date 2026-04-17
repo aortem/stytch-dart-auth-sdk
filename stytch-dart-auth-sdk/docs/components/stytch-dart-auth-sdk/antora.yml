@@ -1,5 +1,5 @@
-﻿name: stytch-dart-auth-sdk
+name: stytch-dart-auth-sdk
 title: Stytch Dart Auth SDK
-version: v0.0.1
+version: v0.0.2
 nav:
 - modules/ROOT/nav.adoc
