@@ -4,7 +4,7 @@ version: 0.0.1
 repository: https://github.com/aortem/stytch_dart_auth_sdk
 
 environment:
-  sdk: ^3.11.0
+  sdk: ^3.11.4
 
 # Add regular dependencies here.
 
