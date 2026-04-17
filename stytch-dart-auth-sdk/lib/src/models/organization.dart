@@ -10,13 +10,13 @@ class CreateOrganizationRequest {
   /// String?
   final String? slug;
 
-  /// List<String>?
+  /// `List<String>?`
   final List<String>? allowedDomains;
 
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
-  /// List<String>?
+  /// `List<String>?`
   final List<String>? ssoMethods;
 
   /// CreateOrganizationRequest(
@@ -70,13 +70,13 @@ class CreateOrganizationResponse {
   /// String
   final String slug;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> allowedDomains;
 
   /// Map<String,
   final Map<String, dynamic> attributes;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> ssoMethods;
 
   /// DateTime
@@ -135,13 +135,13 @@ class Organization {
   /// String
   final String slug;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> allowedDomains;
 
   /// Map<String,
   final Map<String, dynamic> attributes;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> ssoMethods;
 
   /// DateTime
@@ -205,13 +205,13 @@ class UpdateOrganizationRequest {
   /// String?
   final String? slug;
 
-  /// List<String>?
+  /// `List<String>?`
   final List<String>? allowedDomains;
 
   /// Map<String,
   final Map<String, dynamic>? attributes;
 
-  /// List<String>?
+  /// `List<String>?`
   final List<String>? ssoMethods;
 
   /// UpdateOrganizationRequest(

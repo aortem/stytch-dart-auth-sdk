@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.2]
+### Changed
+* Updated the package version to `0.0.2`.
+* Refreshed direct dependencies to the latest compatible pub.dev releases for `build_web_compilers` and `jwt_generator`.
+* Updated package and docs version markers to align README, Antora, and the example app with `0.0.2`.
+
+### Fixed
+* Removed the stale `test/flutter_test_config.dart` hook so the package test suite runs with `dart test` instead of attempting a Flutter-specific test runner.
+* Kept the CI validation and release parser alignment in place for the current backend pipeline layout.
+
 ## [0.0.1]
 ### Added
 * Added the core Stytch B2B SDK surface with a unified entrypoint in `lib/stytch_dart_auth_sdk.dart`.

@@ -1,7 +1,7 @@
 ﻿= Package Overview
 :page-layout: default
 
-Stytch Dart Auth SDK is published as stytch_dart_auth_sdk at version v0.0.1.
+Stytch Dart Auth SDK is published as stytch_dart_auth_sdk at version v0.0.2.
 
 == Source of Truth
 

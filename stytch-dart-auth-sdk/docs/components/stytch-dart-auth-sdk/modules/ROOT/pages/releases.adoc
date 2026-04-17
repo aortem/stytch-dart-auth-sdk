@@ -11,6 +11,25 @@ This page summarizes the stable package release history for Stytch Dart Auth SDK
 * Pubspec: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/pubspec.yaml
 * Changelog: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/CHANGELOG.md
 
+== v0.0.2
+
+=== Overview
+This release prepares the Stytch Dart Auth SDK for the next stable publish with refreshed direct dependencies, aligned version markers, and a package-native test runner configuration.
+
+=== Highlights
+* Next stable package release after `0.0.1`
+* Updated direct package dependencies to the latest compatible pub.dev versions
+* Removed the stale Flutter-specific test hook from the Dart package test suite
+
+=== Changed
+* Bumped the published package version to `0.0.2`.
+* Updated `build_web_compilers` to `^4.4.17` and `jwt_generator` to `^0.0.9`.
+* Updated README, Antora, and example package references to `0.0.2`.
+
+=== Fixes
+* Removed `test/flutter_test_config.dart` so `dart test` runs the package suite without requiring a Flutter test runner.
+* Kept the current CI validation/release pipeline alignment intact for the backend package flow.
+
 == v0.0.1
 
 === Overview
