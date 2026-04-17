@@ -131,7 +131,7 @@ class User {
   /// DateTime?
   final DateTime? updatedAt;
 
-  /// List<String>?
+  /// `List<String>?`
   final List<String>? organizationIds;
 
   /// User(

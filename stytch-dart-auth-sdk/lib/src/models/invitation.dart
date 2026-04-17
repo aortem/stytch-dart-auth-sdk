@@ -10,7 +10,7 @@ class SendInvitationRequest {
   /// String?
   final String? organizationId;
 
-  /// List<String>?
+  /// `List<String>?`
   final List<String>? organizationIds;
 
   /// Map<String,
@@ -239,7 +239,7 @@ class AcceptInvitationResponse {
   /// DateTime
   final DateTime sessionExpiresAt;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> organizationIds;
 
   /// AcceptInvitationResponse(

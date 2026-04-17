@@ -10,7 +10,7 @@ Add the package to your pubspec.yaml:
 [source,yaml]
 ----
 dependencies:
-  stytch_dart_auth_sdk: ^0.0.1
+  stytch_dart_auth_sdk: ^0.0.2
 ----
 
 Then run:

@@ -96,7 +96,7 @@ class AuthResponse {
   /// bool
   final bool isMfaEnabled;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> organizationIds;
 
   /// String
@@ -205,7 +205,7 @@ class MfaResponse {
   /// String
   final String mfaToken;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> availableMethods;
 
   /// MfaResponse(
@@ -238,7 +238,7 @@ class CreateSessionRequest {
   /// DateTime?
   final DateTime? expiresAt;
 
-  /// List<String>?
+  /// `List<String>?`
   final List<String>? organizationIds;
 
   /// CreateSessionRequest(
@@ -287,7 +287,7 @@ class CreateSessionResponse {
   /// DateTime
   final DateTime sessionExpiresAt;
 
-  /// List<String>
+  /// `List<String>`
   final List<String> organizationIds;
 
   /// CreateSessionResponse(
