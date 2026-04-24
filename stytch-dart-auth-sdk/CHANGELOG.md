@@ -3,8 +3,9 @@
 ## [0.0.2]
 ### Changed
 * Updated the package version to `0.0.2`.
-* Refreshed direct dependencies to the latest compatible pub.dev releases for `build_web_compilers` and `jwt_generator`.
+* Trimmed unused runtime dependencies and refreshed the testing dependency baseline to the current workspace release.
 * Updated package and docs version markers to align README, Antora, and the example app with `0.0.2`.
+* Added explicit license metadata and publish exclusions for docs/deployment artifacts.
 
 ### Fixed
 * Removed the stale `test/flutter_test_config.dart` hook so the package test suite runs with `dart test` instead of attempting a Flutter-specific test runner.
@@ -30,7 +31,7 @@
 * Updated package metadata and runtime/tooling baselines:
   * Updated Dart SDK constraint to `^3.11.0`
   * Added `license: BSD-3`
-  * Refreshed dependency versions for `ds_standard_features`, `build_web_compilers`, `jwt_generator`, and `ds_tools_testing`
+  * Refreshed dependency versions for `ds_standard_features` and `ds_tools_testing`
   * Added `lints` and `flutter_lints` in dev dependencies
 * Refactored sample app naming and paths from `cognito-*` to `stytch-*` conventions across example projects and CI references.
 * Updated CI/CD pipeline wiring:
