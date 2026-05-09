@@ -9,6 +9,8 @@ import 'client/auth_service.dart';
 import 'client/user_service.dart';
 import 'client/organization_service.dart';
 import 'client/invitation_service.dart';
+import 'client/member_service.dart';
+import 'client/rbac_service.dart';
 import 'models/error.dart';
 
 /// Main stytch authentication instance
@@ -21,6 +23,8 @@ class StytchAuth {
   late final UserService _userService;
   late final OrganizationService _organizationService;
   late final InvitationService _invitationService;
+  late final MemberService _memberService;
+  late final RbacService _rbacService;
 
   /// Constructor for StytchAuth authentication
   StytchAuth({
@@ -100,6 +104,8 @@ class StytchAuth {
     _userService = UserService(_httpClient);
     _organizationService = OrganizationService(_httpClient);
     _invitationService = InvitationService(_httpClient);
+    _memberService = MemberService(_httpClient);
+    _rbacService = RbacService(_httpClient);
   }
 
   /// Get the authentication service
@@ -113,6 +119,12 @@ class StytchAuth {
 
   /// Get the invitation service
   InvitationService get invitation => _invitationService;
+
+  /// Get the member service
+  MemberService get member => _memberService;
+
+  /// Get the RBAC service
+  RbacService get rbac => _rbacService;
 
   /// Check if the client is configured correctly
   bool isConfigured() {

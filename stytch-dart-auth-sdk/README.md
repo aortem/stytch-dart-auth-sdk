@@ -9,7 +9,8 @@ This package provides typed service clients and models for user, session, organi
 Implemented and exported from `lib/stytch_dart_auth_sdk.dart`:
 
 - `StytchAuth` main entrypoint.
-- Service clients: `AuthService`, `UserService`, `OrganizationService`, `InvitationService`.
+- Service clients: `AuthService`, `UserService`, `OrganizationService`,
+  `InvitationService`, `MemberService`, `RbacService`.
 - Typed request/response models under `lib/src/models/`.
 - Error model and exception mapping (`StytchException`, `StytchAuthException`, etc).
 - Firebase-style compatibility helpers under `lib/src/auth/` (primarily for the Flutter example app).
@@ -210,6 +211,55 @@ print('Request ID: ${response.requestId}');
 print('Member ID: ${response.memberId}');
 print('Status: ${response.statusCode}');
 ```
+
+### MemberService
+
+- `createMember`
+- `getMember`
+- `getMemberByEmail`
+- `updateMember`
+- `reactivateMember`
+- `searchMembers`
+- `unlinkRetiredMemberEmail`
+- `deleteMember`
+- `deleteMemberPassword`
+- `deleteMemberMfaPhoneNumber`
+- `deleteMemberMfaTotp`
+
+Member methods wrap Stytch's current B2B organization member endpoints,
+including `GET /v1/b2b/organizations/{organization_id}/member` with
+`member_id` or `email_address` query parameters.
+
+```dart
+final member = await stytch.member.getMember(
+  'organization-test-123',
+  'member-test-123',
+);
+
+final search = await stytch.member.searchMembers(
+  SearchMembersRequest(
+    organizationIds: ['organization-test-123'],
+    query: {
+      'operator': 'AND',
+      'operands': [
+        {
+          'filter_name': 'member_emails',
+          'filter_value': ['member@example.com'],
+        },
+      ],
+    },
+  ),
+);
+
+print('Member ID: ${member.memberId}');
+print('Matched members: ${search.members.length}');
+```
+
+### RbacService
+
+- `getRbacPolicy`
+
+`getRbacPolicy` wraps Stytch's `GET /v1/b2b/rbac/policy` endpoint.
 
 ## Example App
 

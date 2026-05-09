@@ -18,6 +18,8 @@ void main() {
       expect(auth.user, isNotNull);
       expect(auth.organization, isNotNull);
       expect(auth.invitation, isNotNull);
+      expect(auth.member, isNotNull);
+      expect(auth.rbac, isNotNull);
     });
 
     test('should validate configuration', () {
@@ -65,6 +67,8 @@ void main() {
       expect(auth.user, isA<UserService>());
       expect(auth.organization, isA<OrganizationService>());
       expect(auth.invitation, isA<InvitationService>());
+      expect(auth.member, isA<MemberService>());
+      expect(auth.rbac, isA<RbacService>());
     });
   });
 

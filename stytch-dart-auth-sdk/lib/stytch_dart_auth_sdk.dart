@@ -9,6 +9,8 @@ export 'src/models/user.dart';
 export 'src/models/auth.dart';
 export 'src/models/organization.dart';
 export 'src/models/invitation.dart';
+export 'src/models/member.dart';
+export 'src/models/rbac.dart';
 export 'src/models/error.dart';
 
 // Client services
@@ -17,6 +19,8 @@ export 'src/client/auth_service.dart';
 export 'src/client/user_service.dart';
 export 'src/client/organization_service.dart';
 export 'src/client/invitation_service.dart';
+export 'src/client/member_service.dart';
+export 'src/client/rbac_service.dart';
 
 // Firebase compatibility layer (for Flutter example apps)
 // Note: This creates a Firebase-like interface over stytch B2B functionality
