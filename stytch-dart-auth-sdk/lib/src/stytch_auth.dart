@@ -12,6 +12,7 @@ import 'client/invitation_service.dart';
 import 'client/member_service.dart';
 import 'client/m2m_service.dart';
 import 'client/rbac_service.dart';
+import 'client/scim_service.dart';
 import 'client/sso_service.dart';
 import 'models/error.dart';
 
@@ -28,6 +29,7 @@ class StytchAuth {
   late final MemberService _memberService;
   late final M2mService _m2mService;
   late final RbacService _rbacService;
+  late final ScimService _scimService;
   late final SsoService _ssoService;
 
   /// Constructor for StytchAuth authentication
@@ -111,6 +113,7 @@ class StytchAuth {
     _memberService = MemberService(_httpClient);
     _m2mService = M2mService(_httpClient);
     _rbacService = RbacService(_httpClient);
+    _scimService = ScimService(_httpClient);
     _ssoService = SsoService(_httpClient);
   }
 
@@ -134,6 +137,9 @@ class StytchAuth {
 
   /// Get the M2M service
   M2mService get m2m => _m2mService;
+
+  /// Get the SCIM service
+  ScimService get scim => _scimService;
 
   /// Get the SSO service
   SsoService get sso => _ssoService;

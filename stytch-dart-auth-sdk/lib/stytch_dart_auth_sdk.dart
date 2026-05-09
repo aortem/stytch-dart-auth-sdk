@@ -12,6 +12,7 @@ export 'src/models/invitation.dart';
 export 'src/models/member.dart';
 export 'src/models/m2m.dart';
 export 'src/models/rbac.dart';
+export 'src/models/scim.dart';
 export 'src/models/sso.dart';
 export 'src/models/error.dart';
 
@@ -24,6 +25,7 @@ export 'src/client/invitation_service.dart';
 export 'src/client/member_service.dart';
 export 'src/client/m2m_service.dart';
 export 'src/client/rbac_service.dart';
+export 'src/client/scim_service.dart';
 export 'src/client/sso_service.dart';
 
 // Firebase compatibility layer (for Flutter example apps)
