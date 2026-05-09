@@ -371,6 +371,233 @@ void main() {
       );
     });
 
+    test('otpSmsSend posts current SMS OTP send payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.otpSmsSend(
+        OtpSmsSendRequest(
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+          mfaPhoneNumber: '+15551234567',
+          locale: 'en',
+          intermediateSessionToken: 'intermediate-token',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/otps/sms/send'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'member_id': 'member-123',
+        'mfa_phone_number': '+15551234567',
+        'locale': 'en',
+        'intermediate_session_token': 'intermediate-token',
+      });
+      expect(response.requestId, equals('request-123'));
+      expect(response.memberId, equals('member-123'));
+      expect(response.organization['organization_id'], 'organization-test-123');
+    });
+
+    test(
+      'authenticateOtpSms posts current SMS OTP authenticate payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.authenticateOtpSms(
+          OtpSmsAuthenticateRequest(
+            organizationId: 'organization-test-123',
+            memberId: 'member-123',
+            code: '123456',
+            intermediateSessionToken: 'intermediate-token',
+            sessionDurationMinutes: 60,
+            sessionCustomClaims: {'tier': 'gold'},
+            setMfaEnrollment: 'enroll',
+            setDefaultMfa: true,
+            telemetryId: 'telemetry-123',
+          ),
+        );
+
+        expect(httpClient.lastPath, equals('/b2b/otps/sms/authenticate'));
+        expect(httpClient.lastBody, {
+          'organization_id': 'organization-test-123',
+          'member_id': 'member-123',
+          'code': '123456',
+          'intermediate_session_token': 'intermediate-token',
+          'session_duration_minutes': 60,
+          'session_custom_claims': {'tier': 'gold'},
+          'set_mfa_enrollment': 'enroll',
+          'set_default_mfa': true,
+          'telemetry_id': 'telemetry-123',
+        });
+        expect(response.memberId, equals('member-123'));
+        expect(response.sessionToken, equals('session-token'));
+        expect(response.memberDevice?['visitor_id'], 'visitor-123');
+        expect(response.statusCode, equals(200));
+      },
+    );
+
+    test('totpCreate posts current TOTP create payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.totpCreate(
+        TotpCreateRequest(
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+          expirationMinutes: 60,
+          sessionToken: 'session-token',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/totp'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'member_id': 'member-123',
+        'expiration_minutes': 60,
+        'session_token': 'session-token',
+      });
+      expect(response.totpRegistrationId, equals('totp-registration-123'));
+      expect(response.secret, equals('totp-secret'));
+      expect(response.qrCode, equals('base64-qr-code'));
+      expect(response.recoveryCodes, ['code-1', 'code-2']);
+    });
+
+    test('authenticateTotp posts current TOTP authenticate payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.authenticateTotp(
+        TotpAuthenticateRequest(
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+          code: '123456',
+          sessionJwt: 'session-jwt',
+          sessionDurationMinutes: 60,
+          sessionCustomClaims: {'tier': 'gold'},
+          setMfaEnrollment: 'enroll',
+          setDefaultMfa: true,
+          telemetryId: 'telemetry-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/totp/authenticate'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'member_id': 'member-123',
+        'code': '123456',
+        'session_jwt': 'session-jwt',
+        'session_duration_minutes': 60,
+        'session_custom_claims': {'tier': 'gold'},
+        'set_mfa_enrollment': 'enroll',
+        'set_default_mfa': true,
+        'telemetry_id': 'telemetry-123',
+      });
+      expect(response.memberId, equals('member-123'));
+      expect(response.sessionJwt, equals('session-jwt'));
+      expect(
+        response.memberSession?['member_session_id'],
+        'member-session-123',
+      );
+    });
+
+    test('totpMigrate posts current TOTP migrate payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.totpMigrate(
+        TotpMigrateRequest(
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+          secret: 'totp-secret',
+          recoveryCodes: ['code-1', 'code-2'],
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/totp/migrate'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'member_id': 'member-123',
+        'secret': 'totp-secret',
+        'recovery_codes': ['code-1', 'code-2'],
+      });
+      expect(response.totpRegistrationId, equals('totp-registration-123'));
+      expect(response.recoveryCodes, ['code-1', 'code-2']);
+      expect(response.organization['organization_id'], 'organization-test-123');
+    });
+
+    test('recoveryCodesGet gets current recovery code path', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.recoveryCodesGet(
+        RecoveryCodesGetRequest(
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+        ),
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals('/b2b/recovery_codes/organization-test-123/member-123'),
+      );
+      expect(response.memberId, equals('member-123'));
+      expect(response.recoveryCodes, ['code-1', 'code-2']);
+      expect(response.statusCode, equals(200));
+    });
+
+    test('recoveryCodesRecover posts current recover payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.recoveryCodesRecover(
+        RecoveryCodesRecoverRequest(
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+          recoveryCode: 'code-1',
+          intermediateSessionToken: 'intermediate-token',
+          sessionDurationMinutes: 60,
+          sessionCustomClaims: {'tier': 'gold'},
+          telemetryId: 'telemetry-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/recovery_codes/recover'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'member_id': 'member-123',
+        'recovery_code': 'code-1',
+        'intermediate_session_token': 'intermediate-token',
+        'session_duration_minutes': 60,
+        'session_custom_claims': {'tier': 'gold'},
+        'telemetry_id': 'telemetry-123',
+      });
+      expect(response.memberId, equals('member-123'));
+      expect(response.recoveryCodesRemaining, equals(1));
+      expect(response.sessionToken, equals('session-token'));
+    });
+
+    test('recoveryCodesRotate posts current rotate payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.recoveryCodesRotate(
+        RecoveryCodesRotateRequest(
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/recovery_codes/rotate'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'member_id': 'member-123',
+      });
+      expect(response.memberId, equals('member-123'));
+      expect(response.recoveryCodes, ['code-1', 'code-2']);
+      expect(response.organization['organization_id'], 'organization-test-123');
+    });
+
     test(
       'getSession gets active member sessions with query parameters',
       () async {
@@ -994,6 +1221,9 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
   ]) async {
     lastPath = path;
     lastQueryParameters = queryParameters;
+    if (path == '/b2b/recovery_codes/organization-test-123/member-123') {
+      return _recoveryCodesResponse();
+    }
     if (path == '/b2b/sessions') {
       return {
         'request_id': 'request-123',
@@ -1111,6 +1341,35 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
         },
         'organization': {'organization_id': 'organization-test-123'},
       };
+    }
+    if (path == '/b2b/otps/sms/send') {
+      return _mfaMemberResponse();
+    }
+    if (path == '/b2b/otps/sms/authenticate' ||
+        path == '/b2b/totp/authenticate') {
+      return _mfaSessionResponse();
+    }
+    if (path == '/b2b/totp') {
+      return {
+        ..._mfaMemberResponse(),
+        'totp_registration_id': 'totp-registration-123',
+        'secret': 'totp-secret',
+        'qr_code': 'base64-qr-code',
+        'recovery_codes': ['code-1', 'code-2'],
+      };
+    }
+    if (path == '/b2b/totp/migrate') {
+      return {
+        ..._mfaMemberResponse(),
+        'totp_registration_id': 'totp-registration-123',
+        'recovery_codes': ['code-1', 'code-2'],
+      };
+    }
+    if (path == '/b2b/recovery_codes/recover') {
+      return {..._mfaSessionResponse(), 'recovery_codes_remaining': 1};
+    }
+    if (path == '/b2b/recovery_codes/rotate') {
+      return _recoveryCodesResponse();
     }
     if (path == '/b2b/sessions/authenticate') {
       return {
@@ -1269,6 +1528,38 @@ Map<String, dynamic> _passwordSessionResponse() {
     'organization': {'organization_id': 'organization-test-123'},
     'member_session': {'member_session_id': 'member-session-123'},
     'status_code': 200,
+  };
+}
+
+Map<String, dynamic> _mfaMemberResponse() {
+  return {
+    'request_id': 'request-123',
+    'member_id': 'member-123',
+    'member': {
+      'member_id': 'member-123',
+      'email_address': 'member@example.com',
+    },
+    'organization': {'organization_id': 'organization-test-123'},
+    'status_code': 200,
+  };
+}
+
+Map<String, dynamic> _mfaSessionResponse() {
+  return {
+    ..._mfaMemberResponse(),
+    'organization_id': 'organization-test-123',
+    'session_token': 'session-token',
+    'session_jwt': 'session-jwt',
+    'member_authenticated': true,
+    'member_session': {'member_session_id': 'member-session-123'},
+    'member_device': {'visitor_id': 'visitor-123'},
+  };
+}
+
+Map<String, dynamic> _recoveryCodesResponse() {
+  return {
+    ..._mfaMemberResponse(),
+    'recovery_codes': ['code-1', 'code-2'],
   };
 }
 

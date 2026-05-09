@@ -162,6 +162,95 @@ class AuthService {
     return PasswordRequireResetByEmailResponse.fromJson(response);
   }
 
+  /// Send an SMS OTP to a member for MFA.
+  Future<MfaMemberResponse> otpSmsSend(OtpSmsSendRequest request) async {
+    final response = await _httpClient.post(
+      '/b2b/otps/sms/send',
+      body: request.toJson(),
+    );
+
+    return MfaMemberResponse.fromJson(response);
+  }
+
+  /// Authenticate an SMS OTP for MFA.
+  Future<AuthenticateMagicLinkResponse> authenticateOtpSms(
+    OtpSmsAuthenticateRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/otps/sms/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Create a TOTP registration for a member.
+  Future<TotpCreateResponse> totpCreate(TotpCreateRequest request) async {
+    final response = await _httpClient.post(
+      '/b2b/totp',
+      body: request.toJson(),
+    );
+
+    return TotpCreateResponse.fromJson(response);
+  }
+
+  /// Authenticate a TOTP code for MFA.
+  Future<AuthenticateMagicLinkResponse> authenticateTotp(
+    TotpAuthenticateRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/totp/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Migrate an existing TOTP registration for a member.
+  Future<TotpMigrateResponse> totpMigrate(TotpMigrateRequest request) async {
+    final response = await _httpClient.post(
+      '/b2b/totp/migrate',
+      body: request.toJson(),
+    );
+
+    return TotpMigrateResponse.fromJson(response);
+  }
+
+  /// Get active recovery codes for a member.
+  Future<RecoveryCodesResponse> recoveryCodesGet(
+    RecoveryCodesGetRequest request,
+  ) async {
+    final response = await _httpClient.get(
+      '/b2b/recovery_codes/${request.organizationId.trim()}/${request.memberId.trim()}',
+    );
+
+    return RecoveryCodesResponse.fromJson(response);
+  }
+
+  /// Recover a member session with a recovery code.
+  Future<AuthenticateMagicLinkResponse> recoveryCodesRecover(
+    RecoveryCodesRecoverRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/recovery_codes/recover',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Rotate active recovery codes for a member.
+  Future<RecoveryCodesResponse> recoveryCodesRotate(
+    RecoveryCodesRotateRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/recovery_codes/rotate',
+      body: request.toJson(),
+    );
+
+    return RecoveryCodesResponse.fromJson(response);
+  }
+
   /// Login with SSO token
   Future<AuthResponse> loginWithSso(SsoLoginRequest request) async {
     /// response

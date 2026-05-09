@@ -985,6 +985,561 @@ class PasswordRequireResetByEmailResponse {
   }
 }
 
+/// Request model for sending an SMS OTP for MFA.
+class OtpSmsSendRequest {
+  /// Organization to send the OTP in.
+  final String organizationId;
+
+  /// Member to send the OTP to.
+  final String memberId;
+
+  /// Phone number to send to when the member does not already have one.
+  final String? mfaPhoneNumber;
+
+  /// Locale for localized SMS copy.
+  final String? locale;
+
+  /// Intermediate session token.
+  final String? intermediateSessionToken;
+
+  /// Existing session token.
+  final String? sessionToken;
+
+  /// Existing session JWT.
+  final String? sessionJwt;
+
+  /// OtpSmsSendRequest
+  OtpSmsSendRequest({
+    required this.organizationId,
+    required this.memberId,
+    this.mfaPhoneNumber,
+    this.locale,
+    this.intermediateSessionToken,
+    this.sessionToken,
+    this.sessionJwt,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'member_id': memberId.trim(),
+      if (mfaPhoneNumber != null) 'mfa_phone_number': mfaPhoneNumber,
+      if (locale != null) 'locale': locale,
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken!.trim(),
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+    };
+  }
+}
+
+/// Response model for MFA endpoints returning member and organization details.
+class MfaMemberResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String memberId;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic> member;
+
+  /// Organization payload returned by Stytch.
+  final Map<String, dynamic> organization;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// MfaMemberResponse
+  const MfaMemberResponse({
+    required this.requestId,
+    required this.memberId,
+    required this.member,
+    required this.organization,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory MfaMemberResponse.fromJson(Map<String, dynamic> json) {
+    return MfaMemberResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for authenticating an SMS OTP.
+class OtpSmsAuthenticateRequest {
+  /// Organization to authenticate into.
+  final String organizationId;
+
+  /// Member to authenticate.
+  final String memberId;
+
+  /// OTP code to authenticate.
+  final String code;
+
+  /// Intermediate session token.
+  final String? intermediateSessionToken;
+
+  /// Existing session token.
+  final String? sessionToken;
+
+  /// Existing session JWT.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// MFA enrollment change.
+  final String? setMfaEnrollment;
+
+  /// Whether to set SMS as the default MFA method.
+  final bool? setDefaultMfa;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// OtpSmsAuthenticateRequest
+  OtpSmsAuthenticateRequest({
+    required this.organizationId,
+    required this.memberId,
+    required this.code,
+    this.intermediateSessionToken,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.setMfaEnrollment,
+    this.setDefaultMfa,
+    this.telemetryId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+    _validateRequired(code, 'OTP code');
+    _validateExactlyOneSessionFactor(
+      intermediateSessionToken,
+      sessionToken,
+      sessionJwt,
+    );
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return _mfaAuthenticatePayload(
+      organizationId: organizationId,
+      memberId: memberId,
+      code: code,
+      intermediateSessionToken: intermediateSessionToken,
+      sessionToken: sessionToken,
+      sessionJwt: sessionJwt,
+      sessionDurationMinutes: sessionDurationMinutes,
+      sessionCustomClaims: sessionCustomClaims,
+      setMfaEnrollment: setMfaEnrollment,
+      setDefaultMfa: setDefaultMfa,
+      telemetryId: telemetryId,
+    );
+  }
+}
+
+/// Request model for creating a TOTP registration.
+class TotpCreateRequest {
+  /// Organization to create the registration in.
+  final String organizationId;
+
+  /// Member to create the registration for.
+  final String memberId;
+
+  /// TOTP registration expiration in minutes.
+  final int? expirationMinutes;
+
+  /// Intermediate session token.
+  final String? intermediateSessionToken;
+
+  /// Existing session token.
+  final String? sessionToken;
+
+  /// Existing session JWT.
+  final String? sessionJwt;
+
+  /// TotpCreateRequest
+  TotpCreateRequest({
+    required this.organizationId,
+    required this.memberId,
+    this.expirationMinutes,
+    this.intermediateSessionToken,
+    this.sessionToken,
+    this.sessionJwt,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'member_id': memberId.trim(),
+      if (expirationMinutes != null) 'expiration_minutes': expirationMinutes,
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken!.trim(),
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+    };
+  }
+}
+
+/// Response model for creating a TOTP registration.
+class TotpCreateResponse extends MfaMemberResponse {
+  /// TOTP registration ID.
+  final String totpRegistrationId;
+
+  /// TOTP secret.
+  final String secret;
+
+  /// QR code image encoded in base64.
+  final String qrCode;
+
+  /// Recovery codes generated for the member.
+  final List<String> recoveryCodes;
+
+  /// TotpCreateResponse
+  const TotpCreateResponse({
+    required super.requestId,
+    required super.memberId,
+    required this.totpRegistrationId,
+    required this.secret,
+    required this.qrCode,
+    required this.recoveryCodes,
+    required super.member,
+    required super.organization,
+    required super.statusCode,
+  });
+
+  /// fromJson
+  factory TotpCreateResponse.fromJson(Map<String, dynamic> json) {
+    return TotpCreateResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      totpRegistrationId: json['totp_registration_id'] as String,
+      secret: json['secret'] as String,
+      qrCode: json['qr_code'] as String,
+      recoveryCodes: (json['recovery_codes'] as List<dynamic>)
+          .map((code) => code as String)
+          .toList(),
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for authenticating a TOTP code.
+class TotpAuthenticateRequest {
+  /// Organization to authenticate into.
+  final String organizationId;
+
+  /// Member to authenticate.
+  final String memberId;
+
+  /// TOTP code to authenticate.
+  final String code;
+
+  /// Intermediate session token.
+  final String? intermediateSessionToken;
+
+  /// Existing session token.
+  final String? sessionToken;
+
+  /// Existing session JWT.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// MFA enrollment change.
+  final String? setMfaEnrollment;
+
+  /// Whether to set TOTP as the default MFA method.
+  final bool? setDefaultMfa;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// TotpAuthenticateRequest
+  TotpAuthenticateRequest({
+    required this.organizationId,
+    required this.memberId,
+    required this.code,
+    this.intermediateSessionToken,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.setMfaEnrollment,
+    this.setDefaultMfa,
+    this.telemetryId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+    _validateRequired(code, 'TOTP code');
+    _validateExactlyOneSessionFactor(
+      intermediateSessionToken,
+      sessionToken,
+      sessionJwt,
+    );
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return _mfaAuthenticatePayload(
+      organizationId: organizationId,
+      memberId: memberId,
+      code: code,
+      intermediateSessionToken: intermediateSessionToken,
+      sessionToken: sessionToken,
+      sessionJwt: sessionJwt,
+      sessionDurationMinutes: sessionDurationMinutes,
+      sessionCustomClaims: sessionCustomClaims,
+      setMfaEnrollment: setMfaEnrollment,
+      setDefaultMfa: setDefaultMfa,
+      telemetryId: telemetryId,
+    );
+  }
+}
+
+/// Request model for migrating an existing TOTP registration.
+class TotpMigrateRequest {
+  /// Organization to migrate into.
+  final String organizationId;
+
+  /// Member to migrate the registration for.
+  final String memberId;
+
+  /// Existing TOTP secret.
+  final String secret;
+
+  /// Existing recovery codes.
+  final List<String> recoveryCodes;
+
+  /// TotpMigrateRequest
+  TotpMigrateRequest({
+    required this.organizationId,
+    required this.memberId,
+    required this.secret,
+    required this.recoveryCodes,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+    _validateRequired(secret, 'TOTP secret');
+    if (recoveryCodes.isEmpty) {
+      throw ArgumentError('Recovery codes are required.');
+    }
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'member_id': memberId.trim(),
+      'secret': secret,
+      'recovery_codes': recoveryCodes,
+    };
+  }
+}
+
+/// Response model for migrating an existing TOTP registration.
+class TotpMigrateResponse extends MfaMemberResponse {
+  /// TOTP registration ID.
+  final String totpRegistrationId;
+
+  /// Recovery codes imported or generated for the member.
+  final List<String> recoveryCodes;
+
+  /// TotpMigrateResponse
+  const TotpMigrateResponse({
+    required super.requestId,
+    required super.memberId,
+    required super.member,
+    required super.organization,
+    required this.totpRegistrationId,
+    required this.recoveryCodes,
+    required super.statusCode,
+  });
+
+  /// fromJson
+  factory TotpMigrateResponse.fromJson(Map<String, dynamic> json) {
+    return TotpMigrateResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      totpRegistrationId: json['totp_registration_id'] as String,
+      recoveryCodes: (json['recovery_codes'] as List<dynamic>)
+          .map((code) => code as String)
+          .toList(),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for getting a member's recovery codes.
+class RecoveryCodesGetRequest {
+  /// Organization ID path parameter.
+  final String organizationId;
+
+  /// Member ID path parameter.
+  final String memberId;
+
+  /// RecoveryCodesGetRequest
+  RecoveryCodesGetRequest({
+    required this.organizationId,
+    required this.memberId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+  }
+}
+
+/// Request model for rotating a member's recovery codes.
+class RecoveryCodesRotateRequest {
+  /// Organization to rotate codes in.
+  final String organizationId;
+
+  /// Member to rotate codes for.
+  final String memberId;
+
+  /// RecoveryCodesRotateRequest
+  RecoveryCodesRotateRequest({
+    required this.organizationId,
+    required this.memberId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'member_id': memberId.trim(),
+    };
+  }
+}
+
+/// Response model for recovery code list endpoints.
+class RecoveryCodesResponse extends MfaMemberResponse {
+  /// Active recovery codes returned by Stytch.
+  final List<String> recoveryCodes;
+
+  /// RecoveryCodesResponse
+  const RecoveryCodesResponse({
+    required super.requestId,
+    required super.memberId,
+    required super.member,
+    required super.organization,
+    required this.recoveryCodes,
+    required super.statusCode,
+  });
+
+  /// fromJson
+  factory RecoveryCodesResponse.fromJson(Map<String, dynamic> json) {
+    return RecoveryCodesResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      recoveryCodes: (json['recovery_codes'] as List<dynamic>)
+          .map((code) => code as String)
+          .toList(),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for recovering a member session with a recovery code.
+class RecoveryCodesRecoverRequest {
+  /// Organization to authenticate into.
+  final String organizationId;
+
+  /// Member to authenticate.
+  final String memberId;
+
+  /// Recovery code to consume.
+  final String recoveryCode;
+
+  /// Intermediate session token.
+  final String? intermediateSessionToken;
+
+  /// Existing session token.
+  final String? sessionToken;
+
+  /// Existing session JWT.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// RecoveryCodesRecoverRequest
+  RecoveryCodesRecoverRequest({
+    required this.organizationId,
+    required this.memberId,
+    required this.recoveryCode,
+    this.intermediateSessionToken,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.telemetryId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+    _validateRequired(recoveryCode, 'Recovery code');
+    _validateExactlyOneSessionFactor(
+      intermediateSessionToken,
+      sessionToken,
+      sessionJwt,
+    );
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'member_id': memberId.trim(),
+      'recovery_code': recoveryCode.trim(),
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken!.trim(),
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (telemetryId != null) 'telemetry_id': telemetryId,
+    };
+  }
+}
+
 /// Request model for MFA
 class MfaRequest {
   /// String
@@ -1855,6 +2410,54 @@ void _validateRequired(String value, String label) {
   }
 }
 
+void _validateExactlyOneSessionFactor(
+  String? intermediateSessionToken,
+  String? sessionToken,
+  String? sessionJwt,
+) {
+  final provided = [
+    intermediateSessionToken,
+    sessionToken,
+    sessionJwt,
+  ].where((value) => value != null && value.trim().isNotEmpty).length;
+  if (provided != 1) {
+    throw ArgumentError(
+      'Exactly one intermediate session token, session token, or session JWT is required.',
+    );
+  }
+}
+
+Map<String, dynamic> _mfaAuthenticatePayload({
+  required String organizationId,
+  required String memberId,
+  required String code,
+  String? intermediateSessionToken,
+  String? sessionToken,
+  String? sessionJwt,
+  int? sessionDurationMinutes,
+  Map<String, dynamic>? sessionCustomClaims,
+  String? setMfaEnrollment,
+  bool? setDefaultMfa,
+  String? telemetryId,
+}) {
+  return {
+    'organization_id': organizationId.trim(),
+    'member_id': memberId.trim(),
+    'code': code.trim(),
+    if (intermediateSessionToken != null)
+      'intermediate_session_token': intermediateSessionToken.trim(),
+    if (sessionToken != null) 'session_token': sessionToken.trim(),
+    if (sessionJwt != null) 'session_jwt': sessionJwt.trim(),
+    if (sessionDurationMinutes != null)
+      'session_duration_minutes': sessionDurationMinutes,
+    if (sessionCustomClaims != null)
+      'session_custom_claims': sessionCustomClaims,
+    if (setMfaEnrollment != null) 'set_mfa_enrollment': setMfaEnrollment,
+    if (setDefaultMfa != null) 'set_default_mfa': setDefaultMfa,
+    if (telemetryId != null) 'telemetry_id': telemetryId,
+  };
+}
+
 /// Request model for sending a login or signup Email Magic Link.
 class SendLoginSignupEmailRequest {
   /// Organization to send the Email Magic Link in.
@@ -2041,6 +2644,12 @@ class AuthenticateMagicLinkResponse {
   /// Provider values returned by OAuth authenticate endpoints.
   final Map<String, dynamic>? providerValues;
 
+  /// Member device values returned by Protected Auth.
+  final Map<String, dynamic>? memberDevice;
+
+  /// Recovery codes remaining after recovery-code authentication.
+  final int? recoveryCodesRemaining;
+
   /// HTTP status code returned by Stytch.
   final int statusCode;
 
@@ -2058,6 +2667,8 @@ class AuthenticateMagicLinkResponse {
     required this.memberAuthenticated,
     this.intermediateSessionToken,
     this.providerValues,
+    this.memberDevice,
+    this.recoveryCodesRemaining,
     required this.statusCode,
   });
 
@@ -2084,6 +2695,10 @@ class AuthenticateMagicLinkResponse {
       providerValues: json['provider_values'] != null
           ? Map<String, dynamic>.from(json['provider_values'] as Map)
           : null,
+      memberDevice: json['member_device'] != null
+          ? Map<String, dynamic>.from(json['member_device'] as Map)
+          : null,
+      recoveryCodesRemaining: json['recovery_codes_remaining'] as int?,
       statusCode: json['status_code'] as int,
     );
   }
