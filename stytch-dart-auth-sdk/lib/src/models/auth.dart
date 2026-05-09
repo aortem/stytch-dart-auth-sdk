@@ -163,6 +163,828 @@ class AuthResponse {
   }
 }
 
+/// Request model for authenticating a member with a password.
+class PasswordAuthenticateRequest {
+  /// Organization to authenticate into.
+  final String organizationId;
+
+  /// Member email address.
+  final String emailAddress;
+
+  /// Member password.
+  final String password;
+
+  /// Existing session token to extend.
+  final String? sessionToken;
+
+  /// Existing session JWT to extend.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Locale for MFA SMS copy, when MFA is required.
+  final String? locale;
+
+  /// Intermediate session token to add this primary factor to.
+  final String? intermediateSessionToken;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// PasswordAuthenticateRequest
+  PasswordAuthenticateRequest({
+    required this.organizationId,
+    required this.emailAddress,
+    required this.password,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.locale,
+    this.intermediateSessionToken,
+    this.telemetryId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateEmail(emailAddress);
+    _validateRequired(password, 'Password');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'email_address': emailAddress.trim(),
+      'password': password,
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (locale != null) 'locale': locale,
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken!.trim(),
+      if (telemetryId != null) 'telemetry_id': telemetryId,
+    };
+  }
+}
+
+/// Request model for authenticating a discovery password.
+class PasswordDiscoveryAuthenticateRequest {
+  /// Member email address.
+  final String emailAddress;
+
+  /// Member password.
+  final String password;
+
+  /// PasswordDiscoveryAuthenticateRequest
+  PasswordDiscoveryAuthenticateRequest({
+    required this.emailAddress,
+    required this.password,
+  }) {
+    _validateEmail(emailAddress);
+    _validateRequired(password, 'Password');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {'email_address': emailAddress.trim(), 'password': password};
+  }
+}
+
+/// Request model for checking password strength.
+class PasswordStrengthCheckRequest {
+  /// Password to check.
+  final String password;
+
+  /// Optional member email address.
+  final String? emailAddress;
+
+  /// PasswordStrengthCheckRequest
+  PasswordStrengthCheckRequest({required this.password, this.emailAddress}) {
+    _validateRequired(password, 'Password');
+    if (emailAddress != null) _validateEmail(emailAddress!);
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'password': password,
+      if (emailAddress != null) 'email_address': emailAddress!.trim(),
+    };
+  }
+}
+
+/// Response model for checking password strength.
+class PasswordStrengthCheckResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Whether the password passes validation.
+  final bool validPassword;
+
+  /// zxcvbn score returned by Stytch.
+  final int score;
+
+  /// Whether the password has appeared in a breach dataset.
+  final bool breachedPassword;
+
+  /// Password policy type enforced by the project.
+  final String strengthPolicy;
+
+  /// Whether breach detection is enabled on create.
+  final bool breachDetectionOnCreate;
+
+  /// LUDS feedback payload.
+  final Map<String, dynamic>? ludsFeedback;
+
+  /// zxcvbn feedback payload.
+  final Map<String, dynamic>? zxcvbnFeedback;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// PasswordStrengthCheckResponse
+  const PasswordStrengthCheckResponse({
+    required this.requestId,
+    required this.validPassword,
+    required this.score,
+    required this.breachedPassword,
+    required this.strengthPolicy,
+    required this.breachDetectionOnCreate,
+    this.ludsFeedback,
+    this.zxcvbnFeedback,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory PasswordStrengthCheckResponse.fromJson(Map<String, dynamic> json) {
+    return PasswordStrengthCheckResponse(
+      requestId: json['request_id'] as String,
+      validPassword: json['valid_password'] as bool,
+      score: json['score'] as int,
+      breachedPassword: json['breached_password'] as bool,
+      strengthPolicy: json['strength_policy'] as String,
+      breachDetectionOnCreate: json['breach_detection_on_create'] as bool,
+      ludsFeedback: json['luds_feedback'] != null
+          ? Map<String, dynamic>.from(json['luds_feedback'] as Map)
+          : null,
+      zxcvbnFeedback: json['zxcvbn_feedback'] != null
+          ? Map<String, dynamic>.from(json['zxcvbn_feedback'] as Map)
+          : null,
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for migrating an existing password hash to Stytch.
+class PasswordMigrateRequest {
+  /// Member email address.
+  final String emailAddress;
+
+  /// Existing password hash.
+  final String hash;
+
+  /// Hash type accepted by Stytch.
+  final String hashType;
+
+  /// Organization to migrate the password into.
+  final String organizationId;
+
+  /// Optional MD-5 hash configuration.
+  final Map<String, dynamic>? md5Config;
+
+  /// Optional Argon2 hash configuration.
+  final Map<String, dynamic>? argon2Config;
+
+  /// Optional SHA-1 hash configuration.
+  final Map<String, dynamic>? sha1Config;
+
+  /// Optional SHA-512 hash configuration.
+  final Map<String, dynamic>? sha512Config;
+
+  /// Optional scrypt hash configuration.
+  final Map<String, dynamic>? scryptConfig;
+
+  /// Optional PBKDF2 hash configuration.
+  final Map<String, dynamic>? pbkdf2Config;
+
+  /// Member name.
+  final String? name;
+
+  /// Trusted metadata for the member.
+  final Map<String, dynamic>? trustedMetadata;
+
+  /// Untrusted metadata for the member.
+  final Map<String, dynamic>? untrustedMetadata;
+
+  /// Explicit role assignments.
+  final List<String>? roles;
+
+  /// Whether to preserve existing SSO sessions when role assignments change.
+  final bool? preserveExistingSessions;
+
+  /// Member phone number.
+  final String? mfaPhoneNumber;
+
+  /// Whether to mark the phone number as verified.
+  final bool? setPhoneNumberVerified;
+
+  /// External member ID.
+  final String? externalId;
+
+  /// PasswordMigrateRequest
+  PasswordMigrateRequest({
+    required this.emailAddress,
+    required this.hash,
+    required this.hashType,
+    required this.organizationId,
+    this.md5Config,
+    this.argon2Config,
+    this.sha1Config,
+    this.sha512Config,
+    this.scryptConfig,
+    this.pbkdf2Config,
+    this.name,
+    this.trustedMetadata,
+    this.untrustedMetadata,
+    this.roles,
+    this.preserveExistingSessions,
+    this.mfaPhoneNumber,
+    this.setPhoneNumberVerified,
+    this.externalId,
+  }) {
+    _validateEmail(emailAddress);
+    _validateRequired(hash, 'Password hash');
+    _validateRequired(hashType, 'Hash type');
+    _validateRequired(organizationId, 'Organization ID');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'email_address': emailAddress.trim(),
+      'hash': hash,
+      'hash_type': hashType,
+      'organization_id': organizationId.trim(),
+      if (md5Config != null) 'md_5_config': md5Config,
+      if (argon2Config != null) 'argon_2_config': argon2Config,
+      if (sha1Config != null) 'sha_1_config': sha1Config,
+      if (sha512Config != null) 'sha_512_config': sha512Config,
+      if (scryptConfig != null) 'scrypt_config': scryptConfig,
+      if (pbkdf2Config != null) 'pbkdf_2_config': pbkdf2Config,
+      if (name != null) 'name': name,
+      if (trustedMetadata != null) 'trusted_metadata': trustedMetadata,
+      if (untrustedMetadata != null) 'untrusted_metadata': untrustedMetadata,
+      if (roles != null) 'roles': roles,
+      if (preserveExistingSessions != null)
+        'preserve_existing_sessions': preserveExistingSessions,
+      if (mfaPhoneNumber != null) 'mfa_phone_number': mfaPhoneNumber,
+      if (setPhoneNumberVerified != null)
+        'set_phone_number_verified': setPhoneNumberVerified,
+      if (externalId != null) 'external_id': externalId,
+    };
+  }
+}
+
+/// Response model for migrating an existing password hash to Stytch.
+class PasswordMigrateResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String memberId;
+
+  /// Whether Stytch created a member.
+  final bool memberCreated;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic> member;
+
+  /// Organization payload returned by Stytch.
+  final Map<String, dynamic> organization;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// PasswordMigrateResponse
+  const PasswordMigrateResponse({
+    required this.requestId,
+    required this.memberId,
+    required this.memberCreated,
+    required this.member,
+    required this.organization,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory PasswordMigrateResponse.fromJson(Map<String, dynamic> json) {
+    return PasswordMigrateResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      memberCreated: json['member_created'] as bool,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for starting an organization password reset by email.
+class PasswordEmailResetStartRequest {
+  /// Organization to send the reset email in.
+  final String organizationId;
+
+  /// Member email address.
+  final String emailAddress;
+
+  /// Redirect URL for the reset-password magic link.
+  final String? resetPasswordRedirectUrl;
+
+  /// Reset-password link expiration in minutes.
+  final int? resetPasswordExpirationMinutes;
+
+  /// PKCE code challenge.
+  final String? codeChallenge;
+
+  /// Login redirect URL for "Log in without password".
+  final String? loginRedirectUrl;
+
+  /// Locale for localized email copy.
+  final String? locale;
+
+  /// Reset-password email template ID.
+  final String? resetPasswordTemplateId;
+
+  /// Verification email template ID.
+  final String? verifyEmailTemplateId;
+
+  /// PasswordEmailResetStartRequest
+  PasswordEmailResetStartRequest({
+    required this.organizationId,
+    required this.emailAddress,
+    this.resetPasswordRedirectUrl,
+    this.resetPasswordExpirationMinutes,
+    this.codeChallenge,
+    this.loginRedirectUrl,
+    this.locale,
+    this.resetPasswordTemplateId,
+    this.verifyEmailTemplateId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateEmail(emailAddress);
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'email_address': emailAddress.trim(),
+      if (resetPasswordRedirectUrl != null)
+        'reset_password_redirect_url': resetPasswordRedirectUrl,
+      if (resetPasswordExpirationMinutes != null)
+        'reset_password_expiration_minutes': resetPasswordExpirationMinutes,
+      if (codeChallenge != null) 'code_challenge': codeChallenge,
+      if (loginRedirectUrl != null) 'login_redirect_url': loginRedirectUrl,
+      if (locale != null) 'locale': locale,
+      if (resetPasswordTemplateId != null)
+        'reset_password_template_id': resetPasswordTemplateId,
+      if (verifyEmailTemplateId != null)
+        'verify_email_template_id': verifyEmailTemplateId,
+    };
+  }
+}
+
+/// Response model for starting an organization password reset by email.
+class PasswordEmailResetStartResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String memberId;
+
+  /// Member email ID returned by Stytch.
+  final String memberEmailId;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic> member;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// PasswordEmailResetStartResponse
+  const PasswordEmailResetStartResponse({
+    required this.requestId,
+    required this.memberId,
+    required this.memberEmailId,
+    required this.member,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory PasswordEmailResetStartResponse.fromJson(Map<String, dynamic> json) {
+    return PasswordEmailResetStartResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      memberEmailId: json['member_email_id'] as String,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for resetting a password with an email reset token.
+class PasswordEmailResetRequest {
+  /// Password reset token.
+  final String passwordResetToken;
+
+  /// New password.
+  final String password;
+
+  /// Existing session token to extend.
+  final String? sessionToken;
+
+  /// Existing session JWT to extend.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// PKCE code verifier.
+  final String? codeVerifier;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Locale for MFA SMS copy, when MFA is required.
+  final String? locale;
+
+  /// Intermediate session token to add this primary factor to.
+  final String? intermediateSessionToken;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// PasswordEmailResetRequest
+  PasswordEmailResetRequest({
+    required this.passwordResetToken,
+    required this.password,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.codeVerifier,
+    this.sessionCustomClaims,
+    this.locale,
+    this.intermediateSessionToken,
+    this.telemetryId,
+  }) {
+    _validateRequired(passwordResetToken, 'Password reset token');
+    _validateRequired(password, 'Password');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'password_reset_token': passwordResetToken.trim(),
+      'password': password,
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (codeVerifier != null) 'code_verifier': codeVerifier,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (locale != null) 'locale': locale,
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken!.trim(),
+      if (telemetryId != null) 'telemetry_id': telemetryId,
+    };
+  }
+}
+
+/// Request model for resetting a password with an existing password.
+class PasswordExistingPasswordResetRequest {
+  /// Member email address.
+  final String emailAddress;
+
+  /// Member's existing password.
+  final String existingPassword;
+
+  /// New password.
+  final String newPassword;
+
+  /// Organization to reset in.
+  final String organizationId;
+
+  /// Existing session token to extend.
+  final String? sessionToken;
+
+  /// Existing session JWT to extend.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Locale for MFA SMS copy, when MFA is required.
+  final String? locale;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// PasswordExistingPasswordResetRequest
+  PasswordExistingPasswordResetRequest({
+    required this.emailAddress,
+    required this.existingPassword,
+    required this.newPassword,
+    required this.organizationId,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.locale,
+    this.telemetryId,
+  }) {
+    _validateEmail(emailAddress);
+    _validateRequired(existingPassword, 'Existing password');
+    _validateRequired(newPassword, 'New password');
+    _validateRequired(organizationId, 'Organization ID');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'email_address': emailAddress.trim(),
+      'existing_password': existingPassword,
+      'new_password': newPassword,
+      'organization_id': organizationId.trim(),
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (locale != null) 'locale': locale,
+      if (telemetryId != null) 'telemetry_id': telemetryId,
+    };
+  }
+}
+
+/// Request model for resetting a password with a recent member session.
+class PasswordSessionResetRequest {
+  /// Organization to reset in.
+  final String organizationId;
+
+  /// New password.
+  final String password;
+
+  /// Existing session token.
+  final String? sessionToken;
+
+  /// Existing session JWT.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Locale for localized messages.
+  final String? locale;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// PasswordSessionResetRequest
+  PasswordSessionResetRequest({
+    required this.organizationId,
+    required this.password,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.locale,
+    this.telemetryId,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(password, 'Password');
+    final hasSession = [
+      sessionToken,
+      sessionJwt,
+    ].any((value) => value != null && value.trim().isNotEmpty);
+    if (!hasSession) {
+      throw ArgumentError('A session token or session JWT is required.');
+    }
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'password': password,
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (locale != null) 'locale': locale,
+      if (telemetryId != null) 'telemetry_id': telemetryId,
+    };
+  }
+}
+
+/// Request model for starting a discovery password reset by email.
+class PasswordDiscoveryEmailResetStartRequest {
+  /// Member email address.
+  final String emailAddress;
+
+  /// Redirect URL for the reset-password magic link.
+  final String? resetPasswordRedirectUrl;
+
+  /// Discovery redirect URL.
+  final String? discoveryRedirectUrl;
+
+  /// Reset-password email template ID.
+  final String? resetPasswordTemplateId;
+
+  /// Reset-password link expiration in minutes.
+  final int? resetPasswordExpirationMinutes;
+
+  /// PKCE code challenge.
+  final String? pkceCodeChallenge;
+
+  /// Locale for localized email copy.
+  final String? locale;
+
+  /// PasswordDiscoveryEmailResetStartRequest
+  PasswordDiscoveryEmailResetStartRequest({
+    required this.emailAddress,
+    this.resetPasswordRedirectUrl,
+    this.discoveryRedirectUrl,
+    this.resetPasswordTemplateId,
+    this.resetPasswordExpirationMinutes,
+    this.pkceCodeChallenge,
+    this.locale,
+  }) {
+    _validateEmail(emailAddress);
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'email_address': emailAddress.trim(),
+      if (resetPasswordRedirectUrl != null)
+        'reset_password_redirect_url': resetPasswordRedirectUrl,
+      if (discoveryRedirectUrl != null)
+        'discovery_redirect_url': discoveryRedirectUrl,
+      if (resetPasswordTemplateId != null)
+        'reset_password_template_id': resetPasswordTemplateId,
+      if (resetPasswordExpirationMinutes != null)
+        'reset_password_expiration_minutes': resetPasswordExpirationMinutes,
+      if (pkceCodeChallenge != null) 'pkce_code_challenge': pkceCodeChallenge,
+      if (locale != null) 'locale': locale,
+    };
+  }
+}
+
+/// Response model for starting a discovery password reset by email.
+class PasswordDiscoveryEmailResetStartResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// PasswordDiscoveryEmailResetStartResponse
+  const PasswordDiscoveryEmailResetStartResponse({
+    required this.requestId,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory PasswordDiscoveryEmailResetStartResponse.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return PasswordDiscoveryEmailResetStartResponse(
+      requestId: json['request_id'] as String,
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for resetting a discovery password with an email token.
+class PasswordDiscoveryEmailResetRequest {
+  /// Password reset token.
+  final String passwordResetToken;
+
+  /// New password.
+  final String password;
+
+  /// PKCE code verifier.
+  final String? pkceCodeVerifier;
+
+  /// PasswordDiscoveryEmailResetRequest
+  PasswordDiscoveryEmailResetRequest({
+    required this.passwordResetToken,
+    required this.password,
+    this.pkceCodeVerifier,
+  }) {
+    _validateRequired(passwordResetToken, 'Password reset token');
+    _validateRequired(password, 'Password');
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'password_reset_token': passwordResetToken.trim(),
+      'password': password,
+      if (pkceCodeVerifier != null) 'pkce_code_verifier': pkceCodeVerifier,
+    };
+  }
+}
+
+/// Request model for requiring a password reset by email.
+class PasswordRequireResetByEmailRequest {
+  /// Member email address.
+  final String emailAddress;
+
+  /// Optional organization ID.
+  final String? organizationId;
+
+  /// Optional member ID.
+  final String? memberId;
+
+  /// PasswordRequireResetByEmailRequest
+  PasswordRequireResetByEmailRequest({
+    required this.emailAddress,
+    this.organizationId,
+    this.memberId,
+  }) {
+    _validateEmail(emailAddress);
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'email_address': emailAddress.trim(),
+      if (organizationId != null) 'organization_id': organizationId!.trim(),
+      if (memberId != null) 'member_id': memberId!.trim(),
+    };
+  }
+}
+
+/// Response model for requiring a password reset by email.
+class PasswordRequireResetByEmailResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// Member ID returned by Stytch, when available.
+  final String? memberId;
+
+  /// Member payload returned by Stytch, when available.
+  final Map<String, dynamic>? member;
+
+  /// Organization payload returned by Stytch, when available.
+  final Map<String, dynamic>? organization;
+
+  /// PasswordRequireResetByEmailResponse
+  const PasswordRequireResetByEmailResponse({
+    required this.requestId,
+    required this.statusCode,
+    this.memberId,
+    this.member,
+    this.organization,
+  });
+
+  /// fromJson
+  factory PasswordRequireResetByEmailResponse.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return PasswordRequireResetByEmailResponse(
+      requestId: json['request_id'] as String,
+      statusCode: json['status_code'] as int,
+      memberId: json['member_id'] as String?,
+      member: json['member'] != null
+          ? Map<String, dynamic>.from(json['member'] as Map)
+          : null,
+      organization: json['organization'] != null
+          ? Map<String, dynamic>.from(json['organization'] as Map)
+          : null,
+    );
+  }
+}
+
 /// Request model for MFA
 class MfaRequest {
   /// String

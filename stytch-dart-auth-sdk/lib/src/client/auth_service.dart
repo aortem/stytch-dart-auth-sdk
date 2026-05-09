@@ -29,6 +29,139 @@ class AuthService {
     return AuthResponse.fromJson(response);
   }
 
+  /// Authenticate a member with an email address and password.
+  Future<AuthenticateMagicLinkResponse> authenticatePassword(
+    PasswordAuthenticateRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Authenticate an email and password in the discovery flow.
+  Future<AuthenticateDiscoveryResponse> authenticateDiscoveryPassword(
+    PasswordDiscoveryAuthenticateRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/discovery/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateDiscoveryResponse.fromJson(response);
+  }
+
+  /// Check password strength against the Stytch project policy.
+  Future<PasswordStrengthCheckResponse> strengthCheckPassword(
+    PasswordStrengthCheckRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/strength_check',
+      body: request.toJson(),
+    );
+
+    return PasswordStrengthCheckResponse.fromJson(response);
+  }
+
+  /// Migrate an existing password hash to Stytch.
+  Future<PasswordMigrateResponse> migratePassword(
+    PasswordMigrateRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/migrate',
+      body: request.toJson(),
+    );
+
+    return PasswordMigrateResponse.fromJson(response);
+  }
+
+  /// Start an organization password reset by email.
+  Future<PasswordEmailResetStartResponse> startPasswordEmailReset(
+    PasswordEmailResetStartRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/email/reset/start',
+      body: request.toJson(),
+    );
+
+    return PasswordEmailResetStartResponse.fromJson(response);
+  }
+
+  /// Reset an organization password with an email reset token.
+  Future<AuthenticateMagicLinkResponse> resetPasswordByEmail(
+    PasswordEmailResetRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/email/reset',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Reset an organization password with the member's existing password.
+  Future<AuthenticateMagicLinkResponse> resetPasswordByExistingPassword(
+    PasswordExistingPasswordResetRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/existing_password/reset',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Reset an organization password with a recent member session.
+  Future<AuthenticateMagicLinkResponse> resetPasswordBySession(
+    PasswordSessionResetRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/session/reset',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Start a discovery password reset by email.
+  Future<PasswordDiscoveryEmailResetStartResponse>
+  startDiscoveryPasswordEmailReset(
+    PasswordDiscoveryEmailResetStartRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/discovery/email/reset/start',
+      body: request.toJson(),
+    );
+
+    return PasswordDiscoveryEmailResetStartResponse.fromJson(response);
+  }
+
+  /// Reset a discovery password with an email reset token.
+  Future<AuthenticateDiscoveryResponse> resetDiscoveryPasswordByEmail(
+    PasswordDiscoveryEmailResetRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/discovery/email/reset',
+      body: request.toJson(),
+    );
+
+    return AuthenticateDiscoveryResponse.fromJson(response);
+  }
+
+  /// Require a password reset for an email address.
+  Future<PasswordRequireResetByEmailResponse> requirePasswordResetByEmail(
+    PasswordRequireResetByEmailRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/passwords/email/require_reset',
+      body: request.toJson(),
+    );
+
+    return PasswordRequireResetByEmailResponse.fromJson(response);
+  }
+
   /// Login with SSO token
   Future<AuthResponse> loginWithSso(SsoLoginRequest request) async {
     /// response

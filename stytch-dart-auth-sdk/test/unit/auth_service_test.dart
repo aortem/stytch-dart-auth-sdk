@@ -5,6 +5,372 @@ import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 
 void main() {
   group('AuthService', () {
+    test('authenticatePassword posts current Stytch payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.authenticatePassword(
+        PasswordAuthenticateRequest(
+          organizationId: 'organization-test-123',
+          emailAddress: 'member@example.com',
+          password: 'correct-password',
+          sessionToken: 'session-token',
+          sessionDurationMinutes: 60,
+          sessionCustomClaims: {'tier': 'gold'},
+          locale: 'en',
+          intermediateSessionToken: 'intermediate-token',
+          telemetryId: 'telemetry-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/passwords/authenticate'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'email_address': 'member@example.com',
+        'password': 'correct-password',
+        'session_token': 'session-token',
+        'session_duration_minutes': 60,
+        'session_custom_claims': {'tier': 'gold'},
+        'locale': 'en',
+        'intermediate_session_token': 'intermediate-token',
+        'telemetry_id': 'telemetry-123',
+      });
+      expect(response.requestId, equals('request-123'));
+      expect(response.memberId, equals('member-123'));
+      expect(response.organizationId, equals('organization-test-123'));
+      expect(response.sessionToken, equals('session-token'));
+      expect(response.memberAuthenticated, isTrue);
+      expect(response.statusCode, equals(200));
+    });
+
+    test(
+      'authenticateDiscoveryPassword posts discovery password payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.authenticateDiscoveryPassword(
+          PasswordDiscoveryAuthenticateRequest(
+            emailAddress: 'prospect@example.com',
+            password: 'correct-password',
+          ),
+        );
+
+        expect(
+          httpClient.lastPath,
+          equals('/b2b/passwords/discovery/authenticate'),
+        );
+        expect(httpClient.lastBody, {
+          'email_address': 'prospect@example.com',
+          'password': 'correct-password',
+        });
+        expect(response.requestId, equals('request-123'));
+        expect(response.emailAddress, equals('prospect@example.com'));
+        expect(response.intermediateSessionToken, equals('intermediate-token'));
+        expect(response.discoveredOrganizations.single['membership'], {
+          'type': 'active_member',
+        });
+      },
+    );
+
+    test('strengthCheckPassword posts strength check payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.strengthCheckPassword(
+        PasswordStrengthCheckRequest(
+          password: 'correct-password',
+          emailAddress: 'member@example.com',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/passwords/strength_check'));
+      expect(httpClient.lastBody, {
+        'password': 'correct-password',
+        'email_address': 'member@example.com',
+      });
+      expect(response.requestId, equals('request-123'));
+      expect(response.validPassword, isTrue);
+      expect(response.score, equals(4));
+      expect(response.breachedPassword, isFalse);
+      expect(response.strengthPolicy, equals('zxcvbn'));
+      expect(response.breachDetectionOnCreate, isTrue);
+      expect(response.zxcvbnFeedback?['suggestions'], ['Keep it memorable']);
+      expect(response.statusCode, equals(200));
+    });
+
+    test('migratePassword posts current password migrate payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.migratePassword(
+        PasswordMigrateRequest(
+          emailAddress: 'member@example.com',
+          hash: r'$2a$10$abcdefghijklmnopqrstuu',
+          hashType: 'bcrypt',
+          organizationId: 'organization-test-123',
+          trustedMetadata: {'source': 'legacy'},
+          roles: ['admin'],
+          preserveExistingSessions: true,
+          externalId: 'external-member-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/passwords/migrate'));
+      expect(httpClient.lastBody, {
+        'email_address': 'member@example.com',
+        'hash': r'$2a$10$abcdefghijklmnopqrstuu',
+        'hash_type': 'bcrypt',
+        'organization_id': 'organization-test-123',
+        'trusted_metadata': {'source': 'legacy'},
+        'roles': ['admin'],
+        'preserve_existing_sessions': true,
+        'external_id': 'external-member-123',
+      });
+      expect(response.requestId, equals('request-123'));
+      expect(response.memberId, equals('member-123'));
+      expect(response.memberCreated, isTrue);
+      expect(response.organization['organization_id'], 'organization-test-123');
+      expect(response.statusCode, equals(200));
+    });
+
+    test('startPasswordEmailReset posts reset start payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.startPasswordEmailReset(
+        PasswordEmailResetStartRequest(
+          organizationId: 'organization-test-123',
+          emailAddress: 'member@example.com',
+          resetPasswordRedirectUrl: 'https://example.com/reset',
+          resetPasswordExpirationMinutes: 30,
+          codeChallenge: 'code-challenge',
+          loginRedirectUrl: 'https://example.com/login',
+          locale: 'en',
+          resetPasswordTemplateId: 'reset-template',
+          verifyEmailTemplateId: 'verify-template',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/passwords/email/reset/start'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'email_address': 'member@example.com',
+        'reset_password_redirect_url': 'https://example.com/reset',
+        'reset_password_expiration_minutes': 30,
+        'code_challenge': 'code-challenge',
+        'login_redirect_url': 'https://example.com/login',
+        'locale': 'en',
+        'reset_password_template_id': 'reset-template',
+        'verify_email_template_id': 'verify-template',
+      });
+      expect(response.requestId, equals('request-123'));
+      expect(response.memberId, equals('member-123'));
+      expect(response.memberEmailId, equals('email-123'));
+      expect(response.member['email_address'], 'member@example.com');
+    });
+
+    test('resetPasswordByEmail posts email reset payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.resetPasswordByEmail(
+        PasswordEmailResetRequest(
+          passwordResetToken: 'password-reset-token',
+          password: 'new-password',
+          sessionJwt: 'session-jwt',
+          sessionDurationMinutes: 60,
+          codeVerifier: 'code-verifier',
+          sessionCustomClaims: {'tier': 'gold'},
+          locale: 'en',
+          intermediateSessionToken: 'intermediate-token',
+          telemetryId: 'telemetry-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/passwords/email/reset'));
+      expect(httpClient.lastBody, {
+        'password_reset_token': 'password-reset-token',
+        'password': 'new-password',
+        'session_jwt': 'session-jwt',
+        'session_duration_minutes': 60,
+        'code_verifier': 'code-verifier',
+        'session_custom_claims': {'tier': 'gold'},
+        'locale': 'en',
+        'intermediate_session_token': 'intermediate-token',
+        'telemetry_id': 'telemetry-123',
+      });
+      expect(response.memberId, equals('member-123'));
+      expect(response.sessionToken, equals('session-token'));
+      expect(response.memberAuthenticated, isTrue);
+    });
+
+    test(
+      'resetPasswordByExistingPassword posts existing reset payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.resetPasswordByExistingPassword(
+          PasswordExistingPasswordResetRequest(
+            emailAddress: 'member@example.com',
+            existingPassword: 'old-password',
+            newPassword: 'new-password',
+            organizationId: 'organization-test-123',
+            sessionToken: 'session-token',
+            sessionDurationMinutes: 60,
+            sessionCustomClaims: {'tier': 'gold'},
+            locale: 'en',
+            telemetryId: 'telemetry-123',
+          ),
+        );
+
+        expect(
+          httpClient.lastPath,
+          equals('/b2b/passwords/existing_password/reset'),
+        );
+        expect(httpClient.lastBody, {
+          'email_address': 'member@example.com',
+          'existing_password': 'old-password',
+          'new_password': 'new-password',
+          'organization_id': 'organization-test-123',
+          'session_token': 'session-token',
+          'session_duration_minutes': 60,
+          'session_custom_claims': {'tier': 'gold'},
+          'locale': 'en',
+          'telemetry_id': 'telemetry-123',
+        });
+        expect(response.memberId, equals('member-123'));
+        expect(response.sessionJwt, equals('session-jwt'));
+        expect(response.statusCode, equals(200));
+      },
+    );
+
+    test('resetPasswordBySession posts session reset payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.resetPasswordBySession(
+        PasswordSessionResetRequest(
+          organizationId: 'organization-test-123',
+          password: 'new-password',
+          sessionToken: 'session-token',
+          sessionDurationMinutes: 60,
+          sessionCustomClaims: {'tier': 'gold'},
+          locale: 'en',
+          telemetryId: 'telemetry-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/passwords/session/reset'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'password': 'new-password',
+        'session_token': 'session-token',
+        'session_duration_minutes': 60,
+        'session_custom_claims': {'tier': 'gold'},
+        'locale': 'en',
+        'telemetry_id': 'telemetry-123',
+      });
+      expect(response.memberId, equals('member-123'));
+      expect(
+        response.memberSession?['member_session_id'],
+        'member-session-123',
+      );
+    });
+
+    test(
+      'startDiscoveryPasswordEmailReset posts discovery reset start payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.startDiscoveryPasswordEmailReset(
+          PasswordDiscoveryEmailResetStartRequest(
+            emailAddress: 'prospect@example.com',
+            resetPasswordRedirectUrl: 'https://example.com/reset',
+            discoveryRedirectUrl: 'https://example.com/discovery',
+            resetPasswordTemplateId: 'reset-template',
+            resetPasswordExpirationMinutes: 30,
+            pkceCodeChallenge: 'pkce-challenge',
+            locale: 'en',
+          ),
+        );
+
+        expect(
+          httpClient.lastPath,
+          equals('/b2b/passwords/discovery/email/reset/start'),
+        );
+        expect(httpClient.lastBody, {
+          'email_address': 'prospect@example.com',
+          'reset_password_redirect_url': 'https://example.com/reset',
+          'discovery_redirect_url': 'https://example.com/discovery',
+          'reset_password_template_id': 'reset-template',
+          'reset_password_expiration_minutes': 30,
+          'pkce_code_challenge': 'pkce-challenge',
+          'locale': 'en',
+        });
+        expect(response.requestId, equals('request-123'));
+        expect(response.statusCode, equals(200));
+      },
+    );
+
+    test(
+      'resetDiscoveryPasswordByEmail posts discovery reset payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.resetDiscoveryPasswordByEmail(
+          PasswordDiscoveryEmailResetRequest(
+            passwordResetToken: 'password-reset-token',
+            password: 'new-password',
+            pkceCodeVerifier: 'pkce-verifier',
+          ),
+        );
+
+        expect(
+          httpClient.lastPath,
+          equals('/b2b/passwords/discovery/email/reset'),
+        );
+        expect(httpClient.lastBody, {
+          'password_reset_token': 'password-reset-token',
+          'password': 'new-password',
+          'pkce_code_verifier': 'pkce-verifier',
+        });
+        expect(response.emailAddress, equals('prospect@example.com'));
+        expect(response.intermediateSessionToken, equals('intermediate-token'));
+        expect(response.statusCode, equals(200));
+      },
+    );
+
+    test('requirePasswordResetByEmail posts require reset payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.requirePasswordResetByEmail(
+        PasswordRequireResetByEmailRequest(
+          emailAddress: 'member@example.com',
+          organizationId: 'organization-test-123',
+          memberId: 'member-123',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/passwords/email/require_reset'));
+      expect(httpClient.lastBody, {
+        'email_address': 'member@example.com',
+        'organization_id': 'organization-test-123',
+        'member_id': 'member-123',
+      });
+      expect(response.requestId, equals('request-123'));
+      expect(response.memberId, equals('member-123'));
+      expect(response.member?['email_address'], 'member@example.com');
+      expect(
+        response.organization?['organization_id'],
+        'organization-test-123',
+      );
+    });
+
     test(
       'getSession gets active member sessions with query parameters',
       () async {
@@ -670,6 +1036,82 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
   }) async {
     lastPath = path;
     lastBody = body;
+    if (path == '/b2b/passwords/authenticate' ||
+        path == '/b2b/passwords/email/reset' ||
+        path == '/b2b/passwords/existing_password/reset' ||
+        path == '/b2b/passwords/session/reset') {
+      return _passwordSessionResponse();
+    }
+    if (path == '/b2b/passwords/discovery/authenticate' ||
+        path == '/b2b/passwords/discovery/email/reset') {
+      return {
+        'request_id': 'request-123',
+        'intermediate_session_token': 'intermediate-token',
+        'email_address': body?['email_address'] ?? 'prospect@example.com',
+        'discovered_organizations': [
+          {
+            'organization': {'organization_id': 'organization-test-123'},
+            'membership': {'type': 'active_member'},
+          },
+        ],
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/passwords/strength_check') {
+      return {
+        'request_id': 'request-123',
+        'valid_password': true,
+        'score': 4,
+        'breached_password': false,
+        'strength_policy': 'zxcvbn',
+        'breach_detection_on_create': true,
+        'zxcvbn_feedback': {
+          'warning': '',
+          'suggestions': ['Keep it memorable'],
+        },
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/passwords/migrate') {
+      return {
+        'request_id': 'request-123',
+        'member_id': 'member-123',
+        'member_created': true,
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'organization': {'organization_id': 'organization-test-123'},
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/passwords/email/reset/start') {
+      return {
+        'request_id': 'request-123',
+        'member_id': 'member-123',
+        'member_email_id': 'email-123',
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/passwords/discovery/email/reset/start') {
+      return {'request_id': 'request-123', 'status_code': 200};
+    }
+    if (path == '/b2b/passwords/email/require_reset') {
+      return {
+        'request_id': 'request-123',
+        'status_code': 200,
+        'member_id': 'member-123',
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'organization': {'organization_id': 'organization-test-123'},
+      };
+    }
     if (path == '/b2b/sessions/authenticate') {
       return {
         'request_id': 'request-123',
@@ -809,6 +1251,25 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
     }
     return {'request_id': 'request-123', 'status_code': 200};
   }
+}
+
+Map<String, dynamic> _passwordSessionResponse() {
+  return {
+    'request_id': 'request-123',
+    'member_id': 'member-123',
+    'organization_id': 'organization-test-123',
+    'method_id': 'password-test-123',
+    'session_token': 'session-token',
+    'session_jwt': 'session-jwt',
+    'member_authenticated': true,
+    'member': {
+      'member_id': 'member-123',
+      'email_address': 'member@example.com',
+    },
+    'organization': {'organization_id': 'organization-test-123'},
+    'member_session': {'member_session_id': 'member-session-123'},
+    'status_code': 200,
+  };
 }
 
 Map<String, dynamic> _sessionExchangeResponse({
