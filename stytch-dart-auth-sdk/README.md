@@ -112,8 +112,15 @@ Future<void> main() async {
 - `createSession`
 - `validateSession`
 - `revokeSession`
+- `revokeSessionWithRequest`
 - `revokeAllUserSessions`
 - `exchangeSession`
+
+`exchangeSession` wraps Stytch's `POST /v1/b2b/sessions/exchange` endpoint
+with `ExchangeSessionRequest` and `ExchangeSessionResponse`.
+`revokeSession` revokes by member session ID through
+`POST /v1/b2b/sessions/revoke`; use `revokeSessionWithRequest` to revoke by
+session token, session JWT, or all sessions for a member.
 
 ### Discovery Email Magic Link
 
@@ -163,6 +170,11 @@ print('Status: ${response.statusCode}');
 - `addUserToOrganization`
 - `removeUserFromOrganization`
 - `updateOrganizationMember`
+
+Organization methods use Stytch's current B2B wire fields, including
+`organization_name`, `organization_slug`, `email_allowed_domains`, and the
+`organization` response envelope, while exposing the existing Dart property
+names such as `name`, `slug`, and `allowedDomains`.
 
 ### InvitationService
 

@@ -35,14 +35,18 @@ class OrganizationService {
     final response = await _httpClient.get(
       '/b2b/organizations/$organizationId',
     );
-    return Organization.fromJson(response);
+    return Organization.fromJson(
+      response['organization'] as Map<String, dynamic>,
+    );
   }
 
   /// Get organization by slug
   Future<Organization> getOrganizationBySlug(String slug) async {
     /// response
     final response = await _httpClient.get('/b2b/organizations/slug/$slug');
-    return Organization.fromJson(response);
+    return Organization.fromJson(
+      response['organization'] as Map<String, dynamic>,
+    );
   }
 
   /// Update organization
@@ -61,8 +65,13 @@ class OrganizationService {
   }
 
   /// Delete organization
-  Future<void> deleteOrganization(String organizationId) async {
-    await _httpClient.delete('/b2b/organizations/$organizationId');
+  Future<DeleteOrganizationResponse> deleteOrganization(
+    String organizationId,
+  ) async {
+    final response = await _httpClient.delete(
+      '/b2b/organizations/$organizationId',
+    );
+    return DeleteOrganizationResponse.fromJson(response);
   }
 
   /// List organizations with pagination
@@ -90,8 +99,8 @@ class OrganizationService {
   }
 
   /// Search organizations
-  Future<List<Organization>> searchOrganizations({
-    required String query,
+  Future<SearchOrganizationsResponse> searchOrganizations({
+    Map<String, dynamic>? query,
 
     /// limit
     int limit = 100,
@@ -101,19 +110,13 @@ class OrganizationService {
     final response = await _httpClient.post(
       '/b2b/organizations/search',
       body: {
-        'query': query,
+        if (query != null) 'query': query,
         'limit': limit,
         if (cursor != null) 'cursor': cursor,
       },
     );
 
-    /// orgsJson
-    final orgsJson = response['organizations'] as List<dynamic>;
-    return orgsJson
-        .map(
-          (orgJson) => Organization.fromJson(orgJson as Map<String, dynamic>),
-        )
-        .toList();
+    return SearchOrganizationsResponse.fromJson(response);
   }
 
   /// Get organization members

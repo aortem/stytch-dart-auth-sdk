@@ -101,9 +101,23 @@ class AuthService {
     return ValidateSessionResponse.fromJson(response);
   }
 
-  /// Revoke a session
-  Future<void> revokeSession(String sessionId) async {
-    await _httpClient.delete('/b2b/sessions/$sessionId');
+  /// Revoke a session by member session ID.
+  Future<RevokeSessionResponse> revokeSession(String memberSessionId) async {
+    return revokeSessionWithRequest(
+      RevokeSessionRequest(memberSessionId: memberSessionId),
+    );
+  }
+
+  /// Revoke a session by any Stytch-supported session identifier.
+  Future<RevokeSessionResponse> revokeSessionWithRequest(
+    RevokeSessionRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/sessions/revoke',
+      body: request.toJson(),
+    );
+
+    return RevokeSessionResponse.fromJson(response);
   }
 
   /// Revoke all sessions for a user
@@ -111,23 +125,16 @@ class AuthService {
     await _httpClient.delete('/b2b/users/$userId/sessions');
   }
 
-  /// Exchange a session for a new one
-  Future<CreateSessionResponse> exchangeSession(
-    /// sessionToken,
-    String sessionToken,
-
-    /// dynamic>?
-    Map<String, dynamic>? attributes,
+  /// Exchange a session into another organization.
+  Future<ExchangeSessionResponse> exchangeSession(
+    ExchangeSessionRequest request,
   ) async {
     /// response
     final response = await _httpClient.post(
       '/b2b/sessions/exchange',
-      body: {
-        'session_token': sessionToken,
-        if (attributes != null) 'attributes': attributes,
-      },
+      body: request.toJson(),
     );
 
-    return CreateSessionResponse.fromJson(response);
+    return ExchangeSessionResponse.fromJson(response);
   }
 }

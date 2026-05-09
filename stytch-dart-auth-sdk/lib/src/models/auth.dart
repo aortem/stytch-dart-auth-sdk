@@ -410,6 +410,245 @@ class ValidateSessionResponse {
   }
 }
 
+/// Request model for exchanging a session into another organization.
+class ExchangeSessionRequest {
+  /// Organization to exchange the session into.
+  final String organizationId;
+
+  /// Stytch session token for the current member session.
+  final String? sessionToken;
+
+  /// Stytch session JWT for the current member session.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Optional locale for the exchange flow.
+  final String? locale;
+
+  /// ExchangeSessionRequest
+  ExchangeSessionRequest({
+    required this.organizationId,
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.locale,
+  }) {
+    if (organizationId.trim().isEmpty) {
+      throw ArgumentError('Organization ID cannot be empty.');
+    }
+    if ((sessionToken == null || sessionToken!.trim().isEmpty) &&
+        (sessionJwt == null || sessionJwt!.trim().isEmpty)) {
+      throw ArgumentError('A session token or session JWT is required.');
+    }
+  }
+
+  /// fromJson
+  factory ExchangeSessionRequest.fromJson(Map<String, dynamic> json) {
+    return ExchangeSessionRequest(
+      organizationId: json['organization_id'] as String,
+      sessionToken: json['session_token'] as String?,
+      sessionJwt: json['session_jwt'] as String?,
+      sessionDurationMinutes: json['session_duration_minutes'] as int?,
+      sessionCustomClaims:
+          json['session_custom_claims'] as Map<String, dynamic>?,
+      locale: json['locale'] as String?,
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (locale != null) 'locale': locale,
+    };
+  }
+}
+
+/// Response model for exchanging a session.
+class ExchangeSessionResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String? memberId;
+
+  /// Full session token when authentication requirements are satisfied.
+  final String? sessionToken;
+
+  /// Session JWT when authentication requirements are satisfied.
+  final String? sessionJwt;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic>? member;
+
+  /// Organization payload returned by Stytch.
+  final Map<String, dynamic>? organization;
+
+  /// Whether the member is fully authenticated into the target organization.
+  final bool memberAuthenticated;
+
+  /// Intermediate token returned when more authentication is required.
+  final String? intermediateSessionToken;
+
+  /// Member session payload returned by Stytch.
+  final Map<String, dynamic>? memberSession;
+
+  /// MFA requirement payload returned by Stytch.
+  final Map<String, dynamic>? mfaRequired;
+
+  /// Primary auth requirement payload returned by Stytch.
+  final Map<String, dynamic>? primaryRequired;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// ExchangeSessionResponse
+  const ExchangeSessionResponse({
+    required this.requestId,
+    this.memberId,
+    this.sessionToken,
+    this.sessionJwt,
+    this.member,
+    this.organization,
+    required this.memberAuthenticated,
+    this.intermediateSessionToken,
+    this.memberSession,
+    this.mfaRequired,
+    this.primaryRequired,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory ExchangeSessionResponse.fromJson(Map<String, dynamic> json) {
+    return ExchangeSessionResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String?,
+      sessionToken: json['session_token'] as String?,
+      sessionJwt: json['session_jwt'] as String?,
+      member: json['member'] as Map<String, dynamic>?,
+      organization: json['organization'] as Map<String, dynamic>?,
+      memberAuthenticated: json['member_authenticated'] as bool? ?? false,
+      intermediateSessionToken: json['intermediate_session_token'] as String?,
+      memberSession: json['member_session'] as Map<String, dynamic>?,
+      mfaRequired: json['mfa_required'] as Map<String, dynamic>?,
+      primaryRequired: json['primary_required'] as Map<String, dynamic>?,
+      statusCode: json['status_code'] as int,
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'request_id': requestId,
+      if (memberId != null) 'member_id': memberId,
+      if (sessionToken != null) 'session_token': sessionToken,
+      if (sessionJwt != null) 'session_jwt': sessionJwt,
+      if (member != null) 'member': member,
+      if (organization != null) 'organization': organization,
+      'member_authenticated': memberAuthenticated,
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken,
+      if (memberSession != null) 'member_session': memberSession,
+      if (mfaRequired != null) 'mfa_required': mfaRequired,
+      if (primaryRequired != null) 'primary_required': primaryRequired,
+      'status_code': statusCode,
+    };
+  }
+}
+
+/// Request model for revoking a session.
+class RevokeSessionRequest {
+  /// Member session ID to revoke.
+  final String? memberSessionId;
+
+  /// Session token to revoke.
+  final String? sessionToken;
+
+  /// Session JWT to revoke.
+  final String? sessionJwt;
+
+  /// Member ID whose sessions should all be revoked.
+  final String? memberId;
+
+  /// RevokeSessionRequest
+  RevokeSessionRequest({
+    this.memberSessionId,
+    this.sessionToken,
+    this.sessionJwt,
+    this.memberId,
+  }) {
+    final hasIdentifier = [
+      memberSessionId,
+      sessionToken,
+      sessionJwt,
+      memberId,
+    ].any((value) => value != null && value.trim().isNotEmpty);
+    if (!hasIdentifier) {
+      throw ArgumentError('A session or member identifier is required.');
+    }
+  }
+
+  /// fromJson
+  factory RevokeSessionRequest.fromJson(Map<String, dynamic> json) {
+    return RevokeSessionRequest(
+      memberSessionId: json['member_session_id'] as String?,
+      sessionToken: json['session_token'] as String?,
+      sessionJwt: json['session_jwt'] as String?,
+      memberId: json['member_id'] as String?,
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      if (memberSessionId != null) 'member_session_id': memberSessionId!.trim(),
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (memberId != null) 'member_id': memberId!.trim(),
+    };
+  }
+}
+
+/// Response model for revoking a session.
+class RevokeSessionResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// RevokeSessionResponse
+  const RevokeSessionResponse({
+    required this.requestId,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory RevokeSessionResponse.fromJson(Map<String, dynamic> json) {
+    return RevokeSessionResponse(
+      requestId: json['request_id'] as String,
+      statusCode: json['status_code'] as int,
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {'request_id': requestId, 'status_code': statusCode};
+  }
+}
+
 /// Request model for sending a discovery Email Magic Link.
 class SendDiscoveryEmailRequest {
   /// Email address of the member starting discovery.

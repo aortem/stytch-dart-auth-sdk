@@ -6,16 +6,21 @@
 * Added unit coverage for discovery email request/response serialization, validation, and endpoint routing.
 * Added `InvitationService.sendInviteEmail` with typed `SendInviteEmailRequest` and `SendInviteEmailResponse` models for Stytch B2B invite Email Magic Links.
 * Added unit coverage for invite email request/response serialization, validation, and endpoint routing.
+* Added typed Stytch B2B session exchange and revoke responses with focused endpoint routing coverage.
+* Added typed organization search and delete responses with pagination metadata coverage.
 
 ### Changed
 * Updated the package version to `0.0.2`.
 * Trimmed unused runtime dependencies and refreshed the testing dependency baseline to the current workspace release.
 * Updated package and docs version markers to align README, Antora, and the example app with `0.0.2`.
 * Added explicit license metadata and publish exclusions for docs/deployment artifacts.
+* Aligned organization request and response wire fields with the current Stytch B2B API while preserving the existing Dart property names.
 
 ### Fixed
 * Removed the stale `test/flutter_test_config.dart` hook so the package test suite runs with `dart test` instead of attempting a Flutter-specific test runner.
 * Kept the CI validation and release parser alignment in place for the current backend pipeline layout.
+* Fixed `getOrganization` response parsing to unwrap Stytch's `organization` response envelope.
+* Fixed `revokeSession` to call `POST /v1/b2b/sessions/revoke` instead of the unsupported delete-by-path route.
 
 ## [0.0.1]
 ### Added
