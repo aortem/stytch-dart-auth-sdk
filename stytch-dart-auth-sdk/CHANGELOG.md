@@ -15,6 +15,7 @@
 * Added Google and Microsoft OAuth discovery start helpers.
 * Added `AuthService.getJWKS` for Stytch session JWT key retrieval.
 * Added typed get, authenticate, and migrate session helpers with focused B2B endpoint routing coverage.
+* Added `SsoService` with SAML, OIDC, External, and shared SSO endpoint coverage.
 
 ### Changed
 * Updated the package version to `0.0.2`.

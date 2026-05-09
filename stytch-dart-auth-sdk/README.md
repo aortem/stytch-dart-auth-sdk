@@ -10,7 +10,7 @@ Implemented and exported from `lib/stytch_dart_auth_sdk.dart`:
 
 - `StytchAuth` main entrypoint.
 - Service clients: `AuthService`, `UserService`, `OrganizationService`,
-  `InvitationService`, `MemberService`, `RbacService`.
+  `InvitationService`, `MemberService`, `RbacService`, `SsoService`.
 - Typed request/response models under `lib/src/models/`.
 - Error model and exception mapping (`StytchException`, `StytchAuthException`, etc).
 - Firebase-style compatibility helpers under `lib/src/auth/` (primarily for the Flutter example app).
@@ -348,6 +348,25 @@ print('Matched members: ${search.members.length}');
 - `getRbacPolicy`
 
 `getRbacPolicy` wraps Stytch's `GET /v1/b2b/rbac/policy` endpoint.
+
+### SsoService
+
+- `createSamlConnection`
+- `updateSamlConnection`
+- `updateSamlConnectionUrl`
+- `deleteVerificationCertificate`
+- `createOidcConnection`
+- `updateOidcConnection`
+- `getOidcAccessToken`
+- `createExternalConnection`
+- `updateExternalConnection`
+- `getSsoConnections`
+- `deleteSsoConnection`
+- `ssoAuthenticateStart`
+- `ssoAuthenticate`
+
+SSO methods wrap Stytch's current B2B SAML, OIDC, External, and shared SSO
+endpoints without provider-specific shortcuts.
 
 ## Example App
 

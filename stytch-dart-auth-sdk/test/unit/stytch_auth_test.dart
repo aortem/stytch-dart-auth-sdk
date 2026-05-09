@@ -20,6 +20,7 @@ void main() {
       expect(auth.invitation, isNotNull);
       expect(auth.member, isNotNull);
       expect(auth.rbac, isNotNull);
+      expect(auth.sso, isNotNull);
     });
 
     test('should validate configuration', () {
@@ -69,6 +70,7 @@ void main() {
       expect(auth.invitation, isA<InvitationService>());
       expect(auth.member, isA<MemberService>());
       expect(auth.rbac, isA<RbacService>());
+      expect(auth.sso, isA<SsoService>());
     });
   });
 
