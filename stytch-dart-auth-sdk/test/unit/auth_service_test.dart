@@ -5,6 +5,77 @@ import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 
 void main() {
   group('AuthService', () {
+    test(
+      'getSession gets active member sessions with query parameters',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.getSession(
+          GetSessionsRequest(
+            organizationId: 'organization-test-123',
+            memberId: 'member-123',
+          ),
+        );
+
+        expect(httpClient.lastPath, equals('/b2b/sessions'));
+        expect(httpClient.lastQueryParameters, {
+          'organization_id': 'organization-test-123',
+          'member_id': 'member-123',
+        });
+        expect(response.requestId, equals('request-123'));
+        expect(
+          response.memberSessions.single['member_session_id'],
+          'session-1',
+        );
+        expect(response.statusCode, equals(200));
+      },
+    );
+
+    test(
+      'authenticateSession posts token payload and parses verdict',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.authenticateSession(
+          AuthenticateSessionRequest(
+            sessionToken: 'session-token',
+            sessionDurationMinutes: 60,
+            sessionCustomClaims: {'tier': 'gold'},
+            authorizationCheck: {
+              'organization_id': 'organization-test-123',
+              'resource_id': 'project',
+              'action': 'read',
+            },
+          ),
+        );
+
+        expect(httpClient.lastPath, equals('/b2b/sessions/authenticate'));
+        expect(httpClient.lastBody, {
+          'session_token': 'session-token',
+          'session_duration_minutes': 60,
+          'session_custom_claims': {'tier': 'gold'},
+          'authorization_check': {
+            'organization_id': 'organization-test-123',
+            'resource_id': 'project',
+            'action': 'read',
+          },
+        });
+        expect(response.requestId, equals('request-123'));
+        expect(response.memberSession['member_session_id'], 'session-test-123');
+        expect(response.member['member_id'], 'member-123');
+        expect(
+          response.organization['organization_id'],
+          'organization-test-123',
+        );
+        expect(response.sessionToken, equals('session-token'));
+        expect(response.sessionJwt, equals('session-jwt'));
+        expect(response.verdict?['authorized'], isTrue);
+        expect(response.statusCode, equals(200));
+      },
+    );
+
     test('exchangeSession posts current Stytch exchange payload', () async {
       final httpClient = _RecordingStytchHttpClient();
       final service = AuthService(httpClient);
@@ -31,6 +102,34 @@ void main() {
       expect(response.memberId, equals('member-123'));
       expect(response.sessionToken, equals('new-session-token'));
       expect(response.memberAuthenticated, isTrue);
+      expect(response.statusCode, equals(200));
+    });
+
+    test('migrateSession posts current Stytch migrate payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.migrateSession(
+        MigrateSessionRequest(
+          sessionToken: 'external-session-token',
+          organizationId: 'organization-test-123',
+          sessionDurationMinutes: 60,
+          sessionCustomClaims: {'source': 'legacy'},
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/sessions/migrate'));
+      expect(httpClient.lastBody, {
+        'session_token': 'external-session-token',
+        'organization_id': 'organization-test-123',
+        'session_duration_minutes': 60,
+        'session_custom_claims': {'source': 'legacy'},
+      });
+      expect(response.requestId, equals('request-123'));
+      expect(response.memberId, equals('member-123'));
+      expect(response.sessionToken, equals('migrated-session-token'));
+      expect(response.sessionJwt, equals('migrated-session-jwt'));
+      expect(response.memberSession?['member_session_id'], 'session-test-123');
       expect(response.statusCode, equals(200));
     });
 
@@ -350,6 +449,15 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
   ]) async {
     lastPath = path;
     lastQueryParameters = queryParameters;
+    if (path == '/b2b/sessions') {
+      return {
+        'request_id': 'request-123',
+        'member_sessions': [
+          {'member_session_id': 'session-1', 'member_id': 'member-123'},
+        ],
+        'status_code': 200,
+      };
+    }
     if (path.contains('/oauth/google/')) {
       return {
         'request_id': 'request-123',
@@ -383,6 +491,24 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
   }) async {
     lastPath = path;
     lastBody = body;
+    if (path == '/b2b/sessions/authenticate') {
+      return {
+        'request_id': 'request-123',
+        'member_session': {'member_session_id': 'session-test-123'},
+        'session_token': 'session-token',
+        'session_jwt': 'session-jwt',
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'organization': {'organization_id': 'organization-test-123'},
+        'status_code': 200,
+        'verdict': {
+          'authorized': true,
+          'granting_roles': ['admin'],
+        },
+      };
+    }
     if (path == '/b2b/sessions/exchange') {
       return {
         'request_id': 'request-123',
@@ -395,6 +521,21 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
         },
         'organization': {'organization_id': 'organization-test-123'},
         'member_authenticated': true,
+        'member_session': {'member_session_id': 'session-test-123'},
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/sessions/migrate') {
+      return {
+        'request_id': 'request-123',
+        'member_id': 'member-123',
+        'session_token': 'migrated-session-token',
+        'session_jwt': 'migrated-session-jwt',
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'organization': {'organization_id': 'organization-test-123'},
         'member_session': {'member_session_id': 'session-test-123'},
         'status_code': 200,
       };

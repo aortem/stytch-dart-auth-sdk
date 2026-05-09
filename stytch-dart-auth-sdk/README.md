@@ -121,12 +121,19 @@ Future<void> main() async {
 - `completeMfa`
 - `createSession`
 - `validateSession`
+- `getSession`
+- `authenticateSession`
 - `revokeSession`
 - `revokeSessionWithRequest`
 - `revokeAllUserSessions`
 - `exchangeSession`
+- `migrateSession`
 - `getJWKS`
 
+`getSession`, `authenticateSession`, and `migrateSession` wrap Stytch's current
+B2B session endpoints: `GET /v1/b2b/sessions`,
+`POST /v1/b2b/sessions/authenticate`, and
+`POST /v1/b2b/sessions/migrate`.
 `exchangeSession` wraps Stytch's `POST /v1/b2b/sessions/exchange` endpoint
 with `ExchangeSessionRequest` and `ExchangeSessionResponse`.
 `revokeSession` revokes by member session ID through

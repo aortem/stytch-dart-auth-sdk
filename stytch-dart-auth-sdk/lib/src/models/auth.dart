@@ -410,6 +410,160 @@ class ValidateSessionResponse {
   }
 }
 
+/// Request model for retrieving active sessions for a member.
+class GetSessionsRequest {
+  /// Organization containing the member.
+  final String organizationId;
+
+  /// Member ID whose sessions should be returned.
+  final String memberId;
+
+  /// GetSessionsRequest
+  GetSessionsRequest({required this.organizationId, required this.memberId}) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateRequired(memberId, 'Member ID');
+  }
+
+  /// String>
+  Map<String, String> toQueryParameters() {
+    return {
+      'organization_id': organizationId.trim(),
+      'member_id': memberId.trim(),
+    };
+  }
+}
+
+/// Response model for retrieving active sessions.
+class GetSessionsResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member sessions returned by Stytch.
+  final List<Map<String, dynamic>> memberSessions;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// GetSessionsResponse
+  const GetSessionsResponse({
+    required this.requestId,
+    required this.memberSessions,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory GetSessionsResponse.fromJson(Map<String, dynamic> json) {
+    return GetSessionsResponse(
+      requestId: json['request_id'] as String,
+      memberSessions: (json['member_sessions'] as List<dynamic>)
+          .map((session) => Map<String, dynamic>.from(session as Map))
+          .toList(),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for authenticating a session.
+class AuthenticateSessionRequest {
+  /// Session token to authenticate.
+  final String? sessionToken;
+
+  /// Session JWT to authenticate.
+  final String? sessionJwt;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the authenticated session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Optional authorization check.
+  final Map<String, dynamic>? authorizationCheck;
+
+  /// AuthenticateSessionRequest
+  AuthenticateSessionRequest({
+    this.sessionToken,
+    this.sessionJwt,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.authorizationCheck,
+  }) {
+    final hasToken = sessionToken != null && sessionToken!.trim().isNotEmpty;
+    final hasJwt = sessionJwt != null && sessionJwt!.trim().isNotEmpty;
+    if (hasToken == hasJwt) {
+      throw ArgumentError('Provide exactly one session token or session JWT.');
+    }
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (authorizationCheck != null) 'authorization_check': authorizationCheck,
+    };
+  }
+}
+
+/// Response model for authenticating a session.
+class AuthenticateSessionResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member session returned by Stytch.
+  final Map<String, dynamic> memberSession;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic> member;
+
+  /// Organization payload returned by Stytch.
+  final Map<String, dynamic> organization;
+
+  /// Session token returned by Stytch.
+  final String? sessionToken;
+
+  /// Session JWT returned by Stytch.
+  final String? sessionJwt;
+
+  /// Authorization verdict returned when an authorization check is supplied.
+  final Map<String, dynamic>? verdict;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// AuthenticateSessionResponse
+  const AuthenticateSessionResponse({
+    required this.requestId,
+    required this.memberSession,
+    required this.member,
+    required this.organization,
+    this.sessionToken,
+    this.sessionJwt,
+    this.verdict,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory AuthenticateSessionResponse.fromJson(Map<String, dynamic> json) {
+    return AuthenticateSessionResponse(
+      requestId: json['request_id'] as String,
+      memberSession: Map<String, dynamic>.from(json['member_session'] as Map),
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      sessionToken: json['session_token'] as String?,
+      sessionJwt: json['session_jwt'] as String?,
+      verdict: json['verdict'] != null
+          ? Map<String, dynamic>.from(json['verdict'] as Map)
+          : null,
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
 /// Request model for exchanging a session into another organization.
 class ExchangeSessionRequest {
   /// Organization to exchange the session into.
@@ -563,6 +717,113 @@ class ExchangeSessionResponse {
       if (memberSession != null) 'member_session': memberSession,
       if (mfaRequired != null) 'mfa_required': mfaRequired,
       if (primaryRequired != null) 'primary_required': primaryRequired,
+      'status_code': statusCode,
+    };
+  }
+}
+
+/// Request model for migrating an external OIDC session.
+class MigrateSessionRequest {
+  /// External session token for Stytch to pass to the configured UserInfo endpoint.
+  final String sessionToken;
+
+  /// Organization to migrate into.
+  final String organizationId;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// MigrateSessionRequest
+  MigrateSessionRequest({
+    required this.sessionToken,
+    required this.organizationId,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+  }) {
+    _validateRequired(sessionToken, 'Session token');
+    _validateRequired(organizationId, 'Organization ID');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'session_token': sessionToken.trim(),
+      'organization_id': organizationId.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+    };
+  }
+}
+
+/// Response model for migrating an external OIDC session.
+class MigrateSessionResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String memberId;
+
+  /// Full session token returned by Stytch.
+  final String sessionToken;
+
+  /// Session JWT returned by Stytch.
+  final String sessionJwt;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic> member;
+
+  /// Organization payload returned by Stytch.
+  final Map<String, dynamic> organization;
+
+  /// Member session payload returned by Stytch.
+  final Map<String, dynamic>? memberSession;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// MigrateSessionResponse
+  const MigrateSessionResponse({
+    required this.requestId,
+    required this.memberId,
+    required this.sessionToken,
+    required this.sessionJwt,
+    required this.member,
+    required this.organization,
+    this.memberSession,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory MigrateSessionResponse.fromJson(Map<String, dynamic> json) {
+    return MigrateSessionResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      sessionToken: json['session_token'] as String,
+      sessionJwt: json['session_jwt'] as String,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      memberSession: json['member_session'] != null
+          ? Map<String, dynamic>.from(json['member_session'] as Map)
+          : null,
+      statusCode: json['status_code'] as int,
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'request_id': requestId,
+      'member_id': memberId,
+      'session_token': sessionToken,
+      'session_jwt': sessionJwt,
+      'member': member,
+      'organization': organization,
+      if (memberSession != null) 'member_session': memberSession,
       'status_code': statusCode,
     };
   }

@@ -211,6 +211,28 @@ class AuthService {
     return ValidateSessionResponse.fromJson(response);
   }
 
+  /// Retrieve active sessions for a member.
+  Future<GetSessionsResponse> getSession(GetSessionsRequest request) async {
+    final response = await _httpClient.get(
+      '/b2b/sessions',
+      request.toQueryParameters(),
+    );
+
+    return GetSessionsResponse.fromJson(response);
+  }
+
+  /// Authenticate a session token or session JWT.
+  Future<AuthenticateSessionResponse> authenticateSession(
+    AuthenticateSessionRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/sessions/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateSessionResponse.fromJson(response);
+  }
+
   /// Revoke a session by member session ID.
   Future<RevokeSessionResponse> revokeSession(String memberSessionId) async {
     return revokeSessionWithRequest(
@@ -246,6 +268,18 @@ class AuthService {
     );
 
     return ExchangeSessionResponse.fromJson(response);
+  }
+
+  /// Migrate a session from an external OIDC-compliant provider.
+  Future<MigrateSessionResponse> migrateSession(
+    MigrateSessionRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/sessions/migrate',
+      body: request.toJson(),
+    );
+
+    return MigrateSessionResponse.fromJson(response);
   }
 
   /// Get the JSON Web Key Set used to validate Stytch session JWTs.
