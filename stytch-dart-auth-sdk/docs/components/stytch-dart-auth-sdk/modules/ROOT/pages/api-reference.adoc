@@ -25,6 +25,16 @@ This page maps the public package entrypoint to the current source tree.
   `discoveryExpirationMinutes`.
 * `SendDiscoveryEmailResponse` exposes the Stytch `requestId` and `statusCode`.
 
+== InvitationService
+
+* `sendInviteEmail(SendInviteEmailRequest request)` sends a Stytch B2B invite
+  Email Magic Link through `/v1/b2b/magic_links/email/invite`.
+* `SendInviteEmailRequest` supports `organizationId`, `emailAddress`,
+  `inviteRedirectUrl`, `invitedByMemberId`, `name`, metadata, template, locale,
+  roles, and `inviteExpirationMinutes`.
+* `SendInviteEmailResponse` exposes the Stytch `requestId`, `memberId`, raw
+  `member`, raw `organization`, and `statusCode`.
+
 == Supporting Sources
 
 * Tests: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/test

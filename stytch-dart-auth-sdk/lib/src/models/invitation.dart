@@ -116,6 +116,160 @@ class SendInvitationResponse {
   }
 }
 
+/// Request model for sending an invite Email Magic Link.
+class SendInviteEmailRequest {
+  /// Organization identifier, slug, or external ID.
+  final String organizationId;
+
+  /// Email address of the member to invite.
+  final String emailAddress;
+
+  /// Redirect URL used after the invite magic link is clicked.
+  final String? inviteRedirectUrl;
+
+  /// Member ID of the member sending the invite.
+  final String? invitedByMemberId;
+
+  /// Optional invited member name.
+  final String? name;
+
+  /// Trusted metadata to attach to the invited member.
+  final Map<String, dynamic>? trustedMetadata;
+
+  /// Untrusted metadata to attach to the invited member.
+  final Map<String, dynamic>? untrustedMetadata;
+
+  /// Optional custom invite email template ID.
+  final String? inviteTemplateId;
+
+  /// Optional IETF BCP 47 locale such as `en`, `es`, `fr`, or `pt-br`.
+  final String? locale;
+
+  /// Roles to assign to the invited member.
+  final List<String>? roles;
+
+  /// Invite magic-link expiration in minutes.
+  final int? inviteExpirationMinutes;
+
+  /// SendInviteEmailRequest
+  SendInviteEmailRequest({
+    required this.organizationId,
+    required this.emailAddress,
+    this.inviteRedirectUrl,
+    this.invitedByMemberId,
+    this.name,
+    this.trustedMetadata,
+    this.untrustedMetadata,
+    this.inviteTemplateId,
+    this.locale,
+    this.roles,
+    this.inviteExpirationMinutes,
+  }) {
+    final trimmedOrganizationId = organizationId.trim();
+    final trimmedEmail = emailAddress.trim();
+    if (trimmedOrganizationId.isEmpty) {
+      throw ArgumentError('Organization ID cannot be empty.');
+    }
+    if (trimmedEmail.isEmpty) {
+      throw ArgumentError('Email address cannot be empty.');
+    }
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(trimmedEmail)) {
+      throw ArgumentError('Email address is invalid.');
+    }
+    if (inviteExpirationMinutes != null && inviteExpirationMinutes! < 0) {
+      throw ArgumentError('Invite expiration minutes cannot be negative.');
+    }
+  }
+
+  /// fromJson
+  factory SendInviteEmailRequest.fromJson(Map<String, dynamic> json) {
+    return SendInviteEmailRequest(
+      organizationId: json['organization_id'] as String,
+      emailAddress: json['email_address'] as String,
+      inviteRedirectUrl: json['invite_redirect_url'] as String?,
+      invitedByMemberId: json['invited_by_member_id'] as String?,
+      name: json['name'] as String?,
+      trustedMetadata: json['trusted_metadata'] as Map<String, dynamic>?,
+      untrustedMetadata: json['untrusted_metadata'] as Map<String, dynamic>?,
+      inviteTemplateId: json['invite_template_id'] as String?,
+      locale: json['locale'] as String?,
+      roles: json['roles'] != null
+          ? (json['roles'] as List<dynamic>)
+                .map((role) => role as String)
+                .toList()
+          : null,
+      inviteExpirationMinutes: json['invite_expiration_minutes'] as int?,
+    );
+  }
+
+  /// Converts the request to the Stytch API payload.
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'email_address': emailAddress.trim(),
+      if (inviteRedirectUrl != null) 'invite_redirect_url': inviteRedirectUrl,
+      if (invitedByMemberId != null) 'invited_by_member_id': invitedByMemberId,
+      if (name != null) 'name': name,
+      if (trustedMetadata != null) 'trusted_metadata': trustedMetadata,
+      if (untrustedMetadata != null) 'untrusted_metadata': untrustedMetadata,
+      if (inviteTemplateId != null) 'invite_template_id': inviteTemplateId,
+      if (locale != null) 'locale': locale,
+      if (roles != null) 'roles': roles,
+      if (inviteExpirationMinutes != null)
+        'invite_expiration_minutes': inviteExpirationMinutes,
+    };
+  }
+}
+
+/// Response model for sending an invite Email Magic Link.
+class SendInviteEmailResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Globally unique member ID for the invited member.
+  final String memberId;
+
+  /// Raw Stytch member object.
+  final Map<String, dynamic> member;
+
+  /// Raw Stytch organization object.
+  final Map<String, dynamic> organization;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// SendInviteEmailResponse
+  const SendInviteEmailResponse({
+    required this.requestId,
+    required this.memberId,
+    required this.member,
+    required this.organization,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory SendInviteEmailResponse.fromJson(Map<String, dynamic> json) {
+    return SendInviteEmailResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      organization: Map<String, dynamic>.from(json['organization'] as Map),
+      statusCode: json['status_code'] as int,
+    );
+  }
+
+  /// Converts the response to JSON.
+  Map<String, dynamic> toJson() {
+    return {
+      'request_id': requestId,
+      'member_id': memberId,
+      'member': member,
+      'organization': organization,
+      'status_code': statusCode,
+    };
+  }
+}
+
 /// Model for an invitation
 class Invitation {
   /// String

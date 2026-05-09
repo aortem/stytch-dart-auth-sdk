@@ -166,6 +166,7 @@ print('Status: ${response.statusCode}');
 
 ### InvitationService
 
+- `sendInviteEmail`
 - `sendInvitation`
 - `getInvitation`
 - `listInvitations`
@@ -174,6 +175,29 @@ print('Status: ${response.statusCode}');
 - `sendBulkInvitations`
 - `getPendingInvitationsForEmail`
 - `resendInvitation`
+
+### Invite Email Magic Link
+
+Use `sendInviteEmail` to send a Stytch B2B invite Email Magic Link to a new
+organization member. The method wraps Stytch's
+`POST /v1/b2b/magic_links/email/invite` endpoint.
+
+```dart
+final response = await stytch.invitation.sendInviteEmail(
+  SendInviteEmailRequest(
+    organizationId: 'organization-test-123',
+    emailAddress: 'new-member@example.com',
+    inviteRedirectUrl: 'https://example.com/invite/callback',
+    name: 'New Member',
+    roles: ['viewer'],
+    locale: 'en',
+  ),
+);
+
+print('Request ID: ${response.requestId}');
+print('Member ID: ${response.memberId}');
+print('Status: ${response.statusCode}');
+```
 
 ## Example App
 
