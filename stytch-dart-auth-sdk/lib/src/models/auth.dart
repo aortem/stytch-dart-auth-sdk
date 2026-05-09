@@ -649,6 +649,671 @@ class RevokeSessionResponse {
   }
 }
 
+bool _isValidEmail(String value) {
+  return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value.trim());
+}
+
+void _validateEmail(String value) {
+  if (value.trim().isEmpty) {
+    throw ArgumentError('Email address cannot be empty.');
+  }
+  if (!_isValidEmail(value)) {
+    throw ArgumentError('Email address is invalid.');
+  }
+}
+
+void _validateRequired(String value, String label) {
+  if (value.trim().isEmpty) {
+    throw ArgumentError('$label cannot be empty.');
+  }
+}
+
+/// Request model for sending a login or signup Email Magic Link.
+class SendLoginSignupEmailRequest {
+  /// Organization to send the Email Magic Link in.
+  final String organizationId;
+
+  /// Member email address.
+  final String emailAddress;
+
+  /// Login redirect URL.
+  final String? loginRedirectUrl;
+
+  /// Signup redirect URL.
+  final String? signupRedirectUrl;
+
+  /// PKCE code challenge.
+  final String? pkceCodeChallenge;
+
+  /// Login email template ID.
+  final String? loginTemplateId;
+
+  /// Signup email template ID.
+  final String? signupTemplateId;
+
+  /// Locale for localized email copy.
+  final String? locale;
+
+  /// Login magic-link expiration in minutes.
+  final int? loginExpirationMinutes;
+
+  /// Signup magic-link expiration in minutes.
+  final int? signupExpirationMinutes;
+
+  /// SendLoginSignupEmailRequest
+  SendLoginSignupEmailRequest({
+    required this.organizationId,
+    required this.emailAddress,
+    this.loginRedirectUrl,
+    this.signupRedirectUrl,
+    this.pkceCodeChallenge,
+    this.loginTemplateId,
+    this.signupTemplateId,
+    this.locale,
+    this.loginExpirationMinutes,
+    this.signupExpirationMinutes,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateEmail(emailAddress);
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'email_address': emailAddress.trim(),
+      if (loginRedirectUrl != null) 'login_redirect_url': loginRedirectUrl,
+      if (signupRedirectUrl != null) 'signup_redirect_url': signupRedirectUrl,
+      if (pkceCodeChallenge != null) 'pkce_code_challenge': pkceCodeChallenge,
+      if (loginTemplateId != null) 'login_template_id': loginTemplateId,
+      if (signupTemplateId != null) 'signup_template_id': signupTemplateId,
+      if (locale != null) 'locale': locale,
+      if (loginExpirationMinutes != null)
+        'login_expiration_minutes': loginExpirationMinutes,
+      if (signupExpirationMinutes != null)
+        'signup_expiration_minutes': signupExpirationMinutes,
+    };
+  }
+}
+
+/// Response model for sending a login or signup Email Magic Link.
+class SendLoginSignupEmailResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String memberId;
+
+  /// Whether Stytch created a member.
+  final bool memberCreated;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic> member;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// SendLoginSignupEmailResponse
+  const SendLoginSignupEmailResponse({
+    required this.requestId,
+    required this.memberId,
+    required this.memberCreated,
+    required this.member,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory SendLoginSignupEmailResponse.fromJson(Map<String, dynamic> json) {
+    return SendLoginSignupEmailResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      memberCreated: json['member_created'] as bool,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for authenticating an Email Magic Link.
+class AuthenticateMagicLinkRequest {
+  /// Email Magic Link token.
+  final String magicLinksToken;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// PKCE code verifier.
+  final String? pkceCodeVerifier;
+
+  /// Locale for localized secondary auth challenges.
+  final String? locale;
+
+  /// AuthenticateMagicLinkRequest
+  AuthenticateMagicLinkRequest({
+    required this.magicLinksToken,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.pkceCodeVerifier,
+    this.locale,
+  }) {
+    _validateRequired(magicLinksToken, 'Magic link token');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'magic_links_token': magicLinksToken.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (pkceCodeVerifier != null) 'pkce_code_verifier': pkceCodeVerifier,
+      if (locale != null) 'locale': locale,
+    };
+  }
+}
+
+/// Response model for organization auth endpoints returning a member session.
+class AuthenticateMagicLinkResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String memberId;
+
+  /// Organization ID returned by Stytch.
+  final String? organizationId;
+
+  /// Authentication method ID.
+  final String? methodId;
+
+  /// Full session token when authentication requirements are satisfied.
+  final String? sessionToken;
+
+  /// Session JWT when authentication requirements are satisfied.
+  final String? sessionJwt;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic>? member;
+
+  /// Organization payload returned by Stytch.
+  final Map<String, dynamic>? organization;
+
+  /// Member session payload returned by Stytch.
+  final Map<String, dynamic>? memberSession;
+
+  /// Whether the member is fully authenticated.
+  final bool memberAuthenticated;
+
+  /// Intermediate session token when more authentication is required.
+  final String? intermediateSessionToken;
+
+  /// Provider values returned by OAuth authenticate endpoints.
+  final Map<String, dynamic>? providerValues;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// AuthenticateMagicLinkResponse
+  const AuthenticateMagicLinkResponse({
+    required this.requestId,
+    required this.memberId,
+    this.organizationId,
+    this.methodId,
+    this.sessionToken,
+    this.sessionJwt,
+    this.member,
+    this.organization,
+    this.memberSession,
+    required this.memberAuthenticated,
+    this.intermediateSessionToken,
+    this.providerValues,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory AuthenticateMagicLinkResponse.fromJson(Map<String, dynamic> json) {
+    return AuthenticateMagicLinkResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      organizationId: json['organization_id'] as String?,
+      methodId: json['method_id'] as String?,
+      sessionToken: json['session_token'] as String?,
+      sessionJwt: json['session_jwt'] as String?,
+      member: json['member'] != null
+          ? Map<String, dynamic>.from(json['member'] as Map)
+          : null,
+      organization: json['organization'] != null
+          ? Map<String, dynamic>.from(json['organization'] as Map)
+          : null,
+      memberSession: json['member_session'] != null
+          ? Map<String, dynamic>.from(json['member_session'] as Map)
+          : null,
+      memberAuthenticated: json['member_authenticated'] as bool? ?? false,
+      intermediateSessionToken: json['intermediate_session_token'] as String?,
+      providerValues: json['provider_values'] != null
+          ? Map<String, dynamic>.from(json['provider_values'] as Map)
+          : null,
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for authenticating a discovery Email Magic Link.
+class AuthenticateDiscoveryMagicLinkRequest {
+  /// Discovery Email Magic Link token.
+  final String discoveryMagicLinksToken;
+
+  /// AuthenticateDiscoveryMagicLinkRequest
+  AuthenticateDiscoveryMagicLinkRequest({
+    required this.discoveryMagicLinksToken,
+  }) {
+    _validateRequired(discoveryMagicLinksToken, 'Discovery magic link token');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {'discovery_magic_links_token': discoveryMagicLinksToken.trim()};
+  }
+}
+
+/// Response model for Stytch discovery authentication endpoints.
+class AuthenticateDiscoveryResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Intermediate session token returned by Stytch.
+  final String intermediateSessionToken;
+
+  /// Authenticated email address.
+  final String emailAddress;
+
+  /// Discovered organizations returned by Stytch.
+  final List<Map<String, dynamic>> discoveredOrganizations;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// AuthenticateDiscoveryResponse
+  const AuthenticateDiscoveryResponse({
+    required this.requestId,
+    required this.intermediateSessionToken,
+    required this.emailAddress,
+    required this.discoveredOrganizations,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory AuthenticateDiscoveryResponse.fromJson(Map<String, dynamic> json) {
+    return AuthenticateDiscoveryResponse(
+      requestId: json['request_id'] as String,
+      intermediateSessionToken: json['intermediate_session_token'] as String,
+      emailAddress: json['email_address'] as String,
+      discoveredOrganizations:
+          (json['discovered_organizations'] as List<dynamic>)
+              .map((item) => Map<String, dynamic>.from(item as Map))
+              .toList(),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for sending a login or signup Email OTP.
+class SendLoginSignupEmailOtpRequest {
+  /// Organization to send the OTP in.
+  final String organizationId;
+
+  /// Member email address.
+  final String emailAddress;
+
+  /// Login email template ID.
+  final String? loginTemplateId;
+
+  /// Signup email template ID.
+  final String? signupTemplateId;
+
+  /// Locale for localized email copy.
+  final String? locale;
+
+  /// Login OTP expiration in minutes.
+  final int? loginExpirationMinutes;
+
+  /// Signup OTP expiration in minutes.
+  final int? signupExpirationMinutes;
+
+  /// SendLoginSignupEmailOtpRequest
+  SendLoginSignupEmailOtpRequest({
+    required this.organizationId,
+    required this.emailAddress,
+    this.loginTemplateId,
+    this.signupTemplateId,
+    this.locale,
+    this.loginExpirationMinutes,
+    this.signupExpirationMinutes,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateEmail(emailAddress);
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'email_address': emailAddress.trim(),
+      if (loginTemplateId != null) 'login_template_id': loginTemplateId,
+      if (signupTemplateId != null) 'signup_template_id': signupTemplateId,
+      if (locale != null) 'locale': locale,
+      if (loginExpirationMinutes != null)
+        'login_expiration_minutes': loginExpirationMinutes,
+      if (signupExpirationMinutes != null)
+        'signup_expiration_minutes': signupExpirationMinutes,
+    };
+  }
+}
+
+/// Response model for sending a login or signup Email OTP.
+class SendLoginSignupEmailOtpResponse extends SendLoginSignupEmailResponse {
+  /// SendLoginSignupEmailOtpResponse
+  const SendLoginSignupEmailOtpResponse({
+    required super.requestId,
+    required super.memberId,
+    required super.memberCreated,
+    required super.member,
+    required super.statusCode,
+  });
+
+  /// fromJson
+  factory SendLoginSignupEmailOtpResponse.fromJson(Map<String, dynamic> json) {
+    return SendLoginSignupEmailOtpResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      memberCreated: json['member_created'] as bool,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for authenticating an Email OTP.
+class AuthenticateEmailOtpRequest {
+  /// Organization containing the member.
+  final String organizationId;
+
+  /// Member email address.
+  final String emailAddress;
+
+  /// OTP code.
+  final String code;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Session token for step-up or MFA contexts.
+  final String? sessionToken;
+
+  /// Session JWT for step-up or MFA contexts.
+  final String? sessionJwt;
+
+  /// Intermediate session token for MFA contexts.
+  final String? intermediateSessionToken;
+
+  /// AuthenticateEmailOtpRequest
+  AuthenticateEmailOtpRequest({
+    required this.organizationId,
+    required this.emailAddress,
+    required this.code,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.sessionToken,
+    this.sessionJwt,
+    this.intermediateSessionToken,
+  }) {
+    _validateRequired(organizationId, 'Organization ID');
+    _validateEmail(emailAddress);
+    _validateRequired(code, 'OTP code');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId.trim(),
+      'email_address': emailAddress.trim(),
+      'code': code.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (sessionToken != null) 'session_token': sessionToken,
+      if (sessionJwt != null) 'session_jwt': sessionJwt,
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken,
+    };
+  }
+}
+
+/// Response model for authenticating an Email OTP.
+class AuthenticateEmailOtpResponse extends AuthenticateMagicLinkResponse {
+  /// AuthenticateEmailOtpResponse
+  const AuthenticateEmailOtpResponse({
+    required super.requestId,
+    required super.memberId,
+    super.organizationId,
+    super.methodId,
+    super.sessionToken,
+    super.sessionJwt,
+    super.member,
+    super.organization,
+    super.memberSession,
+    required super.memberAuthenticated,
+    super.intermediateSessionToken,
+    required super.statusCode,
+  });
+
+  /// fromJson
+  factory AuthenticateEmailOtpResponse.fromJson(Map<String, dynamic> json) {
+    final response = AuthenticateMagicLinkResponse.fromJson(json);
+    return AuthenticateEmailOtpResponse(
+      requestId: response.requestId,
+      memberId: response.memberId,
+      organizationId: response.organizationId,
+      methodId: response.methodId,
+      sessionToken: response.sessionToken,
+      sessionJwt: response.sessionJwt,
+      member: response.member,
+      organization: response.organization,
+      memberSession: response.memberSession,
+      memberAuthenticated: response.memberAuthenticated,
+      intermediateSessionToken: response.intermediateSessionToken,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+/// Request model for sending a discovery Email OTP.
+class SendDiscoveryEmailOtpRequest {
+  /// Email address to start discovery for.
+  final String emailAddress;
+
+  /// Login email template ID.
+  final String? loginTemplateId;
+
+  /// Locale for localized email copy.
+  final String? locale;
+
+  /// Discovery OTP expiration in minutes.
+  final int? discoveryExpirationMinutes;
+
+  /// SendDiscoveryEmailOtpRequest
+  SendDiscoveryEmailOtpRequest({
+    required this.emailAddress,
+    this.loginTemplateId,
+    this.locale,
+    this.discoveryExpirationMinutes,
+  }) {
+    _validateEmail(emailAddress);
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'email_address': emailAddress.trim(),
+      if (loginTemplateId != null) 'login_template_id': loginTemplateId,
+      if (locale != null) 'locale': locale,
+      if (discoveryExpirationMinutes != null)
+        'discovery_expiration_minutes': discoveryExpirationMinutes,
+    };
+  }
+}
+
+/// Response model for sending a discovery Email OTP.
+class SendDiscoveryEmailOtpResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// SendDiscoveryEmailOtpResponse
+  const SendDiscoveryEmailOtpResponse({
+    required this.requestId,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory SendDiscoveryEmailOtpResponse.fromJson(Map<String, dynamic> json) {
+    return SendDiscoveryEmailOtpResponse(
+      requestId: json['request_id'] as String,
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Request model for authenticating a discovery Email OTP.
+class AuthenticateDiscoveryEmailOtpRequest {
+  /// Email address to authenticate.
+  final String emailAddress;
+
+  /// OTP code.
+  final String code;
+
+  /// AuthenticateDiscoveryEmailOtpRequest
+  AuthenticateDiscoveryEmailOtpRequest({
+    required this.emailAddress,
+    required this.code,
+  }) {
+    _validateEmail(emailAddress);
+    _validateRequired(code, 'OTP code');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {'email_address': emailAddress.trim(), 'code': code.trim()};
+  }
+}
+
+/// Request model for starting an OAuth discovery flow.
+class OAuthDiscoveryStartRequest {
+  /// Stytch public token.
+  final String publicToken;
+
+  /// Redirect URL after provider authentication.
+  final String? discoveryRedirectUrl;
+
+  /// Space-separated provider scopes.
+  final String? customScopes;
+
+  /// PKCE code challenge.
+  final String? pkceCodeChallenge;
+
+  /// Provider-specific parameters, without the `provider_` prefix.
+  final Map<String, String>? providerParams;
+
+  /// OAuthDiscoveryStartRequest
+  OAuthDiscoveryStartRequest({
+    required this.publicToken,
+    this.discoveryRedirectUrl,
+    this.customScopes,
+    this.pkceCodeChallenge,
+    this.providerParams,
+  }) {
+    _validateRequired(publicToken, 'Public token');
+  }
+
+  /// String>
+  Map<String, String> toQueryParameters() {
+    return {
+      'public_token': publicToken.trim(),
+      if (discoveryRedirectUrl != null)
+        'discovery_redirect_url': discoveryRedirectUrl!,
+      if (customScopes != null) 'custom_scopes': customScopes!,
+      if (pkceCodeChallenge != null) 'pkce_code_challenge': pkceCodeChallenge!,
+      for (final entry
+          in providerParams?.entries ?? <MapEntry<String, String>>[])
+        'provider_${entry.key}': entry.value,
+    };
+  }
+}
+
+/// Response model for starting an OAuth discovery flow.
+class OAuthDiscoveryStartResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Provider redirect URL.
+  final String redirectUrl;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// OAuthDiscoveryStartResponse
+  const OAuthDiscoveryStartResponse({
+    required this.requestId,
+    required this.redirectUrl,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory OAuthDiscoveryStartResponse.fromJson(Map<String, dynamic> json) {
+    return OAuthDiscoveryStartResponse(
+      requestId: json['request_id'] as String,
+      redirectUrl: json['redirect_url'] as String,
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
+/// Response model for Stytch JWKS.
+class JwksResponse {
+  /// JSON Web Keys returned by Stytch.
+  final List<Map<String, dynamic>> keys;
+
+  /// Globally unique request ID returned by Stytch.
+  final String? requestId;
+
+  /// HTTP status code returned by Stytch.
+  final int? statusCode;
+
+  /// JwksResponse
+  const JwksResponse({required this.keys, this.requestId, this.statusCode});
+
+  /// fromJson
+  factory JwksResponse.fromJson(Map<String, dynamic> json) {
+    return JwksResponse(
+      keys: (json['keys'] as List<dynamic>)
+          .map((key) => Map<String, dynamic>.from(key as Map))
+          .toList(),
+      requestId: json['request_id'] as String?,
+      statusCode: json['status_code'] as int?,
+    );
+  }
+}
+
 /// Request model for sending a discovery Email Magic Link.
 class SendDiscoveryEmailRequest {
   /// Email address of the member starting discovery.

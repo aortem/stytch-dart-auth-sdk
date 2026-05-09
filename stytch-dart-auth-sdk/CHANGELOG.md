@@ -10,6 +10,10 @@
 * Added typed organization search and delete responses with pagination metadata coverage.
 * Added `MemberService` with typed create, get, update, reactivate, search, retired-email unlink, delete, password delete, MFA phone delete, and TOTP delete coverage for Stytch B2B organization members.
 * Added `RbacService.getRbacPolicy` with typed RBAC policy response coverage.
+* Added typed Email Magic Link login/signup, authenticate, and discovery authenticate coverage.
+* Added typed Email OTP login/signup, authenticate, discovery send, and discovery authenticate coverage.
+* Added Google and Microsoft OAuth discovery start helpers.
+* Added `AuthService.getJWKS` for Stytch session JWT key retrieval.
 
 ### Changed
 * Updated the package version to `0.0.2`.

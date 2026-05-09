@@ -88,6 +88,244 @@ void main() {
       expect(response.requestId, equals('request-123'));
       expect(response.statusCode, equals(200));
     });
+
+    test('sendLoginSignupEmail posts current Stytch payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.sendLoginSignupEmail(
+        SendLoginSignupEmailRequest(
+          organizationId: 'organization-test-123',
+          emailAddress: 'member@example.com',
+          loginRedirectUrl: 'https://example.com/login',
+          signupRedirectUrl: 'https://example.com/signup',
+          pkceCodeChallenge: 'challenge',
+          loginTemplateId: 'login-template',
+          signupTemplateId: 'signup-template',
+          locale: 'en',
+          loginExpirationMinutes: 60,
+          signupExpirationMinutes: 60,
+        ),
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals('/b2b/magic_links/email/login_or_signup'),
+      );
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'email_address': 'member@example.com',
+        'login_redirect_url': 'https://example.com/login',
+        'signup_redirect_url': 'https://example.com/signup',
+        'pkce_code_challenge': 'challenge',
+        'login_template_id': 'login-template',
+        'signup_template_id': 'signup-template',
+        'locale': 'en',
+        'login_expiration_minutes': 60,
+        'signup_expiration_minutes': 60,
+      });
+      expect(response.memberId, equals('member-123'));
+      expect(response.memberCreated, isTrue);
+    });
+
+    test('authenticateMagicLink posts token payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.authenticateMagicLink(
+        AuthenticateMagicLinkRequest(
+          magicLinksToken: 'magic-link-token',
+          sessionDurationMinutes: 60,
+          sessionCustomClaims: {'tier': 'gold'},
+          pkceCodeVerifier: 'verifier',
+          locale: 'en',
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/magic_links/authenticate'));
+      expect(httpClient.lastBody, {
+        'magic_links_token': 'magic-link-token',
+        'session_duration_minutes': 60,
+        'session_custom_claims': {'tier': 'gold'},
+        'pkce_code_verifier': 'verifier',
+        'locale': 'en',
+      });
+      expect(response.memberAuthenticated, isTrue);
+      expect(response.sessionToken, equals('session-token'));
+    });
+
+    test('authenticateDiscoveryMagicLink posts token payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.authenticateDiscoveryMagicLink(
+        AuthenticateDiscoveryMagicLinkRequest(
+          discoveryMagicLinksToken: 'discovery-token',
+        ),
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals('/b2b/magic_links/discovery/authenticate'),
+      );
+      expect(httpClient.lastBody, {
+        'discovery_magic_links_token': 'discovery-token',
+      });
+      expect(response.intermediateSessionToken, equals('intermediate-token'));
+      expect(response.discoveredOrganizations, hasLength(1));
+    });
+
+    test('sendLoginSignupEmailOtp posts current Stytch payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.sendLoginSignupEmailOtp(
+        SendLoginSignupEmailOtpRequest(
+          organizationId: 'organization-test-123',
+          emailAddress: 'member@example.com',
+          loginTemplateId: 'login-template',
+          signupTemplateId: 'signup-template',
+          locale: 'en',
+          loginExpirationMinutes: 10,
+          signupExpirationMinutes: 10,
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/otps/email/login_or_signup'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'email_address': 'member@example.com',
+        'login_template_id': 'login-template',
+        'signup_template_id': 'signup-template',
+        'locale': 'en',
+        'login_expiration_minutes': 10,
+        'signup_expiration_minutes': 10,
+      });
+      expect(response.memberId, equals('member-123'));
+    });
+
+    test('authenticateEmailOtp posts code payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.authenticateEmailOtp(
+        AuthenticateEmailOtpRequest(
+          organizationId: 'organization-test-123',
+          emailAddress: 'member@example.com',
+          code: '123456',
+          sessionDurationMinutes: 60,
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/otps/email/authenticate'));
+      expect(httpClient.lastBody, {
+        'organization_id': 'organization-test-123',
+        'email_address': 'member@example.com',
+        'code': '123456',
+        'session_duration_minutes': 60,
+      });
+      expect(response.memberAuthenticated, isTrue);
+    });
+
+    test('sendDiscoveryEmailOtp posts discovery OTP payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.sendDiscoveryEmailOtp(
+        SendDiscoveryEmailOtpRequest(
+          emailAddress: 'prospect@example.com',
+          loginTemplateId: 'login-template',
+          locale: 'en',
+          discoveryExpirationMinutes: 10,
+        ),
+      );
+
+      expect(httpClient.lastPath, equals('/b2b/otps/email/discovery/send'));
+      expect(httpClient.lastBody, {
+        'email_address': 'prospect@example.com',
+        'login_template_id': 'login-template',
+        'locale': 'en',
+        'discovery_expiration_minutes': 10,
+      });
+      expect(response.statusCode, equals(200));
+    });
+
+    test(
+      'authenticateDiscoveryEmailOtp posts discovery code payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.authenticateDiscoveryEmailOtp(
+          AuthenticateDiscoveryEmailOtpRequest(
+            emailAddress: 'prospect@example.com',
+            code: '123456',
+          ),
+        );
+
+        expect(
+          httpClient.lastPath,
+          equals('/b2b/otps/email/discovery/authenticate'),
+        );
+        expect(httpClient.lastBody, {
+          'email_address': 'prospect@example.com',
+          'code': '123456',
+        });
+        expect(response.emailAddress, equals('prospect@example.com'));
+      },
+    );
+
+    test('oauth discovery start builds provider query parameters', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.oauthGoogleDiscoveryStart(
+        OAuthDiscoveryStartRequest(
+          publicToken: 'public-token',
+          discoveryRedirectUrl: 'https://example.com/authenticate',
+          customScopes: 'openid email profile',
+          pkceCodeChallenge: 'challenge',
+          providerParams: {'login_hint': 'member@example.com'},
+        ),
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals('/b2b/public/oauth/google/discovery/start'),
+      );
+      expect(httpClient.lastQueryParameters, {
+        'public_token': 'public-token',
+        'discovery_redirect_url': 'https://example.com/authenticate',
+        'custom_scopes': 'openid email profile',
+        'pkce_code_challenge': 'challenge',
+        'provider_login_hint': 'member@example.com',
+      });
+      expect(response.redirectUrl, startsWith('https://accounts.google.com'));
+    });
+
+    test('oauthMicrosoftDiscoveryStart uses Microsoft provider path', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      await service.oauthMicrosoftDiscoveryStart(
+        OAuthDiscoveryStartRequest(publicToken: 'public-token'),
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals('/b2b/public/oauth/microsoft/discovery/start'),
+      );
+    });
+
+    test('getJWKS gets project JWKS', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.getJWKS();
+
+      expect(httpClient.lastPath, equals('/sessions/jwks/project-test-123'));
+      expect(response.keys.single['kid'], equals('key-1'));
+    });
   });
 }
 
@@ -103,6 +341,40 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
 
   String? lastPath;
   Map<String, dynamic>? lastBody;
+  Map<String, String>? lastQueryParameters;
+
+  @override
+  Future<Map<String, dynamic>> get(
+    String path, [
+    Map<String, String>? queryParameters,
+  ]) async {
+    lastPath = path;
+    lastQueryParameters = queryParameters;
+    if (path.contains('/oauth/google/')) {
+      return {
+        'request_id': 'request-123',
+        'redirect_url': 'https://accounts.google.com/oauth',
+        'status_code': 302,
+      };
+    }
+    if (path.contains('/oauth/microsoft/')) {
+      return {
+        'request_id': 'request-123',
+        'redirect_url': 'https://login.microsoftonline.com/oauth',
+        'status_code': 302,
+      };
+    }
+    if (path == '/sessions/jwks/project-test-123') {
+      return {
+        'request_id': 'request-123',
+        'status_code': 200,
+        'keys': [
+          {'kid': 'key-1', 'kty': 'RSA', 'alg': 'RS256'},
+        ],
+      };
+    }
+    return {'request_id': 'request-123', 'status_code': 200};
+  }
 
   @override
   Future<Map<String, dynamic>> post(
@@ -124,6 +396,53 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
         'organization': {'organization_id': 'organization-test-123'},
         'member_authenticated': true,
         'member_session': {'member_session_id': 'session-test-123'},
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/magic_links/email/login_or_signup' ||
+        path == '/b2b/otps/email/login_or_signup') {
+      return {
+        'request_id': 'request-123',
+        'member_id': 'member-123',
+        'member_created': true,
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/magic_links/authenticate' ||
+        path == '/b2b/otps/email/authenticate') {
+      return {
+        'request_id': 'request-123',
+        'member_id': 'member-123',
+        'organization_id': 'organization-test-123',
+        'method_id': 'email-test-123',
+        'session_token': 'session-token',
+        'session_jwt': 'session-jwt',
+        'member_authenticated': true,
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'organization': {'organization_id': 'organization-test-123'},
+        'member_session': {'member_session_id': 'member-session-123'},
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/magic_links/discovery/authenticate' ||
+        path == '/b2b/otps/email/discovery/authenticate') {
+      return {
+        'request_id': 'request-123',
+        'intermediate_session_token': 'intermediate-token',
+        'email_address': body?['email_address'] ?? 'prospect@example.com',
+        'discovered_organizations': [
+          {
+            'organization': {'organization_id': 'organization-test-123'},
+            'membership': {'type': 'active_member'},
+          },
+        ],
         'status_code': 200,
       };
     }

@@ -53,6 +53,116 @@ class AuthService {
     return SendDiscoveryEmailResponse.fromJson(response);
   }
 
+  /// Send a login or signup Email Magic Link to an organization member.
+  Future<SendLoginSignupEmailResponse> sendLoginSignupEmail(
+    SendLoginSignupEmailRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/magic_links/email/login_or_signup',
+      body: request.toJson(),
+    );
+
+    return SendLoginSignupEmailResponse.fromJson(response);
+  }
+
+  /// Authenticate an organization Email Magic Link token.
+  Future<AuthenticateMagicLinkResponse> authenticateMagicLink(
+    AuthenticateMagicLinkRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/magic_links/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateMagicLinkResponse.fromJson(response);
+  }
+
+  /// Authenticate a discovery Email Magic Link token.
+  Future<AuthenticateDiscoveryResponse> authenticateDiscoveryMagicLink(
+    AuthenticateDiscoveryMagicLinkRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/magic_links/discovery/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateDiscoveryResponse.fromJson(response);
+  }
+
+  /// Send a login or signup Email OTP to an organization member.
+  Future<SendLoginSignupEmailOtpResponse> sendLoginSignupEmailOtp(
+    SendLoginSignupEmailOtpRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/otps/email/login_or_signup',
+      body: request.toJson(),
+    );
+
+    return SendLoginSignupEmailOtpResponse.fromJson(response);
+  }
+
+  /// Authenticate an organization Email OTP.
+  Future<AuthenticateEmailOtpResponse> authenticateEmailOtp(
+    AuthenticateEmailOtpRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/otps/email/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateEmailOtpResponse.fromJson(response);
+  }
+
+  /// Send a discovery Email OTP.
+  Future<SendDiscoveryEmailOtpResponse> sendDiscoveryEmailOtp(
+    SendDiscoveryEmailOtpRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/otps/email/discovery/send',
+      body: request.toJson(),
+    );
+
+    return SendDiscoveryEmailOtpResponse.fromJson(response);
+  }
+
+  /// Authenticate a discovery Email OTP.
+  Future<AuthenticateDiscoveryResponse> authenticateDiscoveryEmailOtp(
+    AuthenticateDiscoveryEmailOtpRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/otps/email/discovery/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateDiscoveryResponse.fromJson(response);
+  }
+
+  /// Start a Google OAuth discovery flow.
+  Future<OAuthDiscoveryStartResponse> oauthGoogleDiscoveryStart(
+    OAuthDiscoveryStartRequest request,
+  ) async {
+    return _oauthDiscoveryStart('google', request);
+  }
+
+  /// Start a Microsoft OAuth discovery flow.
+  Future<OAuthDiscoveryStartResponse> oauthMicrosoftDiscoveryStart(
+    OAuthDiscoveryStartRequest request,
+  ) async {
+    return _oauthDiscoveryStart('microsoft', request);
+  }
+
+  Future<OAuthDiscoveryStartResponse> _oauthDiscoveryStart(
+    String provider,
+    OAuthDiscoveryStartRequest request,
+  ) async {
+    final response = await _httpClient.get(
+      '/b2b/public/oauth/$provider/discovery/start',
+      request.toQueryParameters(),
+    );
+
+    return OAuthDiscoveryStartResponse.fromJson(response);
+  }
+
   /// Start MFA process
   Future<MfaResponse> startMfa(MfaRequest request) async {
     /// response
@@ -136,5 +246,14 @@ class AuthService {
     );
 
     return ExchangeSessionResponse.fromJson(response);
+  }
+
+  /// Get the JSON Web Key Set used to validate Stytch session JWTs.
+  Future<JwksResponse> getJWKS() async {
+    final response = await _httpClient.get(
+      '/sessions/jwks/${_httpClient.config.projectId}',
+    );
+
+    return JwksResponse.fromJson(response);
   }
 }

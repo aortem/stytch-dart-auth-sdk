@@ -108,6 +108,15 @@ Future<void> main() async {
 - `loginWithEmailPassword`
 - `loginWithSso`
 - `sendDiscoveryEmail`
+- `sendLoginSignupEmail`
+- `authenticateMagicLink`
+- `authenticateDiscoveryMagicLink`
+- `sendLoginSignupEmailOtp`
+- `authenticateEmailOtp`
+- `sendDiscoveryEmailOtp`
+- `authenticateDiscoveryEmailOtp`
+- `oauthGoogleDiscoveryStart`
+- `oauthMicrosoftDiscoveryStart`
 - `startMfa`
 - `completeMfa`
 - `createSession`
@@ -116,12 +125,84 @@ Future<void> main() async {
 - `revokeSessionWithRequest`
 - `revokeAllUserSessions`
 - `exchangeSession`
+- `getJWKS`
 
 `exchangeSession` wraps Stytch's `POST /v1/b2b/sessions/exchange` endpoint
 with `ExchangeSessionRequest` and `ExchangeSessionResponse`.
 `revokeSession` revokes by member session ID through
 `POST /v1/b2b/sessions/revoke`; use `revokeSessionWithRequest` to revoke by
 session token, session JWT, or all sessions for a member.
+`getJWKS` wraps `GET /v1/sessions/jwks/{project_id}` for validating Stytch
+session JWTs.
+
+### Email Magic Links
+
+Use `sendLoginSignupEmail` for organization-scoped login/signup links and
+`authenticateMagicLink` to exchange the link token for a member session.
+Discovery links continue to use `sendDiscoveryEmail` and
+`authenticateDiscoveryMagicLink`.
+
+```dart
+await stytch.auth.sendLoginSignupEmail(
+  SendLoginSignupEmailRequest(
+    organizationId: 'organization-test-123',
+    emailAddress: 'member@example.com',
+    loginRedirectUrl: 'https://example.com/login',
+    signupRedirectUrl: 'https://example.com/signup',
+  ),
+);
+
+final authenticated = await stytch.auth.authenticateMagicLink(
+  AuthenticateMagicLinkRequest(
+    magicLinksToken: 'token-from-redirect',
+    sessionDurationMinutes: 60,
+  ),
+);
+
+print('Member authenticated: ${authenticated.memberAuthenticated}');
+```
+
+### Email OTPs
+
+Use `sendLoginSignupEmailOtp` and `authenticateEmailOtp` for organization
+login/signup OTPs. Use `sendDiscoveryEmailOtp` and
+`authenticateDiscoveryEmailOtp` for discovery flows.
+
+```dart
+await stytch.auth.sendLoginSignupEmailOtp(
+  SendLoginSignupEmailOtpRequest(
+    organizationId: 'organization-test-123',
+    emailAddress: 'member@example.com',
+  ),
+);
+
+final otp = await stytch.auth.authenticateEmailOtp(
+  AuthenticateEmailOtpRequest(
+    organizationId: 'organization-test-123',
+    emailAddress: 'member@example.com',
+    code: '123456',
+    sessionDurationMinutes: 60,
+  ),
+);
+
+print('Member authenticated: ${otp.memberAuthenticated}');
+```
+
+### OAuth Discovery
+
+`oauthGoogleDiscoveryStart` and `oauthMicrosoftDiscoveryStart` wrap Stytch's
+public OAuth discovery start endpoints and return the provider redirect URL.
+
+```dart
+final start = await stytch.auth.oauthGoogleDiscoveryStart(
+  OAuthDiscoveryStartRequest(
+    publicToken: 'public-token-test-...',
+    discoveryRedirectUrl: 'https://example.com/authenticate',
+  ),
+);
+
+print('Redirect to: ${start.redirectUrl}');
+```
 
 ### Discovery Email Magic Link
 
