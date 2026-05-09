@@ -722,6 +722,110 @@ class ExchangeSessionResponse {
   }
 }
 
+/// Request model for authenticating a B2B impersonation token.
+class AuthenticateImpersonationTokenRequest {
+  /// Impersonation token generated from the Stytch dashboard.
+  final String impersonationToken;
+
+  /// AuthenticateImpersonationTokenRequest
+  AuthenticateImpersonationTokenRequest({required this.impersonationToken}) {
+    _validateRequired(impersonationToken, 'Impersonation token');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {'impersonation_token': impersonationToken.trim()};
+  }
+}
+
+/// Response model for authenticating a B2B impersonation token.
+class AuthenticateImpersonationTokenResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Member ID returned by Stytch.
+  final String memberId;
+
+  /// Organization ID returned by Stytch.
+  final String organizationId;
+
+  /// Member payload returned by Stytch.
+  final Map<String, dynamic> member;
+
+  /// Session token returned by Stytch.
+  final String? sessionToken;
+
+  /// Session JWT returned by Stytch.
+  final String? sessionJwt;
+
+  /// Organization payload returned by Stytch.
+  final Map<String, dynamic>? organization;
+
+  /// Member session payload returned by Stytch.
+  final Map<String, dynamic>? memberSession;
+
+  /// Whether the member is fully authenticated.
+  final bool memberAuthenticated;
+
+  /// Intermediate session token when MFA is required.
+  final String? intermediateSessionToken;
+
+  /// MFA requirement payload.
+  final Map<String, dynamic>? mfaRequired;
+
+  /// Primary-auth requirement payload.
+  final Map<String, dynamic>? primaryRequired;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// AuthenticateImpersonationTokenResponse
+  const AuthenticateImpersonationTokenResponse({
+    required this.requestId,
+    required this.memberId,
+    required this.organizationId,
+    required this.member,
+    this.sessionToken,
+    this.sessionJwt,
+    this.organization,
+    this.memberSession,
+    required this.memberAuthenticated,
+    this.intermediateSessionToken,
+    this.mfaRequired,
+    this.primaryRequired,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory AuthenticateImpersonationTokenResponse.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return AuthenticateImpersonationTokenResponse(
+      requestId: json['request_id'] as String,
+      memberId: json['member_id'] as String,
+      organizationId: json['organization_id'] as String,
+      member: Map<String, dynamic>.from(json['member'] as Map),
+      sessionToken: json['session_token'] as String?,
+      sessionJwt: json['session_jwt'] as String?,
+      organization: json['organization'] != null
+          ? Map<String, dynamic>.from(json['organization'] as Map)
+          : null,
+      memberSession: json['member_session'] != null
+          ? Map<String, dynamic>.from(json['member_session'] as Map)
+          : null,
+      memberAuthenticated: json['member_authenticated'] as bool? ?? false,
+      intermediateSessionToken: json['intermediate_session_token'] as String?,
+      mfaRequired: json['mfa_required'] != null
+          ? Map<String, dynamic>.from(json['mfa_required'] as Map)
+          : null,
+      primaryRequired: json['primary_required'] != null
+          ? Map<String, dynamic>.from(json['primary_required'] as Map)
+          : null,
+      statusCode: json['status_code'] as int,
+    );
+  }
+}
+
 /// Request model for migrating an external OIDC session.
 class MigrateSessionRequest {
   /// External session token for Stytch to pass to the configured UserInfo endpoint.

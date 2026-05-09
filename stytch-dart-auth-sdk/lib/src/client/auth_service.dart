@@ -270,6 +270,18 @@ class AuthService {
     return ExchangeSessionResponse.fromJson(response);
   }
 
+  /// Authenticate a B2B impersonation token.
+  Future<AuthenticateImpersonationTokenResponse> authenticateImpersonationToken(
+    AuthenticateImpersonationTokenRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/impersonation/authenticate',
+      body: request.toJson(),
+    );
+
+    return AuthenticateImpersonationTokenResponse.fromJson(response);
+  }
+
   /// Migrate a session from an external OIDC-compliant provider.
   Future<MigrateSessionResponse> migrateSession(
     MigrateSessionRequest request,

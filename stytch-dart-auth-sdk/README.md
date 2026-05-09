@@ -10,7 +10,8 @@ Implemented and exported from `lib/stytch_dart_auth_sdk.dart`:
 
 - `StytchAuth` main entrypoint.
 - Service clients: `AuthService`, `UserService`, `OrganizationService`,
-  `InvitationService`, `MemberService`, `RbacService`, `SsoService`.
+  `InvitationService`, `MemberService`, `M2mService`, `RbacService`,
+  `SsoService`.
 - Typed request/response models under `lib/src/models/`.
 - Error model and exception mapping (`StytchException`, `StytchAuthException`, etc).
 - Firebase-style compatibility helpers under `lib/src/auth/` (primarily for the Flutter example app).
@@ -127,6 +128,7 @@ Future<void> main() async {
 - `revokeSessionWithRequest`
 - `revokeAllUserSessions`
 - `exchangeSession`
+- `authenticateImpersonationToken`
 - `migrateSession`
 - `getJWKS`
 
@@ -348,6 +350,20 @@ print('Matched members: ${search.members.length}');
 - `getRbacPolicy`
 
 `getRbacPolicy` wraps Stytch's `GET /v1/b2b/rbac/policy` endpoint.
+
+### M2mService
+
+- `createM2mClient`
+- `getM2mClient`
+- `searchM2mClients`
+- `updateM2mClient`
+- `deleteM2mClient`
+- `m2mRotateSecretStart`
+- `m2mRotateSecret`
+- `m2mRotateSecretCancel`
+
+M2M methods wrap Stytch's current `/v1/m2m/clients` client management and
+secret rotation endpoints.
 
 ### SsoService
 

@@ -133,6 +133,32 @@ void main() {
       expect(response.statusCode, equals(200));
     });
 
+    test(
+      'authenticateImpersonationToken posts current Stytch payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.authenticateImpersonationToken(
+          AuthenticateImpersonationTokenRequest(
+            impersonationToken: 'impersonation-token',
+          ),
+        );
+
+        expect(httpClient.lastPath, equals('/b2b/impersonation/authenticate'));
+        expect(httpClient.lastBody, {
+          'impersonation_token': 'impersonation-token',
+        });
+        expect(response.memberId, equals('member-123'));
+        expect(response.organizationId, equals('organization-test-123'));
+        expect(response.memberAuthenticated, isTrue);
+        expect(
+          response.memberSession?['member_session_id'],
+          'session-test-123',
+        );
+      },
+    );
+
     test('revokeSession posts to the Stytch revoke endpoint', () async {
       final httpClient = _RecordingStytchHttpClient();
       final service = AuthService(httpClient);
@@ -537,6 +563,23 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
         },
         'organization': {'organization_id': 'organization-test-123'},
         'member_session': {'member_session_id': 'session-test-123'},
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/impersonation/authenticate') {
+      return {
+        'request_id': 'request-123',
+        'member_id': 'member-123',
+        'organization_id': 'organization-test-123',
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'member@example.com',
+        },
+        'session_token': 'session-token',
+        'session_jwt': 'session-jwt',
+        'organization': {'organization_id': 'organization-test-123'},
+        'member_session': {'member_session_id': 'session-test-123'},
+        'member_authenticated': true,
         'status_code': 200,
       };
     }

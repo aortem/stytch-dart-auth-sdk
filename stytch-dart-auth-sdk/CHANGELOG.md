@@ -16,6 +16,8 @@
 * Added `AuthService.getJWKS` for Stytch session JWT key retrieval.
 * Added typed get, authenticate, and migrate session helpers with focused B2B endpoint routing coverage.
 * Added `SsoService` with SAML, OIDC, External, and shared SSO endpoint coverage.
+* Added `M2mService` client management and secret rotation helpers.
+* Added `AuthService.authenticateImpersonationToken` for Stytch B2B impersonation sessions.
 
 ### Changed
 * Updated the package version to `0.0.2`.
