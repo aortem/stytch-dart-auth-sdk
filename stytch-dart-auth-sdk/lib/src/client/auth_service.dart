@@ -137,6 +137,42 @@ class AuthService {
     return AuthenticateDiscoveryResponse.fromJson(response);
   }
 
+  /// Create a new organization and member through the discovery flow.
+  Future<ExchangeSessionResponse> createOrganizationViaDiscovery(
+    CreateOrganizationViaDiscoveryRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/discovery/organizations/create',
+      body: request.toJson(),
+    );
+
+    return ExchangeSessionResponse.fromJson(response);
+  }
+
+  /// List organizations connected to a session or intermediate session.
+  Future<ListDiscoveredOrganizationsResponse> listDiscoveredOrganizations(
+    ListDiscoveredOrganizationsRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/discovery/organizations',
+      body: request.toJson(),
+    );
+
+    return ListDiscoveredOrganizationsResponse.fromJson(response);
+  }
+
+  /// Exchange an intermediate session into a target organization session.
+  Future<ExchangeSessionResponse> exchangeIntermediateSession(
+    ExchangeIntermediateSessionRequest request,
+  ) async {
+    final response = await _httpClient.post(
+      '/b2b/discovery/intermediate_sessions/exchange',
+      body: request.toJson(),
+    );
+
+    return ExchangeSessionResponse.fromJson(response);
+  }
+
   /// Start a Google OAuth discovery flow.
   Future<OAuthDiscoveryStartResponse> oauthGoogleDiscoveryStart(
     OAuthDiscoveryStartRequest request,

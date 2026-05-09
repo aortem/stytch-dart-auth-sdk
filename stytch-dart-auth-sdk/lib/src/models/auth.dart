@@ -1326,6 +1326,295 @@ class AuthenticateDiscoveryResponse {
   }
 }
 
+/// Request model for creating an organization through discovery.
+class CreateOrganizationViaDiscoveryRequest {
+  /// Intermediate session token from a discovery authentication flow.
+  final String intermediateSessionToken;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Organization display name.
+  final String? organizationName;
+
+  /// Organization URL slug.
+  final String? organizationSlug;
+
+  /// Organization external ID.
+  final String? organizationExternalId;
+
+  /// Organization logo URL.
+  final String? organizationLogoUrl;
+
+  /// Trusted metadata for the organization.
+  final Map<String, dynamic>? trustedMetadata;
+
+  /// SSO JIT provisioning setting.
+  final String? ssoJitProvisioning;
+
+  /// Allowed email domains.
+  final List<String>? emailAllowedDomains;
+
+  /// Email JIT provisioning setting.
+  final String? emailJitProvisioning;
+
+  /// Email invites setting.
+  final String? emailInvites;
+
+  /// Auth methods setting.
+  final String? authMethods;
+
+  /// Allowed auth methods.
+  final List<String>? allowedAuthMethods;
+
+  /// MFA policy setting.
+  final String? mfaPolicy;
+
+  /// RBAC implicit role assignments by email domain.
+  final List<Map<String, dynamic>>? rbacEmailImplicitRoleAssignments;
+
+  /// MFA methods setting.
+  final String? mfaMethods;
+
+  /// Allowed MFA methods.
+  final List<String>? allowedMfaMethods;
+
+  /// OAuth tenant JIT provisioning setting.
+  final String? oauthTenantJitProvisioning;
+
+  /// Allowed OAuth tenants map.
+  final Map<String, dynamic>? allowedOauthTenants;
+
+  /// First-party Connected Apps policy.
+  final String? firstPartyConnectedAppsAllowedType;
+
+  /// Allowed first-party Connected App IDs.
+  final List<String>? allowedFirstPartyConnectedApps;
+
+  /// Third-party Connected Apps policy.
+  final String? thirdPartyConnectedAppsAllowedType;
+
+  /// Allowed third-party Connected App IDs.
+  final List<String>? allowedThirdPartyConnectedApps;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// CreateOrganizationViaDiscoveryRequest
+  CreateOrganizationViaDiscoveryRequest({
+    required this.intermediateSessionToken,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.organizationName,
+    this.organizationSlug,
+    this.organizationExternalId,
+    this.organizationLogoUrl,
+    this.trustedMetadata,
+    this.ssoJitProvisioning,
+    this.emailAllowedDomains,
+    this.emailJitProvisioning,
+    this.emailInvites,
+    this.authMethods,
+    this.allowedAuthMethods,
+    this.mfaPolicy,
+    this.rbacEmailImplicitRoleAssignments,
+    this.mfaMethods,
+    this.allowedMfaMethods,
+    this.oauthTenantJitProvisioning,
+    this.allowedOauthTenants,
+    this.firstPartyConnectedAppsAllowedType,
+    this.allowedFirstPartyConnectedApps,
+    this.thirdPartyConnectedAppsAllowedType,
+    this.allowedThirdPartyConnectedApps,
+    this.telemetryId,
+  }) {
+    _validateRequired(intermediateSessionToken, 'Intermediate session token');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'intermediate_session_token': intermediateSessionToken.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (organizationName != null) 'organization_name': organizationName,
+      if (organizationSlug != null) 'organization_slug': organizationSlug,
+      if (organizationExternalId != null)
+        'organization_external_id': organizationExternalId,
+      if (organizationLogoUrl != null)
+        'organization_logo_url': organizationLogoUrl,
+      if (trustedMetadata != null) 'trusted_metadata': trustedMetadata,
+      if (ssoJitProvisioning != null)
+        'sso_jit_provisioning': ssoJitProvisioning,
+      if (emailAllowedDomains != null)
+        'email_allowed_domains': emailAllowedDomains,
+      if (emailJitProvisioning != null)
+        'email_jit_provisioning': emailJitProvisioning,
+      if (emailInvites != null) 'email_invites': emailInvites,
+      if (authMethods != null) 'auth_methods': authMethods,
+      if (allowedAuthMethods != null)
+        'allowed_auth_methods': allowedAuthMethods,
+      if (mfaPolicy != null) 'mfa_policy': mfaPolicy,
+      if (rbacEmailImplicitRoleAssignments != null)
+        'rbac_email_implicit_role_assignments':
+            rbacEmailImplicitRoleAssignments,
+      if (mfaMethods != null) 'mfa_methods': mfaMethods,
+      if (allowedMfaMethods != null) 'allowed_mfa_methods': allowedMfaMethods,
+      if (oauthTenantJitProvisioning != null)
+        'oauth_tenant_jit_provisioning': oauthTenantJitProvisioning,
+      if (allowedOauthTenants != null)
+        'allowed_oauth_tenants': allowedOauthTenants,
+      if (firstPartyConnectedAppsAllowedType != null)
+        'first_party_connected_apps_allowed_type':
+            firstPartyConnectedAppsAllowedType,
+      if (allowedFirstPartyConnectedApps != null)
+        'allowed_first_party_connected_apps': allowedFirstPartyConnectedApps,
+      if (thirdPartyConnectedAppsAllowedType != null)
+        'third_party_connected_apps_allowed_type':
+            thirdPartyConnectedAppsAllowedType,
+      if (allowedThirdPartyConnectedApps != null)
+        'allowed_third_party_connected_apps': allowedThirdPartyConnectedApps,
+      if (telemetryId != null) 'telemetry_id': telemetryId,
+    };
+  }
+}
+
+/// Request model for listing discovered organizations.
+class ListDiscoveredOrganizationsRequest {
+  /// Intermediate session token.
+  final String? intermediateSessionToken;
+
+  /// Member session token.
+  final String? sessionToken;
+
+  /// Member session JWT.
+  final String? sessionJwt;
+
+  /// ListDiscoveredOrganizationsRequest
+  ListDiscoveredOrganizationsRequest({
+    this.intermediateSessionToken,
+    this.sessionToken,
+    this.sessionJwt,
+  }) {
+    final provided = [
+      intermediateSessionToken,
+      sessionToken,
+      sessionJwt,
+    ].where((value) => value != null && value.trim().isNotEmpty).length;
+    if (provided != 1) {
+      throw ArgumentError(
+        'Exactly one intermediate session token, session token, or session JWT is required.',
+      );
+    }
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      if (intermediateSessionToken != null)
+        'intermediate_session_token': intermediateSessionToken!.trim(),
+      if (sessionToken != null) 'session_token': sessionToken!.trim(),
+      if (sessionJwt != null) 'session_jwt': sessionJwt!.trim(),
+    };
+  }
+}
+
+/// Response model for listing discovered organizations.
+class ListDiscoveredOrganizationsResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// Email address tied to the session or intermediate session.
+  final String emailAddress;
+
+  /// Discovered organizations returned by Stytch.
+  final List<Map<String, dynamic>> discoveredOrganizations;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// Organization ID hint returned by Stytch.
+  final String? organizationIdHint;
+
+  /// ListDiscoveredOrganizationsResponse
+  const ListDiscoveredOrganizationsResponse({
+    required this.requestId,
+    required this.emailAddress,
+    required this.discoveredOrganizations,
+    required this.statusCode,
+    this.organizationIdHint,
+  });
+
+  /// fromJson
+  factory ListDiscoveredOrganizationsResponse.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return ListDiscoveredOrganizationsResponse(
+      requestId: json['request_id'] as String,
+      emailAddress: json['email_address'] as String,
+      discoveredOrganizations:
+          (json['discovered_organizations'] as List<dynamic>)
+              .map((item) => Map<String, dynamic>.from(item as Map))
+              .toList(),
+      statusCode: json['status_code'] as int,
+      organizationIdHint: json['organization_id_hint'] as String?,
+    );
+  }
+}
+
+/// Request model for exchanging an intermediate session.
+class ExchangeIntermediateSessionRequest {
+  /// Intermediate session token.
+  final String intermediateSessionToken;
+
+  /// Organization to exchange into.
+  final String organizationId;
+
+  /// Requested session duration in minutes.
+  final int? sessionDurationMinutes;
+
+  /// Custom claims for the resulting session.
+  final Map<String, dynamic>? sessionCustomClaims;
+
+  /// Locale for MFA SMS copy, when MFA is required.
+  final String? locale;
+
+  /// Device telemetry ID.
+  final String? telemetryId;
+
+  /// ExchangeIntermediateSessionRequest
+  ExchangeIntermediateSessionRequest({
+    required this.intermediateSessionToken,
+    required this.organizationId,
+    this.sessionDurationMinutes,
+    this.sessionCustomClaims,
+    this.locale,
+    this.telemetryId,
+  }) {
+    _validateRequired(intermediateSessionToken, 'Intermediate session token');
+    _validateRequired(organizationId, 'Organization ID');
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'intermediate_session_token': intermediateSessionToken.trim(),
+      'organization_id': organizationId.trim(),
+      if (sessionDurationMinutes != null)
+        'session_duration_minutes': sessionDurationMinutes,
+      if (sessionCustomClaims != null)
+        'session_custom_claims': sessionCustomClaims,
+      if (locale != null) 'locale': locale,
+      if (telemetryId != null) 'telemetry_id': telemetryId,
+    };
+  }
+}
+
 /// Request model for sending a login or signup Email OTP.
 class SendLoginSignupEmailOtpRequest {
   /// Organization to send the OTP in.

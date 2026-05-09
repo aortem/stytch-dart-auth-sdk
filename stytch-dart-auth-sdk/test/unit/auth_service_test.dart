@@ -400,6 +400,159 @@ void main() {
       },
     );
 
+    test(
+      'createOrganizationViaDiscovery posts current Stytch payload',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.createOrganizationViaDiscovery(
+          CreateOrganizationViaDiscoveryRequest(
+            intermediateSessionToken: 'intermediate-token',
+            sessionDurationMinutes: 60,
+            sessionCustomClaims: {'tier': 'founder'},
+            organizationName: 'Example Org',
+            organizationSlug: 'example-org',
+            organizationExternalId: 'external-org-123',
+            organizationLogoUrl: 'https://example.com/logo.png',
+            trustedMetadata: {'crm_id': 'crm-123'},
+            ssoJitProvisioning: 'NOT_ALLOWED',
+            emailAllowedDomains: ['example.com'],
+            emailJitProvisioning: 'RESTRICTED',
+            emailInvites: 'ALL_ALLOWED',
+            authMethods: 'RESTRICTED',
+            allowedAuthMethods: ['magic_link', 'email_otp'],
+            mfaPolicy: 'OPTIONAL',
+            rbacEmailImplicitRoleAssignments: [
+              {'domain': 'example.com', 'role_id': 'admin'},
+            ],
+            mfaMethods: 'RESTRICTED',
+            allowedMfaMethods: ['sms_otp'],
+            oauthTenantJitProvisioning: 'RESTRICTED',
+            allowedOauthTenants: {
+              'slack': ['T123'],
+            },
+            firstPartyConnectedAppsAllowedType: 'RESTRICTED',
+            allowedFirstPartyConnectedApps: ['client-123'],
+            thirdPartyConnectedAppsAllowedType: 'NOT_ALLOWED',
+            allowedThirdPartyConnectedApps: ['client-456'],
+            telemetryId: 'telemetry-123',
+          ),
+        );
+
+        expect(
+          httpClient.lastPath,
+          equals('/b2b/discovery/organizations/create'),
+        );
+        expect(httpClient.lastBody, {
+          'intermediate_session_token': 'intermediate-token',
+          'session_duration_minutes': 60,
+          'session_custom_claims': {'tier': 'founder'},
+          'organization_name': 'Example Org',
+          'organization_slug': 'example-org',
+          'organization_external_id': 'external-org-123',
+          'organization_logo_url': 'https://example.com/logo.png',
+          'trusted_metadata': {'crm_id': 'crm-123'},
+          'sso_jit_provisioning': 'NOT_ALLOWED',
+          'email_allowed_domains': ['example.com'],
+          'email_jit_provisioning': 'RESTRICTED',
+          'email_invites': 'ALL_ALLOWED',
+          'auth_methods': 'RESTRICTED',
+          'allowed_auth_methods': ['magic_link', 'email_otp'],
+          'mfa_policy': 'OPTIONAL',
+          'rbac_email_implicit_role_assignments': [
+            {'domain': 'example.com', 'role_id': 'admin'},
+          ],
+          'mfa_methods': 'RESTRICTED',
+          'allowed_mfa_methods': ['sms_otp'],
+          'oauth_tenant_jit_provisioning': 'RESTRICTED',
+          'allowed_oauth_tenants': {
+            'slack': ['T123'],
+          },
+          'first_party_connected_apps_allowed_type': 'RESTRICTED',
+          'allowed_first_party_connected_apps': ['client-123'],
+          'third_party_connected_apps_allowed_type': 'NOT_ALLOWED',
+          'allowed_third_party_connected_apps': ['client-456'],
+          'telemetry_id': 'telemetry-123',
+        });
+        expect(response.memberId, equals('member-123'));
+        expect(response.memberAuthenticated, isTrue);
+        expect(
+          response.organization?['organization_slug'],
+          equals('example-org'),
+        );
+      },
+    );
+
+    test(
+      'listDiscoveredOrganizations posts exactly one session token',
+      () async {
+        final httpClient = _RecordingStytchHttpClient();
+        final service = AuthService(httpClient);
+
+        final response = await service.listDiscoveredOrganizations(
+          ListDiscoveredOrganizationsRequest(
+            intermediateSessionToken: 'intermediate-token',
+          ),
+        );
+
+        expect(httpClient.lastPath, equals('/b2b/discovery/organizations'));
+        expect(httpClient.lastBody, {
+          'intermediate_session_token': 'intermediate-token',
+        });
+        expect(response.emailAddress, equals('prospect@example.com'));
+        expect(response.discoveredOrganizations, hasLength(1));
+        expect(response.organizationIdHint, equals('organization-test-123'));
+      },
+    );
+
+    test('listDiscoveredOrganizations rejects missing or duplicate tokens', () {
+      expect(
+        () => ListDiscoveredOrganizationsRequest(),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => ListDiscoveredOrganizationsRequest(
+          intermediateSessionToken: 'intermediate-token',
+          sessionToken: 'session-token',
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('exchangeIntermediateSession posts current Stytch payload', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = AuthService(httpClient);
+
+      final response = await service.exchangeIntermediateSession(
+        ExchangeIntermediateSessionRequest(
+          intermediateSessionToken: 'intermediate-token',
+          organizationId: 'organization-test-123',
+          sessionDurationMinutes: 60,
+          sessionCustomClaims: {'tier': 'gold'},
+          locale: 'en',
+          telemetryId: 'telemetry-123',
+        ),
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals('/b2b/discovery/intermediate_sessions/exchange'),
+      );
+      expect(httpClient.lastBody, {
+        'intermediate_session_token': 'intermediate-token',
+        'organization_id': 'organization-test-123',
+        'session_duration_minutes': 60,
+        'session_custom_claims': {'tier': 'gold'},
+        'locale': 'en',
+        'telemetry_id': 'telemetry-123',
+      });
+      expect(response.memberId, equals('member-123'));
+      expect(response.sessionToken, equals('new-session-token'));
+      expect(response.memberAuthenticated, isTrue);
+      expect(response.memberSession?['member_session_id'], 'session-test-123');
+    });
+
     test('oauth discovery start builds provider query parameters', () async {
       final httpClient = _RecordingStytchHttpClient();
       final service = AuthService(httpClient);
@@ -551,6 +704,30 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
         'status_code': 200,
       };
     }
+    if (path == '/b2b/discovery/organizations/create') {
+      return _sessionExchangeResponse(
+        sessionToken: 'created-session-token',
+        organizationSlug: 'example-org',
+      );
+    }
+    if (path == '/b2b/discovery/organizations') {
+      return {
+        'request_id': 'request-123',
+        'email_address': 'prospect@example.com',
+        'discovered_organizations': [
+          {
+            'member_authenticated': true,
+            'organization': {'organization_id': 'organization-test-123'},
+            'membership': {'type': 'eligible_to_join_by_email_domain'},
+          },
+        ],
+        'organization_id_hint': 'organization-test-123',
+        'status_code': 200,
+      };
+    }
+    if (path == '/b2b/discovery/intermediate_sessions/exchange') {
+      return _sessionExchangeResponse(sessionToken: 'new-session-token');
+    }
     if (path == '/b2b/sessions/migrate') {
       return {
         'request_id': 'request-123',
@@ -632,4 +809,28 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
     }
     return {'request_id': 'request-123', 'status_code': 200};
   }
+}
+
+Map<String, dynamic> _sessionExchangeResponse({
+  required String sessionToken,
+  String organizationSlug = 'organization-slug',
+}) {
+  return {
+    'request_id': 'request-123',
+    'member_id': 'member-123',
+    'session_token': sessionToken,
+    'session_jwt': 'session-jwt',
+    'member': {
+      'member_id': 'member-123',
+      'email_address': 'member@example.com',
+    },
+    'organization': {
+      'organization_id': 'organization-test-123',
+      'organization_slug': organizationSlug,
+    },
+    'member_authenticated': true,
+    'intermediate_session_token': '',
+    'member_session': {'member_session_id': 'session-test-123'},
+    'status_code': 200,
+  };
 }
