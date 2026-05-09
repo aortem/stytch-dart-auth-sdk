@@ -344,3 +344,123 @@ class SearchMembersResponse {
     );
   }
 }
+
+/// Registration returned by Stytch for a member OAuth provider token.
+class OAuthProviderRegistration {
+  /// Unique member subject in the OAuth provider.
+  final String providerSubject;
+
+  /// Single provider tenant ID, when the provider returns exactly one.
+  final String? providerTenantId;
+
+  /// Provider tenant IDs, when the provider can return multiple values.
+  final List<String>? providerTenantIds;
+
+  /// ID token returned by providers that support OpenID Connect.
+  final String? idToken;
+
+  /// Access token returned by the OAuth provider.
+  final String accessToken;
+
+  /// Number of seconds until the access token expires.
+  final int? accessTokenExpiresIn;
+
+  /// OAuth scopes granted for the user token.
+  final List<String> scopes;
+
+  /// Refresh token, when requested and available.
+  final String? refreshToken;
+
+  /// Slack bot access token, when configured.
+  final String? botAccessToken;
+
+  /// Slack bot scopes, when configured.
+  final List<String>? botScopes;
+
+  /// OAuthProviderRegistration
+  const OAuthProviderRegistration({
+    required this.providerSubject,
+    this.providerTenantId,
+    this.providerTenantIds,
+    this.idToken,
+    required this.accessToken,
+    this.accessTokenExpiresIn,
+    required this.scopes,
+    this.refreshToken,
+    this.botAccessToken,
+    this.botScopes,
+  });
+
+  /// fromJson
+  factory OAuthProviderRegistration.fromJson(Map<String, dynamic> json) {
+    return OAuthProviderRegistration(
+      providerSubject: json['provider_subject'] as String,
+      providerTenantId: json['provider_tenant_id'] as String?,
+      providerTenantIds: (json['provider_tenant_ids'] as List<dynamic>?)
+          ?.cast<String>(),
+      idToken: json['id_token'] as String?,
+      accessToken: json['access_token'] as String,
+      accessTokenExpiresIn: json['access_token_expires_in'] as int?,
+      scopes: (json['scopes'] as List<dynamic>).cast<String>(),
+      refreshToken: json['refresh_token'] as String?,
+      botAccessToken: json['bot_access_token'] as String?,
+      botScopes: (json['bot_scopes'] as List<dynamic>?)?.cast<String>(),
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'provider_subject': providerSubject,
+      if (providerTenantId != null) 'provider_tenant_id': providerTenantId,
+      if (providerTenantIds != null) 'provider_tenant_ids': providerTenantIds,
+      if (idToken != null) 'id_token': idToken,
+      'access_token': accessToken,
+      if (accessTokenExpiresIn != null)
+        'access_token_expires_in': accessTokenExpiresIn,
+      'scopes': scopes,
+      if (refreshToken != null) 'refresh_token': refreshToken,
+      if (botAccessToken != null) 'bot_access_token': botAccessToken,
+      if (botScopes != null) 'bot_scopes': botScopes,
+    };
+  }
+}
+
+/// Response model for member OAuth provider access token endpoints.
+class OAuthProviderAccessTokenResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// OAuth identity provider type returned by Stytch.
+  final String providerType;
+
+  /// Token registrations returned for the member.
+  final List<OAuthProviderRegistration> registrations;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// OAuthProviderAccessTokenResponse
+  const OAuthProviderAccessTokenResponse({
+    required this.requestId,
+    required this.providerType,
+    required this.registrations,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory OAuthProviderAccessTokenResponse.fromJson(Map<String, dynamic> json) {
+    return OAuthProviderAccessTokenResponse(
+      requestId: json['request_id'] as String,
+      providerType: json['provider_type'] as String,
+      registrations: (json['registrations'] as List<dynamic>)
+          .map(
+            (item) => OAuthProviderRegistration.fromJson(
+              Map<String, dynamic>.from(item as Map),
+            ),
+          )
+          .toList(),
+      statusCode: json['status_code'] as int,
+    );
+  }
+}

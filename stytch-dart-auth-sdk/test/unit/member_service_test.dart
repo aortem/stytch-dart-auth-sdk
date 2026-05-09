@@ -76,6 +76,87 @@ void main() {
       });
     });
 
+    test('getHubspotAccessToken gets OAuth provider tokens', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = MemberService(httpClient);
+
+      final response = await service.getHubspotAccessToken(
+        'organization-test-123',
+        'member-test-123',
+        includeRefreshToken: true,
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals(
+          '/b2b/organizations/organization-test-123/members/member-test-123/oauth_providers/hubspot',
+        ),
+      );
+      expect(httpClient.lastQueryParameters, {'include_refresh_token': 'true'});
+      expect(response.providerType, equals('hubspot'));
+      expect(response.registrations.single.providerTenantId, equals('hub-123'));
+      expect(response.registrations.single.accessTokenExpiresIn, equals(3600));
+      expect(response.registrations.single.refreshToken, equals('refresh-123'));
+    });
+
+    test('getSlackAccessToken gets OAuth provider tokens', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = MemberService(httpClient);
+
+      final response = await service.getSlackAccessToken(
+        'organization-test-123',
+        'member-test-123',
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals(
+          '/b2b/organizations/organization-test-123/members/member-test-123/oauth_providers/slack',
+        ),
+      );
+      expect(httpClient.lastQueryParameters, isNull);
+      expect(response.providerType, equals('slack'));
+      expect(
+        response.registrations.single.providerTenantId,
+        equals('team-123'),
+      );
+      expect(response.registrations.single.botAccessToken, equals('xoxb-123'));
+      expect(
+        response.registrations.single.botScopes,
+        equals(['channels:read']),
+      );
+    });
+
+    test('getGithubAccessToken gets OAuth provider tokens', () async {
+      final httpClient = _RecordingStytchHttpClient();
+      final service = MemberService(httpClient);
+
+      final response = await service.getGithubAccessToken(
+        'organization-test-123',
+        'member-test-123',
+        includeRefreshToken: false,
+      );
+
+      expect(
+        httpClient.lastPath,
+        equals(
+          '/b2b/organizations/organization-test-123/members/member-test-123/oauth_providers/github',
+        ),
+      );
+      expect(httpClient.lastQueryParameters, {
+        'include_refresh_token': 'false',
+      });
+      expect(response.providerType, equals('github'));
+      expect(
+        response.registrations.single.providerTenantIds,
+        equals(['org-123', 'org-456']),
+      );
+      expect(
+        response.registrations.single.scopes,
+        equals(['user', 'read:org']),
+      );
+    });
+
     test('updateMember puts current Stytch payload', () async {
       final httpClient = _RecordingStytchHttpClient();
       final service = MemberService(httpClient);
@@ -266,6 +347,34 @@ class _RecordingStytchHttpClient extends StytchHttpClient {
   ]) async {
     lastPath = path;
     lastQueryParameters = queryParameters;
+    if (path.endsWith('/oauth_providers/hubspot')) {
+      return _oauthProviderResponse('hubspot', {
+        'provider_subject': 'hubspot-user-123',
+        'provider_tenant_id': 'hub-123',
+        'access_token': 'hubspot-access-123',
+        'access_token_expires_in': 3600,
+        'scopes': ['crm.objects.contacts.read'],
+        'refresh_token': 'refresh-123',
+      });
+    }
+    if (path.endsWith('/oauth_providers/slack')) {
+      return _oauthProviderResponse('slack', {
+        'provider_subject': 'slack-user-123',
+        'provider_tenant_id': 'team-123',
+        'access_token': 'xoxp-123',
+        'scopes': ['users:read'],
+        'bot_access_token': 'xoxb-123',
+        'bot_scopes': ['channels:read'],
+      });
+    }
+    if (path.endsWith('/oauth_providers/github')) {
+      return _oauthProviderResponse('github', {
+        'provider_subject': 'github-user-123',
+        'provider_tenant_ids': ['org-123', 'org-456'],
+        'access_token': 'github-access-123',
+        'scopes': ['user', 'read:org'],
+      });
+    }
     return _memberResponse();
   }
 
@@ -332,5 +441,17 @@ Map<String, dynamic> _memberJson() {
     'email_address': 'member@example.com',
     'status': 'active',
     'name': 'Member User',
+  };
+}
+
+Map<String, dynamic> _oauthProviderResponse(
+  String providerType,
+  Map<String, dynamic> registration,
+) {
+  return {
+    'request_id': 'request-123',
+    'provider_type': providerType,
+    'registrations': [registration],
+    'status_code': 200,
   };
 }

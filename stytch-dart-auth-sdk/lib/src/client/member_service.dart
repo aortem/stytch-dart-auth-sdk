@@ -47,6 +47,43 @@ class MemberService {
     return MemberResponse.fromJson(response);
   }
 
+  /// Retrieve a member's saved HubSpot OAuth access token registrations.
+  Future<OAuthProviderAccessTokenResponse> getHubspotAccessToken(
+    String organizationId,
+    String memberId, {
+    bool? includeRefreshToken,
+  }) async {
+    final response = await _httpClient.get(
+      '/b2b/organizations/$organizationId/members/$memberId/oauth_providers/hubspot',
+      _includeRefreshTokenQuery(includeRefreshToken),
+    );
+    return OAuthProviderAccessTokenResponse.fromJson(response);
+  }
+
+  /// Retrieve a member's saved Slack OAuth access token registrations.
+  Future<OAuthProviderAccessTokenResponse> getSlackAccessToken(
+    String organizationId,
+    String memberId,
+  ) async {
+    final response = await _httpClient.get(
+      '/b2b/organizations/$organizationId/members/$memberId/oauth_providers/slack',
+    );
+    return OAuthProviderAccessTokenResponse.fromJson(response);
+  }
+
+  /// Retrieve a member's saved GitHub OAuth access token registrations.
+  Future<OAuthProviderAccessTokenResponse> getGithubAccessToken(
+    String organizationId,
+    String memberId, {
+    bool? includeRefreshToken,
+  }) async {
+    final response = await _httpClient.get(
+      '/b2b/organizations/$organizationId/members/$memberId/oauth_providers/github',
+      _includeRefreshTokenQuery(includeRefreshToken),
+    );
+    return OAuthProviderAccessTokenResponse.fromJson(response);
+  }
+
   /// Update a member.
   Future<MemberResponse> updateMember(
     String organizationId,
@@ -137,5 +174,12 @@ class MemberService {
       '/b2b/organizations/$organizationId/members/$memberId/totp',
     );
     return MemberResponse.fromJson(response);
+  }
+
+  Map<String, String>? _includeRefreshTokenQuery(bool? includeRefreshToken) {
+    if (includeRefreshToken == null) {
+      return null;
+    }
+    return {'include_refresh_token': includeRefreshToken.toString()};
   }
 }
