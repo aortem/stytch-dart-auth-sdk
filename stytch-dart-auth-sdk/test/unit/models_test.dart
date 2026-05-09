@@ -98,5 +98,53 @@ void main() {
       expect(deserializedResponse.sessionToken, equals(response.sessionToken));
       expect(deserializedResponse.organizationIds.length, equals(2));
     });
+
+    test('SendDiscoveryEmailRequest should serialize optional fields', () {
+      final request = SendDiscoveryEmailRequest(
+        emailAddress: ' prospect@example.com ',
+        discoveryRedirectUrl: 'https://example.com/discovery/callback',
+        pkceCodeChallenge: 'challenge',
+        loginTemplateId: 'template_123',
+        locale: 'en',
+        discoveryExpirationMinutes: 60,
+      );
+
+      final json = request.toJson();
+
+      expect(json['email_address'], equals('prospect@example.com'));
+      expect(
+        json['discovery_redirect_url'],
+        equals('https://example.com/discovery/callback'),
+      );
+      expect(json['pkce_code_challenge'], equals('challenge'));
+      expect(json['login_template_id'], equals('template_123'));
+      expect(json['locale'], equals('en'));
+      expect(json['discovery_expiration_minutes'], equals(60));
+    });
+
+    test('SendDiscoveryEmailRequest should reject invalid email values', () {
+      expect(
+        () => SendDiscoveryEmailRequest(emailAddress: ''),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => SendDiscoveryEmailRequest(emailAddress: 'not-an-email'),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('SendDiscoveryEmailResponse should serialize and deserialize', () {
+      final response = SendDiscoveryEmailResponse.fromJson({
+        'request_id': 'request-123',
+        'status_code': 200,
+      });
+
+      expect(response.requestId, equals('request-123'));
+      expect(response.statusCode, equals(200));
+      expect(response.toJson(), {
+        'request_id': 'request-123',
+        'status_code': 200,
+      });
+    });
   });
 }

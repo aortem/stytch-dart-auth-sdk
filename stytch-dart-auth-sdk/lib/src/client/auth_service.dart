@@ -40,6 +40,19 @@ class AuthService {
     return AuthResponse.fromJson(response);
   }
 
+  /// Send a discovery Email Magic Link.
+  Future<SendDiscoveryEmailResponse> sendDiscoveryEmail(
+    SendDiscoveryEmailRequest request,
+  ) async {
+    /// response
+    final response = await _httpClient.post(
+      '/b2b/magic_links/email/discovery/send',
+      body: request.toJson(),
+    );
+
+    return SendDiscoveryEmailResponse.fromJson(response);
+  }
+
   /// Start MFA process
   Future<MfaResponse> startMfa(MfaRequest request) async {
     /// response

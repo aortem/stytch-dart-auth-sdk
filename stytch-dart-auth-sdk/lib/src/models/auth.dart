@@ -34,7 +34,7 @@ class EmailPasswordLoginRequest {
     );
   }
 
-  /// dynamic>
+  /// Converts the request to the Stytch API payload.
   Map<String, dynamic> toJson() {
     return {
       'email': email,
@@ -72,7 +72,7 @@ class SsoLoginRequest {
     );
   }
 
-  /// dynamic>
+  /// Converts the response to JSON.
   Map<String, dynamic> toJson() {
     return {
       'sso_token': ssoToken,
@@ -407,5 +407,101 @@ class ValidateSessionResponse {
         'session_expires_at': sessionExpiresAt!.toIso8601String(),
       if (userAttributes != null) 'user_attributes': userAttributes,
     };
+  }
+}
+
+/// Request model for sending a discovery Email Magic Link.
+class SendDiscoveryEmailRequest {
+  /// Email address of the member starting discovery.
+  final String emailAddress;
+
+  /// Redirect URL used after the discovery magic link is clicked.
+  final String? discoveryRedirectUrl;
+
+  /// PKCE code challenge for same-device validation.
+  final String? pkceCodeChallenge;
+
+  /// Optional custom email template ID.
+  final String? loginTemplateId;
+
+  /// Optional IETF BCP 47 locale such as `en`, `es`, `fr`, or `pt-br`.
+  final String? locale;
+
+  /// Discovery magic-link expiration in minutes.
+  final int? discoveryExpirationMinutes;
+
+  /// SendDiscoveryEmailRequest
+  SendDiscoveryEmailRequest({
+    required this.emailAddress,
+    this.discoveryRedirectUrl,
+    this.pkceCodeChallenge,
+    this.loginTemplateId,
+    this.locale,
+    this.discoveryExpirationMinutes,
+  }) {
+    final trimmedEmail = emailAddress.trim();
+    if (trimmedEmail.isEmpty) {
+      throw ArgumentError('Email address cannot be empty.');
+    }
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(trimmedEmail)) {
+      throw ArgumentError('Email address is invalid.');
+    }
+    if (discoveryExpirationMinutes != null && discoveryExpirationMinutes! < 0) {
+      throw ArgumentError('Discovery expiration minutes cannot be negative.');
+    }
+  }
+
+  /// fromJson
+  factory SendDiscoveryEmailRequest.fromJson(Map<String, dynamic> json) {
+    return SendDiscoveryEmailRequest(
+      emailAddress: json['email_address'] as String,
+      discoveryRedirectUrl: json['discovery_redirect_url'] as String?,
+      pkceCodeChallenge: json['pkce_code_challenge'] as String?,
+      loginTemplateId: json['login_template_id'] as String?,
+      locale: json['locale'] as String?,
+      discoveryExpirationMinutes: json['discovery_expiration_minutes'] as int?,
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {
+      'email_address': emailAddress.trim(),
+      if (discoveryRedirectUrl != null)
+        'discovery_redirect_url': discoveryRedirectUrl,
+      if (pkceCodeChallenge != null) 'pkce_code_challenge': pkceCodeChallenge,
+      if (loginTemplateId != null) 'login_template_id': loginTemplateId,
+      if (locale != null) 'locale': locale,
+      if (discoveryExpirationMinutes != null)
+        'discovery_expiration_minutes': discoveryExpirationMinutes,
+    };
+  }
+}
+
+/// Response model for sending a discovery Email Magic Link.
+class SendDiscoveryEmailResponse {
+  /// Globally unique request ID returned by Stytch.
+  final String requestId;
+
+  /// HTTP status code returned by Stytch.
+  final int statusCode;
+
+  /// SendDiscoveryEmailResponse
+  const SendDiscoveryEmailResponse({
+    required this.requestId,
+    required this.statusCode,
+  });
+
+  /// fromJson
+  factory SendDiscoveryEmailResponse.fromJson(Map<String, dynamic> json) {
+    return SendDiscoveryEmailResponse(
+      requestId: json['request_id'] as String,
+      statusCode: json['status_code'] as int,
+    );
+  }
+
+  /// dynamic>
+  Map<String, dynamic> toJson() {
+    return {'request_id': requestId, 'status_code': statusCode};
   }
 }

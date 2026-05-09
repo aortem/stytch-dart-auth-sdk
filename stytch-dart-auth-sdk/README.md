@@ -106,6 +106,7 @@ Future<void> main() async {
 
 - `loginWithEmailPassword`
 - `loginWithSso`
+- `sendDiscoveryEmail`
 - `startMfa`
 - `completeMfa`
 - `createSession`
@@ -113,6 +114,27 @@ Future<void> main() async {
 - `revokeSession`
 - `revokeAllUserSessions`
 - `exchangeSession`
+
+### Discovery Email Magic Link
+
+Use `sendDiscoveryEmail` to send a Stytch B2B discovery Email Magic Link to a
+member. The method wraps Stytch's
+`POST /v1/b2b/magic_links/email/discovery/send` endpoint.
+
+```dart
+final response = await stytch.auth.sendDiscoveryEmail(
+  SendDiscoveryEmailRequest(
+    emailAddress: 'member@example.com',
+    discoveryRedirectUrl: 'https://example.com/discovery/callback',
+    loginTemplateId: 'template_123',
+    locale: 'en',
+    discoveryExpirationMinutes: 60,
+  ),
+);
+
+print('Request ID: ${response.requestId}');
+print('Status: ${response.statusCode}');
+```
 
 ### UserService
 

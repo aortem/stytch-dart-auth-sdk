@@ -1,6 +1,10 @@
 # Changelog
 
 ## [0.0.2]
+### Added
+* Added `AuthService.sendDiscoveryEmail` with typed `SendDiscoveryEmailRequest` and `SendDiscoveryEmailResponse` models for Stytch B2B discovery Email Magic Links.
+* Added unit coverage for discovery email request/response serialization, validation, and endpoint routing.
+
 ### Changed
 * Updated the package version to `0.0.2`.
 * Trimmed unused runtime dependencies and refreshed the testing dependency baseline to the current workspace release.
