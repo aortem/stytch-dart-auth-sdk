@@ -1,4 +1,4 @@
-﻿= API Reference
+= API Reference
 :page-layout: default
 
 This page maps the public package entrypoint to the current source tree.
@@ -14,6 +14,26 @@ This page maps the public package entrypoint to the current source tree.
 == Source Areas
 
 * apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/lib/src
+
+== AuthService
+
+* `sendDiscoveryEmail(SendDiscoveryEmailRequest request)` sends a Stytch B2B
+  discovery Email Magic Link through
+  `/v1/b2b/magic_links/email/discovery/send`.
+* `SendDiscoveryEmailRequest` supports `emailAddress`,
+  `discoveryRedirectUrl`, `pkceCodeChallenge`, `loginTemplateId`, `locale`, and
+  `discoveryExpirationMinutes`.
+* `SendDiscoveryEmailResponse` exposes the Stytch `requestId` and `statusCode`.
+
+== InvitationService
+
+* `sendInviteEmail(SendInviteEmailRequest request)` sends a Stytch B2B invite
+  Email Magic Link through `/v1/b2b/magic_links/email/invite`.
+* `SendInviteEmailRequest` supports `organizationId`, `emailAddress`,
+  `inviteRedirectUrl`, `invitedByMemberId`, `name`, metadata, template, locale,
+  roles, and `inviteExpirationMinutes`.
+* `SendInviteEmailResponse` exposes the Stytch `requestId`, `memberId`, raw
+  `member`, raw `organization`, and `statusCode`.
 
 == Supporting Sources
 

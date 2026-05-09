@@ -22,6 +22,8 @@ linter:
 analyzer:
   exclude:
     - build/**
+    - doc/**
+    - docs/**
     - example/**
     - examples/**
     - samples/**
