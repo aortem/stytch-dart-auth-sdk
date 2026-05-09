@@ -29,6 +29,19 @@ class InvitationService {
     return SendInvitationResponse.fromJson(response);
   }
 
+  /// Send an invite Email Magic Link to a new organization member.
+  Future<SendInviteEmailResponse> sendInviteEmail(
+    SendInviteEmailRequest request,
+  ) async {
+    /// response
+    final response = await _httpClient.post(
+      '/b2b/magic_links/email/invite',
+      body: request.toJson(),
+    );
+
+    return SendInviteEmailResponse.fromJson(response);
+  }
+
   /// Get invitation by ID
   Future<Invitation> getInvitation(String invitationId) async {
     /// response

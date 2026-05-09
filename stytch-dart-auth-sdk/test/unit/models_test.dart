@@ -98,5 +98,139 @@ void main() {
       expect(deserializedResponse.sessionToken, equals(response.sessionToken));
       expect(deserializedResponse.organizationIds.length, equals(2));
     });
+
+    test('SendDiscoveryEmailRequest should serialize optional fields', () {
+      final request = SendDiscoveryEmailRequest(
+        emailAddress: ' prospect@example.com ',
+        discoveryRedirectUrl: 'https://example.com/discovery/callback',
+        pkceCodeChallenge: 'challenge',
+        loginTemplateId: 'template_123',
+        locale: 'en',
+        discoveryExpirationMinutes: 60,
+      );
+
+      final json = request.toJson();
+
+      expect(json['email_address'], equals('prospect@example.com'));
+      expect(
+        json['discovery_redirect_url'],
+        equals('https://example.com/discovery/callback'),
+      );
+      expect(json['pkce_code_challenge'], equals('challenge'));
+      expect(json['login_template_id'], equals('template_123'));
+      expect(json['locale'], equals('en'));
+      expect(json['discovery_expiration_minutes'], equals(60));
+    });
+
+    test('SendDiscoveryEmailRequest should reject invalid email values', () {
+      expect(
+        () => SendDiscoveryEmailRequest(emailAddress: ''),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => SendDiscoveryEmailRequest(emailAddress: 'not-an-email'),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('SendDiscoveryEmailResponse should serialize and deserialize', () {
+      final response = SendDiscoveryEmailResponse.fromJson({
+        'request_id': 'request-123',
+        'status_code': 200,
+      });
+
+      expect(response.requestId, equals('request-123'));
+      expect(response.statusCode, equals(200));
+      expect(response.toJson(), {
+        'request_id': 'request-123',
+        'status_code': 200,
+      });
+    });
+  });
+
+  group('Invitation Models', () {
+    test('SendInviteEmailRequest should serialize optional fields', () {
+      final request = SendInviteEmailRequest(
+        organizationId: ' organization-test-123 ',
+        emailAddress: ' invitee@example.com ',
+        inviteRedirectUrl: 'https://example.com/invite/callback',
+        invitedByMemberId: 'member-inviter',
+        name: 'Invitee User',
+        trustedMetadata: {'department': 'engineering'},
+        untrustedMetadata: {'source': 'campaign'},
+        inviteTemplateId: 'template_123',
+        locale: 'en',
+        roles: ['admin', 'viewer'],
+        inviteExpirationMinutes: 60,
+      );
+
+      final json = request.toJson();
+
+      expect(json['organization_id'], equals('organization-test-123'));
+      expect(json['email_address'], equals('invitee@example.com'));
+      expect(
+        json['invite_redirect_url'],
+        equals('https://example.com/invite/callback'),
+      );
+      expect(json['invited_by_member_id'], equals('member-inviter'));
+      expect(json['name'], equals('Invitee User'));
+      expect(json['trusted_metadata'], equals({'department': 'engineering'}));
+      expect(json['untrusted_metadata'], equals({'source': 'campaign'}));
+      expect(json['invite_template_id'], equals('template_123'));
+      expect(json['locale'], equals('en'));
+      expect(json['roles'], equals(['admin', 'viewer']));
+      expect(json['invite_expiration_minutes'], equals(60));
+    });
+
+    test('SendInviteEmailRequest should reject invalid values', () {
+      expect(
+        () => SendInviteEmailRequest(
+          organizationId: '',
+          emailAddress: 'invitee@example.com',
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => SendInviteEmailRequest(
+          organizationId: 'organization-test-123',
+          emailAddress: 'not-an-email',
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => SendInviteEmailRequest(
+          organizationId: 'organization-test-123',
+          emailAddress: 'invitee@example.com',
+          inviteExpirationMinutes: -1,
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('SendInviteEmailResponse should serialize and deserialize', () {
+      final response = SendInviteEmailResponse.fromJson({
+        'request_id': 'request-123',
+        'member_id': 'member-123',
+        'member': {
+          'member_id': 'member-123',
+          'email_address': 'invitee@example.com',
+        },
+        'organization': {
+          'organization_id': 'organization-test-123',
+          'organization_name': 'Example',
+        },
+        'status_code': 200,
+      });
+
+      expect(response.requestId, equals('request-123'));
+      expect(response.memberId, equals('member-123'));
+      expect(response.member['email_address'], equals('invitee@example.com'));
+      expect(
+        response.organization['organization_id'],
+        equals('organization-test-123'),
+      );
+      expect(response.statusCode, equals(200));
+      expect(response.toJson()['member_id'], equals('member-123'));
+    });
   });
 }

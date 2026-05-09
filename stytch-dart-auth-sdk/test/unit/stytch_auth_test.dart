@@ -18,6 +18,10 @@ void main() {
       expect(auth.user, isNotNull);
       expect(auth.organization, isNotNull);
       expect(auth.invitation, isNotNull);
+      expect(auth.member, isNotNull);
+      expect(auth.m2m, isNotNull);
+      expect(auth.rbac, isNotNull);
+      expect(auth.sso, isNotNull);
     });
 
     test('should validate configuration', () {
@@ -65,6 +69,10 @@ void main() {
       expect(auth.user, isA<UserService>());
       expect(auth.organization, isA<OrganizationService>());
       expect(auth.invitation, isA<InvitationService>());
+      expect(auth.member, isA<MemberService>());
+      expect(auth.m2m, isA<M2mService>());
+      expect(auth.rbac, isA<RbacService>());
+      expect(auth.sso, isA<SsoService>());
     });
   });
 
