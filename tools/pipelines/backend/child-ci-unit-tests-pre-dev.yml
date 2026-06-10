@@ -4,7 +4,7 @@ stages:
 # Unit Tests
 unit_tests:
   stage: unit_tests
-  image: dart:3.12.2
+  image: dart:stable
  # tags:
  #   - dart
   rules:
