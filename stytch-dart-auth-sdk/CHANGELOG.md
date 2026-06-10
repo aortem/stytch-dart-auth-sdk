@@ -1,5 +1,12 @@
 # Changelog
 
+
+## 0.0.3
+
+- Bumped package metadata for the Dart 3.12.2 upgrade pass.
+- Updated the Dart SDK constraint to `^3.12.1` for the Dart 3.12 release line.
+- Refreshed dependency resolution with the current Dart/Flutter tooling where applicable.
+
 ## [0.0.2]
 ### Added
 * Added `AuthService.sendDiscoveryEmail` with typed `SendDiscoveryEmailRequest` and `SendDiscoveryEmailResponse` models for Stytch B2B discovery Email Magic Links.

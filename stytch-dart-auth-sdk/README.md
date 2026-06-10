@@ -29,7 +29,7 @@ Important: parts of the Firebase compatibility API are currently placeholders/mo
 
 ```yaml
 dependencies:
-  stytch_dart_auth_sdk: ^0.0.2
+  stytch_dart_auth_sdk: ^0.0.3
 ```
 
 Then run:
