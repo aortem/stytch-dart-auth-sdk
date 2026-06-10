@@ -1,4 +1,4 @@
-﻿= Getting Started
+= Getting Started
 :page-layout: default
 
 This page covers the quickest path to installing and navigating Stytch Dart Auth SDK.
@@ -10,7 +10,7 @@ Add the package to your pubspec.yaml:
 [source,yaml]
 ----
 dependencies:
-  stytch_dart_auth_sdk: ^0.0.2
+  stytch_dart_auth_sdk: ^0.0.3
 ----
 
 Then run:
