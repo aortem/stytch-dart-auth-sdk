@@ -21,7 +21,7 @@ toc::[]
 == Current Public Package
 
 * Package: stytch_dart_auth_sdk
-* Version: v0.0.2
+* Version: v0.0.3
 * Repository root: apps/sdks/stytch-dart-auth-sdk
 * Package root: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk
 * Docs root: apps/sdks/stytch-dart-auth-sdk/stytch-dart-auth-sdk/docs
