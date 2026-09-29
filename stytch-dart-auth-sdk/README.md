@@ -445,3 +445,7 @@ Current note: many compatibility and integration tests are still placeholders, s
 ## License
 
 BSD 3-Clause. See [LICENSE](LICENSE).
+
+### Dart compatibility
+
+Version 0.0.4 is validated with Dart 3.13.4. The existing compatible minimum SDK constraint is retained.
