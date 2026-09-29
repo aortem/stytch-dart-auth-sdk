@@ -2,6 +2,7 @@ import 'package:stytch_dart_auth_sdk/stytch_dart_auth_sdk.dart';
 import 'package:flutter/foundation.dart'; // for kIsWeb
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+
 // Your stytch SDK
 
 class StorageExample extends StatefulWidget {
